@@ -29,7 +29,7 @@ const app = express();
 app.use(cors({
   origin: [
     'https://natureharvest-dashbaord.vercel.app',
-    'https://natureharvest-server.vercel.app',
+    'https://nature-harvest-q2ra.vercel.app',
     'https://admin.wingzimpex.com',
     'https://wingzimpex.osamaqaseem.online',
     'https://nature-harvest-sooty.vercel.app',
@@ -63,7 +63,7 @@ app.use(cors({
 app.use((req, res, next) => {
   const allowedOrigins = [
     'https://natureharvest-dashbaord.vercel.app',
-    'https://natureharvest-server.vercel.app',
+    'https://nature-harvest-q2ra.vercel.app',
     'https://admin.wingzimpex.com',
     'https://wingzimpex.osamaqaseem.online',
     'http://localhost:3000',

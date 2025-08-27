@@ -1,17 +1,29 @@
 'use client'
 
-import { Search, Filter, Star, ChevronDown, X } from 'lucide-react'
+import { Search, Filter, ChevronDown, X, Home, ChevronRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import Image from 'next/image'
 import { apiService, Product, Brand, Flavor, Size } from '../../lib/api'
 import { config, isFeatureEnabled } from '../../lib/config'
 
+interface FilterData {
+  type: 'brand' | 'flavor' | 'size'
+  id: string
+  name: string
+  description?: string
+  imageUrl?: string
+}
+
 const Products = () => {
+  const searchParams = useSearchParams()
   const [products, setProducts] = useState<Product[]>([])
   const [brands, setBrands] = useState<Brand[]>([])
   const [flavors, setFlavors] = useState<Flavor[]>([])
   const [sizes, setSizes] = useState<Size[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [filterData, setFilterData] = useState<FilterData | null>(null)
   
   // Filter states
   const [searchTerm, setSearchTerm] = useState('')
@@ -24,6 +36,28 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [totalProducts, setTotalProducts] = useState(0)
+
+  // Check URL parameters for initial filter
+  useEffect(() => {
+    const type = searchParams.get('type') as 'brand' | 'flavor' | 'size'
+    const id = searchParams.get('id')
+    const name = searchParams.get('name')
+
+    if (type && id && name) {
+      // Set initial filter based on URL parameters
+      switch (type) {
+        case 'brand':
+          setSelectedBrand(id)
+          break
+        case 'flavor':
+          setSelectedFlavor(id)
+          break
+        case 'size':
+          setSelectedSize(id)
+          break
+      }
+    }
+  }, [searchParams])
 
   // Fetch data on component mount
   useEffect(() => {
@@ -39,6 +73,54 @@ const Products = () => {
         setBrands(brandsRes.data.filter(brand => brand.status === 'Active'))
         setFlavors(flavorsRes.data.filter(flavor => flavor.status === 'Active'))
         setSizes(sizesRes.data.filter(size => size.status === 'Active'))
+
+        // Set filter data if URL parameters exist
+        const type = searchParams.get('type') as 'brand' | 'flavor' | 'size'
+        const id = searchParams.get('id')
+        const name = searchParams.get('name')
+
+        if (type && id && name) {
+          let filterInfo: FilterData | null = null
+          
+          switch (type) {
+            case 'brand':
+              const brand = brandsRes.data.find(b => b._id === id)
+              if (brand) {
+                filterInfo = {
+                  type: 'brand',
+                  id: brand._id,
+                  name: brand.name,
+                  description: brand.description,
+                  imageUrl: brand.logoUrl || brand.imageUrl
+                }
+              }
+              break
+            case 'flavor':
+              const flavor = flavorsRes.data.find(f => f._id === id)
+              if (flavor) {
+                filterInfo = {
+                  type: 'flavor',
+                  id: flavor._id,
+                  name: flavor.name,
+                  description: flavor.description,
+                  imageUrl: flavor.imageUrl
+                }
+              }
+              break
+            case 'size':
+              const size = sizesRes.data.find(s => s._id === id)
+              if (size) {
+                filterInfo = {
+                  type: 'size',
+                  id: size._id,
+                  name: size.name,
+                  description: size.description
+                }
+              }
+              break
+          }
+          setFilterData(filterInfo)
+        }
       } catch (err) {
         console.error('Error fetching filter data:', err)
         setError('Failed to load filter options')
@@ -48,7 +130,7 @@ const Products = () => {
     }
 
     fetchData()
-  }, [])
+  }, [searchParams])
 
   // Fetch products when filters change
   useEffect(() => {
@@ -86,344 +168,421 @@ const Products = () => {
     setSelectedFlavor('')
     setSelectedSize('')
     setCurrentPage(1)
+    setFilterData(null)
   }
 
   // Check if any filters are active
   const hasActiveFilters = searchTerm || selectedBrand || selectedFlavor || selectedSize
 
+  // Helper functions for product display
+  const getProductImage = (product: Product) => {
+    if (product.imageUrl) {
+      return product.imageUrl
+    }
+    if (product.brandId?.logoUrl) {
+      return product.brandId.logoUrl
+    }
+    return config.images.defaultProductImage
+  }
+
+  const getFlavorImage = (product: Product): string => {
+    if (product.flavorId?.imageUrl) {
+      return product.flavorId.imageUrl
+    }
+    
+    const flavorName = product.flavorId?.name?.toLowerCase() || ''
+    
+    if (flavorName.includes('orange')) {
+      return '/images/orange.png'
+    } else if (flavorName.includes('strawberry')) {
+      return '/images/strawberry.png'
+    } else if (flavorName.includes('pineapple')) {
+      return '/images/pineapple.png'
+    } else if (flavorName.includes('apple')) {
+      return '/images/orange.png'
+    } else if (flavorName.includes('mango')) {
+      return '/images/pineapple.png'
+    }
+    
+    return '/images/orange.png'
+  }
+
+  const getFilterIcon = () => {
+    if (!filterData) return '🥤'
+    
+    switch (filterData.type) {
+      case 'brand':
+        return '🏢'
+      case 'flavor':
+        return '🍊'
+      case 'size':
+        return '📏'
+      default:
+        return '🥤'
+    }
+  }
+
+  const getFilterDescription = () => {
+    if (!filterData) return 'Discover our carefully curated selection of organic and natural products designed to support your health and wellness journey.'
+    
+    switch (filterData.type) {
+      case 'brand':
+        return `Discover all products from ${filterData.name} - a trusted name in premium beverages.`
+      case 'flavor':
+        return `Explore our collection of ${filterData.name} flavored beverages, crafted with natural ingredients.`
+      case 'size':
+        return `Browse our selection of ${filterData.name} sized products, perfect for your needs.`
+      default:
+        return 'Discover our carefully curated selection of organic and natural products.'
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Page Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Products</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Discover our carefully curated selection of organic and natural products 
-            designed to support your health and wellness journey.
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white">
+      {/* Header Section */}
+      <div className="relative py-20 overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-10 right-20 w-40 h-40 bg-green-300 rounded-full"></div>
+          <div className="absolute bottom-10 left-20 w-32 h-32 bg-green-200 rounded-full"></div>
         </div>
 
-        {/* Search and Filter */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <div className="flex flex-col gap-4">
-            {/* Search Bar */}
-            {isFeatureEnabled('enableSearch') && (
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                  <input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumbs */}
+          <div className="flex items-center text-sm text-gray-600 mb-8">
+            <a href="/" className="flex items-center hover:text-green-600 transition-colors duration-200">
+              <Home className="h-4 w-4 mr-1" />
+              Home
+            </a>
+            <ChevronRight className="h-4 w-4 mx-2" />
+            <span className="text-gray-800 font-medium">Products</span>
+            {filterData && (
+              <>
+                <ChevronRight className="h-4 w-4 mx-2" />
+                <span className="text-gray-800 font-medium">{filterData.name}</span>
+              </>
+            )}
+          </div>
+
+          {/* Page Header */}
+          <div className="text-center mb-16">
+            <div className="text-6xl mb-6">{getFilterIcon()}</div>
+            <h3 className="text-green-600 uppercase tracking-widest font-jost font-semibold text-sm mb-4">
+              {filterData ? `${filterData.type.toUpperCase()} PRODUCTS` : 'OUR PRODUCTS'}
+            </h3>
+            <h1 className="text-5xl lg:text-6xl font-gazpacho font-bold text-gray-800 mb-6 leading-tight">
+              {filterData ? filterData.name : 'Our Products'}
+            </h1>
+            <p className="text-lg font-jost text-gray-600 max-w-3xl mx-auto">
+              {getFilterDescription()}
+            </p>
+          </div>
+
+          {/* Search and Filter */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <div className="flex flex-col gap-4">
+              {/* Search Bar */}
+              {isFeatureEnabled('enableSearch') && (
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-jost"
+                    />
+                  </div>
+                
+                {/* Filter Toggle Button */}
+                {isFeatureEnabled('enableProductFilters') && (
+                  <button
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="flex items-center gap-2 px-6 py-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors duration-200 font-jost font-medium"
+                  >
+                    <Filter className="h-5 w-5" />
+                    Filters
+                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
+                  </button>
+                )}
+              </div>
+
+              )}
+
+              {/* Filter Options */}
+              {showFilters && isFeatureEnabled('enableProductFilters') && (
+                <div className="border-t pt-6 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Brand Filter */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2 font-jost">Brand</label>
+                      <select
+                        value={selectedBrand}
+                        onChange={(e) => setSelectedBrand(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-jost"
+                      >
+                        <option value="">All Brands</option>
+                        {brands.map((brand) => (
+                          <option key={brand._id} value={brand._id}>
+                            {brand.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Flavor Filter */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2 font-jost">Flavor</label>
+                      <select
+                        value={selectedFlavor}
+                        onChange={(e) => setSelectedFlavor(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-jost"
+                      >
+                        <option value="">All Flavors</option>
+                        {flavors.map((flavor) => (
+                          <option key={flavor._id} value={flavor._id}>
+                            {flavor.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Size Filter */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2 font-jost">Size</label>
+                      <select
+                        value={selectedSize}
+                        onChange={(e) => setSelectedSize(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-jost"
+                      >
+                        <option value="">All Sizes</option>
+                        {sizes.map((size) => (
+                          <option key={size._id} value={size._id}>
+                            {size.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Clear Filters */}
+                  {hasActiveFilters && (
+                    <div className="flex justify-end">
+                      <button
+                        onClick={clearFilters}
+                        className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 font-jost"
+                      >
+                        <X className="h-4 w-4" />
+                        Clear All Filters
+                      </button>
+                    </div>
+                  )}
                 </div>
-              
-              {/* Filter Toggle Button */}
-              {isFeatureEnabled('enableProductFilters') && (
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+              )}
+            </div>
+          </div>
+
+          {/* Results Summary */}
+          <div className="mb-8">
+            <p className="text-gray-600 font-jost text-center">
+              Showing <span className="font-bold text-green-600">{products.length}</span> of <span className="font-bold text-green-600">{totalProducts}</span> products
+              {hasActiveFilters && ' (filtered)'}
+            </p>
+            
+            {/* Quick Filter Links */}
+            <div className="mt-6">
+              <h4 className="text-sm font-medium text-gray-700 mb-3 font-jost text-center">Quick Filters:</h4>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {/* Brand Quick Links */}
+                {brands.slice(0, 5).map((brand) => (
+                  <a
+                    key={brand._id}
+                    href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
+                    className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full hover:bg-green-200 transition-colors duration-200 font-jost"
+                  >
+                    🏢 {brand.name}
+                  </a>
+                ))}
+                
+                {/* Flavor Quick Links */}
+                {flavors.slice(0, 5).map((flavor) => (
+                  <a
+                    key={flavor._id}
+                    href={`/products?type=flavor&id=${flavor._id}&name=${encodeURIComponent(flavor.name)}`}
+                    className="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-800 text-sm font-medium rounded-full hover:bg-orange-200 transition-colors duration-200 font-jost"
+                  >
+                    🍊 {flavor.name}
+                  </a>
+                ))}
+                
+                {/* Size Quick Links */}
+                {sizes.slice(0, 5).map((size) => (
+                  <a
+                    key={size._id}
+                    href={`/products?type=size&id=${size._id}&name=${encodeURIComponent(size.name)}`}
+                    className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full hover:bg-blue-200 transition-colors duration-200 font-jost"
+                  >
+                    📏 {size.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600 font-jost">Loading products...</p>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="text-center py-12">
+              <div className="text-red-600 text-6xl mb-4">⚠️</div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2 font-gazpacho">{error}</h3>
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-4 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-200 font-jost"
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+
+          {/* Products Grid - Homepage Style */}
+          {!loading && !error && products.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
+              {products.map((product, index) => (
+                <div 
+                  key={product._id} 
+                  className="relative transition-all duration-500 ease-out hover:scale-105"
                 >
-                  <Filter className="h-5 w-5" />
-                  Filters
-                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
+                  {/* Product Image Container - Homepage Style */}
+                  <div className="relative overflow-hidden">
+                    {/* Brand Tag - Top Left */}
+                    <div className="absolute top-2 left-1 z-10">
+                      <a 
+                        href={product.brandId?._id ? `/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
+                        className="block"
+                      >
+                        <div className="bg-white rounded-full w-20 h-20 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
+                          <span className="text-green-600 font-gazpacho font-bold text-sm">
+                            {product.brandId?.name || 'Nature Harvest'}
+                          </span>
+                          <span className="text-green-600 font-jost font-medium text-xs">
+                            {product.sizeId?.name || '125 ML'}
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+
+                    {/* Main Product Image */}
+                    <div className="relative w-full p-8">
+                      <Image
+                        src={getProductImage(product)}
+                        alt={product.name}
+                        width={300}
+                        height={400}
+                        className="object-contain transition-all duration-500 hover:scale-105 hover:-rotate-6"
+                      />
+                    </div>
+
+                    {/* Flavor Image - Bottom Left */}
+                    <div className="absolute bottom-0 left-40">
+                      <a 
+                        href={product.flavorId?._id ? `/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
+                        className="block"
+                      >
+                        <Image
+                          src={getFlavorImage(product)}
+                          alt={product.flavorId?.name || 'Flavor'}
+                          width={180}
+                          height={180}
+                          className="object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
+                        />
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Product Info - Minimal like homepage */}
+                  <div className="text-center mt-4">
+                    <h3 className="font-gazpacho font-bold text-lg text-gray-800 mb-2">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-600 font-jost text-sm line-clamp-2">
+                      {product.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* No Products State */}
+          {!loading && !error && products.length === 0 && (
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4">🥤</div>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-2 font-gazpacho">No products found</h3>
+              <p className="text-gray-600 mb-4 font-jost">
+                {hasActiveFilters 
+                  ? 'Try adjusting your filters or search terms.'
+                  : 'No products are available at the moment.'
+                }
+              </p>
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-200 font-jost"
+                >
+                  Clear Filters
                 </button>
               )}
             </div>
+          )}
 
-            )}
-
-            {/* Filter Options */}
-            {showFilters && isFeatureEnabled('enableProductFilters') && (
-              <div className="border-t pt-4 space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Brand Filter */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Brand</label>
-                    <select
-                      value={selectedBrand}
-                      onChange={(e) => setSelectedBrand(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    >
-                      <option value="">All Brands</option>
-                      {brands.map((brand) => (
-                        <option key={brand._id} value={brand._id}>
-                          {brand.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Flavor Filter */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Flavor</label>
-                    <select
-                      value={selectedFlavor}
-                      onChange={(e) => setSelectedFlavor(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    >
-                      <option value="">All Flavors</option>
-                      {flavors.map((flavor) => (
-                        <option key={flavor._id} value={flavor._id}>
-                          {flavor.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Size Filter */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Size</label>
-                    <select
-                      value={selectedSize}
-                      onChange={(e) => setSelectedSize(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    >
-                      <option value="">All Sizes</option>
-                      {sizes.map((size) => (
-                        <option key={size._id} value={size._id}>
-                          {size.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Clear Filters */}
-                {hasActiveFilters && (
-                  <div className="flex justify-end">
-                    <button
-                      onClick={clearFilters}
-                      className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
-                    >
-                      <X className="h-4 w-4" />
-                      Clear All Filters
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Results Summary */}
-        <div className="mb-6">
-          <p className="text-gray-600">
-            Showing {products.length} of {totalProducts} products
-            {hasActiveFilters && ' (filtered)'}
-          </p>
-          
-          {/* Quick Filter Links */}
-          <div className="mt-4">
-            <h4 className="text-sm font-medium text-gray-700 mb-3">Quick Filters:</h4>
-            <div className="flex flex-wrap gap-2">
-              {/* Brand Quick Links */}
-              {brands.slice(0, 5).map((brand) => (
-                <a
-                  key={brand._id}
-                  href={`/filter?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
-                  className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full hover:bg-green-200 transition-colors duration-200"
+          {/* Pagination */}
+          {!loading && !error && totalPages > 1 && (
+            <div className="flex justify-center mt-12">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 font-jost"
                 >
-                  🏢 {brand.name}
-                </a>
-              ))}
-              
-              {/* Flavor Quick Links */}
-              {flavors.slice(0, 5).map((flavor) => (
-                <a
-                  key={flavor._id}
-                  href={`/filter?type=flavor&id=${flavor._id}&name=${encodeURIComponent(flavor.name)}`}
-                  className="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-800 text-sm font-medium rounded-full hover:bg-orange-200 transition-colors duration-200"
-                >
-                  🍊 {flavor.name}
-                </a>
-              ))}
-              
-              {/* Size Quick Links */}
-              {sizes.slice(0, 5).map((size) => (
-                <a
-                  key={size._id}
-                  href={`/filter?type=size&id=${size._id}&name=${encodeURIComponent(size.name)}`}
-                  className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full hover:bg-blue-200 transition-colors duration-200"
-                >
-                  📏 {size.name}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading products...</p>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div className="text-center py-12">
-            <p className="text-red-600">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
-            >
-              Try Again
-            </button>
-          </div>
-        )}
-
-        {/* Products Grid */}
-        {!loading && !error && products.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product) => (
-              <div key={product._id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                {/* Product Image */}
-                <div className="h-48 bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center relative">
-                  {product.imageUrl ? (
-                    <img
-                      src={product.imageUrl}
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.nextElementSibling?.classList.remove('hidden');
-                      }}
-                    />
-                  ) : null}
-                                     <div className={`absolute inset-0 flex items-center justify-center ${product.imageUrl ? 'hidden' : ''}`}>
-                     <img
-                       src={config.images.defaultProductImage}
-                       alt="Default product"
-                       className="w-16 h-16 object-contain opacity-50"
-                       onError={(e) => {
-                         const target = e.target as HTMLImageElement;
-                         target.style.display = 'none';
-                         target.nextElementSibling?.classList.remove('hidden');
-                       }}
-                     />
-                     <span className="text-6xl hidden">🥤</span>
-                   </div>
-                </div>
+                  Previous
+                </button>
                 
-                {/* Product Info */}
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-green-600 font-medium">{product.brandId?.name || 'Unknown Brand'}</span>
-                    <div className="flex items-center gap-2">
-                      {product.flavorId && (
-                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                          {product.flavorId.name}
-                        </span>
-                      )}
-                      {product.sizeId && (
-                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
-                          {product.sizeId.name}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h3>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
-                  
-                  {/* Nutritional Info */}
-                  {product.nutrients && (
-                    <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-                      <h4 className="text-sm font-medium text-gray-700 mb-2">Nutritional Info</h4>
-                      <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
-                        {product.nutrients.calories && (
-                          <span>Calories: {product.nutrients.calories}</span>
-                        )}
-                        {product.nutrients.protein && (
-                          <span>Protein: {product.nutrients.protein}g</span>
-                        )}
-                        {product.nutrients.carbohydrates && (
-                          <span>Carbs: {product.nutrients.carbohydrates}g</span>
-                        )}
-                        {product.nutrients.sugar && (
-                          <span>Sugar: {product.nutrients.sugar}g</span>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="flex items-center justify-between">
-                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200">
-                      View Details
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  const page = i + 1;
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-4 py-2 rounded-lg font-jost ${
+                        currentPage === page
+                          ? 'bg-green-600 text-white'
+                          : 'border border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {page}
                     </button>
-                  </div>
-                </div>
+                  );
+                })}
+                
+                <button
+                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 font-jost"
+                >
+                  Next
+                </button>
               </div>
-            ))}
-          </div>
-        )}
-
-        {/* No Products State */}
-        {!loading && !error && products.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🥤</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
-            <p className="text-gray-600 mb-4">
-              {hasActiveFilters 
-                ? 'Try adjusting your filters or search terms.'
-                : 'No products are available at the moment.'
-              }
-            </p>
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilters}
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
-              >
-                Clear Filters
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Pagination */}
-        {!loading && !error && totalPages > 1 && (
-          <div className="flex justify-center mt-12">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-              >
-                Previous
-              </button>
-              
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                const page = i + 1;
-                return (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`px-3 py-2 rounded-lg ${
-                      currentPage === page
-                        ? 'bg-green-600 text-white'
-                        : 'border border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                );
-              })}
-              
-              <button
-                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-              >
-                Next
-              </button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )

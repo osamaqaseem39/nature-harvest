@@ -18,7 +18,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://natureharvest-server.vercel.app',
+        url: 'https://nature-harvest-q2ra.vercel.app',
         description: 'Production Server',
       },
       {
