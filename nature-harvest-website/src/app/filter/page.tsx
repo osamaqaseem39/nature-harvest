@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import Link from 'next/link'
 import { apiService, Product, Brand, Flavor, Size } from '../../lib/api'
 import { config } from '../../lib/config'
 
@@ -370,12 +371,12 @@ const FilterPageContent = () => {
 
           {/* Back to All Products */}
           <div className="text-center">
-            <a 
+            <Link 
               href="/products" 
               className="inline-flex items-center bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-3 px-8 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-lg uppercase tracking-wide"
             >
               ← Back to All Products
-            </a>
+            </Link>
           </div>
         </div>
       </div>

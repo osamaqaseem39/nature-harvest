@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Star, ShoppingCart, Heart, Eye } from 'lucide-react'
 import { apiService } from '../lib/api'
@@ -277,9 +278,9 @@ const FeaturedProducts = () => {
               {/* Product Image Container - No Background Container */}
               <div className="relative overflow-hidden">
                 {/* Brand Tag - Top Left */}
-                <div className="absolute top-2 left-1 z-10">
-                  <a 
-                    href={product.brandId?._id ? `/filter?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
+                                <div className="absolute top-2 left-1 z-10">
+                  <Link 
+                    href={product.brandId?._id ? `/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
                     className="block"
                   >
                     <div className="bg-white rounded-full w-20 h-20 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
@@ -289,9 +290,9 @@ const FeaturedProducts = () => {
                       <span className="text-green-600 font-jost font-medium text-xs">
                         {product.sizeId?.name || '125 ML'}
                       </span>
-                    </div>
-                  </a>
-                </div>
+                                          </div>
+                    </Link>
+                  </div>
 
               
                 {/* Main Product Image */}
@@ -307,8 +308,8 @@ const FeaturedProducts = () => {
 
                 {/* Flavor Image - Bottom Left */}
                 <div className="absolute bottom-0 left-40">
-                  <a 
-                    href={product.flavorId?._id ? `/filter?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
+                  <Link 
+                    href={product.flavorId?._id ? `/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
                     className="block"
                   >
                     <Image
@@ -317,9 +318,9 @@ const FeaturedProducts = () => {
                       width={180}
                       height={180}
                       className="object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
-                    />
-                  </a>
-                </div>
+                                            />
+                      </Link>
+                    </div>
               </div>
 
               {/* No Product Info Section - Clean Minimal Design */}
@@ -331,12 +332,12 @@ const FeaturedProducts = () => {
         <div className={`text-center transition-all duration-1000 ease-out delay-1200 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <a 
+          <Link 
             href="/products" 
             className="inline-flex bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-lg uppercase tracking-wide"
           >
             View All Products
-          </a>
+          </Link>
         </div>
       </div>
     </section>

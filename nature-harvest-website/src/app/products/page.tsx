@@ -1,9 +1,10 @@
 'use client'
 
 import { Search, Filter, ChevronDown, X, Home, ChevronRight } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import Link from 'next/link'
 import { apiService, Product, Brand, Flavor, Size } from '../../lib/api'
 import { config, isFeatureEnabled } from '../../lib/config'
 
@@ -15,7 +16,7 @@ interface FilterData {
   imageUrl?: string
 }
 
-const Products = () => {
+const ProductsContent = () => {
   const searchParams = useSearchParams()
   const [products, setProducts] = useState<Product[]>([])
   const [brands, setBrands] = useState<Brand[]>([])
@@ -250,10 +251,10 @@ const Products = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumbs */}
           <div className="flex items-center text-sm text-gray-600 mb-8">
-            <a href="/" className="flex items-center hover:text-green-600 transition-colors duration-200">
+            <Link href="/" className="flex items-center hover:text-green-600 transition-colors duration-200">
               <Home className="h-4 w-4 mr-1" />
               Home
-            </a>
+            </Link>
             <ChevronRight className="h-4 w-4 mx-2" />
             <span className="text-gray-800 font-medium">Products</span>
             {filterData && (
@@ -396,35 +397,35 @@ const Products = () => {
               <div className="flex flex-wrap gap-2 justify-center">
                 {/* Brand Quick Links */}
                 {brands.slice(0, 5).map((brand) => (
-                  <a
+                  <Link
                     key={brand._id}
                     href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
                     className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full hover:bg-green-200 transition-colors duration-200 font-jost"
                   >
                     🏢 {brand.name}
-                  </a>
+                  </Link>
                 ))}
                 
                 {/* Flavor Quick Links */}
                 {flavors.slice(0, 5).map((flavor) => (
-                  <a
+                  <Link
                     key={flavor._id}
                     href={`/products?type=flavor&id=${flavor._id}&name=${encodeURIComponent(flavor.name)}`}
                     className="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-800 text-sm font-medium rounded-full hover:bg-orange-200 transition-colors duration-200 font-jost"
                   >
                     🍊 {flavor.name}
-                  </a>
+                  </Link>
                 ))}
                 
                 {/* Size Quick Links */}
                 {sizes.slice(0, 5).map((size) => (
-                  <a
+                  <Link
                     key={size._id}
                     href={`/products?type=size&id=${size._id}&name=${encodeURIComponent(size.name)}`}
                     className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full hover:bg-blue-200 transition-colors duration-200 font-jost"
                   >
                     📏 {size.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -464,7 +465,7 @@ const Products = () => {
                   <div className="relative overflow-hidden">
                     {/* Brand Tag - Top Left */}
                     <div className="absolute top-2 left-1 z-10">
-                      <a 
+                      <Link 
                         href={product.brandId?._id ? `/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
                         className="block"
                       >
@@ -476,7 +477,7 @@ const Products = () => {
                             {product.sizeId?.name || '125 ML'}
                           </span>
                         </div>
-                      </a>
+                      </Link>
                     </div>
 
                     {/* Main Product Image */}
@@ -492,7 +493,7 @@ const Products = () => {
 
                     {/* Flavor Image - Bottom Left */}
                     <div className="absolute bottom-0 left-40">
-                      <a 
+                      <Link 
                         href={product.flavorId?._id ? `/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
                         className="block"
                       >
@@ -503,7 +504,7 @@ const Products = () => {
                           height={180}
                           className="object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
                         />
-                      </a>
+                      </Link>
                     </div>
                   </div>
 
@@ -585,6 +586,21 @@ const Products = () => {
         </div>
       </div>
     </div>
+  )
+}
+
+const Products = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 font-jost text-lg">Loading...</p>
+        </div>
+      </div>
+    }>
+      <ProductsContent />
+    </Suspense>
   )
 }
 

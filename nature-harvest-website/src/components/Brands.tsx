@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { apiService, Brand } from '../lib/api'
 import { config } from '../lib/config'
@@ -162,12 +163,12 @@ const Brands = () => {
         <div className={`text-center transition-all duration-1000 ease-out delay-800 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <a 
+          <Link 
             href="/products" 
             className="inline-flex bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-110 text-lg uppercase tracking-wide"
           >
             View All Products
-          </a>
+          </Link>
         </div>
       </div>
     </section>

@@ -2,7 +2,7 @@
 export const config = {
   // API Configuration
   api: {
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://nature-harvest-q2ra.vercel.app/api',
     timeout: parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT || '10000'),
     retryAttempts: parseInt(process.env.NEXT_PUBLIC_API_RETRY_ATTEMPTS || '3'),
   },
@@ -11,14 +11,16 @@ export const config = {
   site: {
     name: process.env.NEXT_PUBLIC_SITE_NAME || 'Nature Harvest',
     description: process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'Premium organic beverages and natural products',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://nature-harvest-sooty.vercel.app',
+    dashboardUrl: 'https://nature-harvest-dashboard.vercel.app',
+    serverUrl: 'https://nature-harvest-q2ra.vercel.app',
   },
 
   // Contact Information
   contact: {
-    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@natureharvest.com',
-    phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || '+1-555-123-4567',
-    address: process.env.NEXT_PUBLIC_CONTACT_ADDRESS || '123 Nature Way, Green City, GC 12345',
+    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@natureharvest.com.pk',
+    phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || '+92 325 413 1111',
+    address: process.env.NEXT_PUBLIC_CONTACT_ADDRESS || '9/E Block G, Main Boulevard Gulberg II, Lahore - Pakistan',
   },
 
   // Social Media Links
@@ -27,6 +29,8 @@ export const config = {
     twitter: process.env.NEXT_PUBLIC_TWITTER_URL || 'https://twitter.com/natureharvest',
     instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://instagram.com/natureharvest',
     linkedin: process.env.NEXT_PUBLIC_LINKEDIN_URL || 'https://linkedin.com/company/natureharvest',
+    tiktok: 'https://tiktok.com/@natureharvest',
+    youtube: 'https://youtube.com/@natureharvest',
   },
 
   // Analytics

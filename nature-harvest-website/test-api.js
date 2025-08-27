@@ -4,7 +4,7 @@
 // Load environment variables
 require('dotenv').config({ path: '.env.local' });
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://nature-harvest-q2ra.vercel.app/api';
 const API_TIMEOUT = parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT || '10000');
 
 // Simple environment validation
@@ -88,7 +88,7 @@ async function testAPI() {
 
   } catch (error) {
     console.error('❌ API test failed:', error.message);
-    console.log('\nMake sure your API server is running on http://localhost:5000');
+    console.log('\nMake sure your API server is running on https://nature-harvest-q2ra.vercel.app');
     console.log('You can start it with: cd nature-harvest-server && npm start');
   }
 }
