@@ -32,6 +32,8 @@ app.use(cors({
     'https://natureharvest-server.vercel.app',
     'https://admin.wingzimpex.com',
     'https://wingzimpex.osamaqaseem.online',
+    'https://nature-harvest-sooty.vercel.app',
+    'https://nature-harvest-dashboard.vercel.app',
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:3002',
