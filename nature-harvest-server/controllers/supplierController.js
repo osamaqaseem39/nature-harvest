@@ -3,8 +3,8 @@ const SupplierRequest = require('../models/SupplierRequest');
 exports.createSupplier = async (req, res) => {
   try {
     const data = req.body;
-    if (req.file) {
-      data.brochure = req.file.path;
+    if (req.fileUrl) {
+      data.brochure = req.fileUrl;
     }
     const supplier = new SupplierRequest(data);
     await supplier.save();

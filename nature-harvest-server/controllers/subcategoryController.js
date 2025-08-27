@@ -8,8 +8,8 @@ exports.createSubcategory = async (req, res) => {
     if (!data.parent) {
       return res.status(400).json({ error: 'Parent category is required for subcategory.' });
     }
-    if (req.file) {
-      data.image = req.file.path;
+    if (req.fileUrl) {
+      data.image = req.fileUrl;
     }
     const subcategory = new SubCategory(data);
     await subcategory.save();
@@ -47,8 +47,8 @@ exports.updateSubcategory = async (req, res) => {
     if (!data.parent) {
       return res.status(400).json({ error: 'Parent category is required for subcategory.' });
     }
-    if (req.file) {
-      data.image = req.file.path;
+    if (req.fileUrl) {
+      data.image = req.fileUrl;
     }
     const subcategory = await SubCategory.findByIdAndUpdate(req.params.id, data, { new: true });
     if (!subcategory) return res.status(404).json({ error: 'Not found' });

@@ -1,6 +1,4 @@
 const Flavor = require('../models/Flavor');
-const fs = require('fs');
-const path = require('path');
 
 // Get all flavors
 exports.getAllFlavors = async (req, res) => {
@@ -74,10 +72,10 @@ exports.createFlavor = async (req, res) => {
   try {
     const { name, description, status = 'Active' } = req.body;
     
-    // Handle image upload
+    // Handle image upload - use the URL from external upload service
     let imageUrl = '';
-    if (req.file) {
-      imageUrl = `uploads/flavors/${req.file.filename}`;
+    if (req.fileUrl) {
+      imageUrl = req.fileUrl;
     }
 
     const flavor = new Flavor({
@@ -108,18 +106,9 @@ exports.updateFlavor = async (req, res) => {
     const { name, description, status } = req.body;
     const updateData = { name, description, status };
 
-    // Handle image upload
-    if (req.file) {
-      updateData.imageUrl = `uploads/flavors/${req.file.filename}`;
-      
-      // Delete old image if exists
-      const existingFlavor = await Flavor.findById(req.params.id);
-      if (existingFlavor && existingFlavor.imageUrl) {
-        const oldImagePath = path.join(__dirname, '..', existingFlavor.imageUrl);
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
-        }
-      }
+    // Handle image upload - use the URL from external upload service
+    if (req.fileUrl) {
+      updateData.imageUrl = req.fileUrl;
     }
 
     const flavor = await Flavor.findByIdAndUpdate(
@@ -160,13 +149,8 @@ exports.deleteFlavor = async (req, res) => {
       });
     }
 
-    // Delete image file if exists
-    if (flavor.imageUrl) {
-      const imagePath = path.join(__dirname, '..', flavor.imageUrl.replace('server/', ''));
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
-      }
-    }
+    // Note: With external storage, we don't need to delete local files
+    // The external service should handle file cleanup if needed
 
     await Flavor.findByIdAndDelete(req.params.id);
     res.json({ 

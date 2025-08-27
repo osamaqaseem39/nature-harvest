@@ -28,9 +28,9 @@ exports.createBrand = async (req, res) => {
       brandData.imageUrl = imageUrl;
     }
 
-    // Handle logo upload (legacy file upload)
-    if (req.file) {
-      brandData.logoUrl = `/uploads/${req.file.filename}`;
+    // Handle logo upload (external upload service)
+    if (req.fileUrl) {
+      brandData.logoUrl = req.fileUrl;
     }
 
     const brand = new Brand(brandData);
@@ -150,9 +150,9 @@ exports.updateBrand = async (req, res) => {
       updateData.imageUrl = imageUrl;
     }
 
-    // Handle logo upload (legacy file upload)
-    if (req.file) {
-      updateData.logoUrl = `/uploads/${req.file.filename}`;
+    // Handle logo upload (external upload service)
+    if (req.fileUrl) {
+      updateData.logoUrl = req.fileUrl;
     }
 
     const brand = await Brand.findByIdAndUpdate(

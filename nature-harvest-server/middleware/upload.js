@@ -2,16 +2,24 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadsDir);
+    const uploadPath = 'uploads/';
+    try {
+      // Ensure the directory exists
+      fs.mkdirSync(uploadPath, { recursive: true });
+      cb(null, uploadPath);
+    } catch (error) {
+      console.error('Error creating upload directory:', error);
+      // In serverless environments, we might not be able to create directories
+      // For now, we'll use a fallback or return an error
+      if (error.code === 'ENOENT' || error.code === 'EACCES') {
+        cb(new Error('File upload not supported in this environment. Please use cloud storage.'));
+      } else {
+        cb(error);
+      }
+    }
   },
   filename: (req, file, cb) => {
     // Generate unique filename

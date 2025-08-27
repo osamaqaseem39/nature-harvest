@@ -116,7 +116,7 @@ router.get('/:id', flavorController.getFlavorById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', uploadFlavorImage.single('image'), flavorValidation.create, flavorController.createFlavor);
+router.post('/', ...uploadFlavorImage, flavorValidation.create, flavorController.createFlavor);
 
 /**
  * @swagger
@@ -174,7 +174,7 @@ router.post('/', uploadFlavorImage.single('image'), flavorValidation.create, fla
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id', uploadFlavorImage.single('image'), flavorValidation.update, flavorController.updateFlavor);
+router.put('/:id', ...uploadFlavorImage, flavorValidation.update, flavorController.updateFlavor);
 
 /**
  * @swagger

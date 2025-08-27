@@ -3,8 +3,8 @@ const Category = require('../models/Category');
 exports.createCategory = async (req, res) => {
   try {
     const data = req.body;
-    if (req.file) {
-      data.image = req.file.path;
+    if (req.fileUrl) {
+      data.image = req.fileUrl;
     }
     const category = new Category(data);
     await category.save();
@@ -36,8 +36,8 @@ exports.getCategory = async (req, res) => {
 exports.updateCategory = async (req, res) => {
   try {
     const data = req.body;
-    if (req.file) {
-      data.image = req.file.path;
+    if (req.fileUrl) {
+      data.image = req.fileUrl;
     }
     const category = await Category.findByIdAndUpdate(req.params.id, data, { new: true });
     if (!category) return res.status(404).json({ error: 'Not found' });

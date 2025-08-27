@@ -4,7 +4,7 @@ const upload = require('../middleware/uploadBrochure');
 const supplierController = require('../controllers/supplierController');
 
 // POST /api/suppliers
-router.post('/', upload.single('brochure'), supplierController.createSupplier);
+router.post('/', ...upload, supplierController.createSupplier);
 
 // GET /api/suppliers
 router.get('/', supplierController.getSuppliers);
