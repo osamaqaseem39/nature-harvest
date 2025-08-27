@@ -102,7 +102,10 @@ const Brands = () => {
             }`}>
               {brands.slice(0, Math.ceil(brands.length / 2)).map((brand, index) => (
                 <div key={brand._id} className="flex justify-center">
-                  <div className="flex items-center justify-center p-4 transition-all duration-500 transform hover:scale-110 group">
+                  <Link 
+                    href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
+                    className="flex items-center justify-center p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer"
+                  >
                     <div className="relative">
                       <Image
                         src={brand.logoUrl || brand.imageUrl || config.images.defaultBrandImage}
@@ -115,8 +118,14 @@ const Brands = () => {
                           target.src = config.images.defaultBrandImage;
                         }}
                       />
+                      {/* Hover overlay with brand name */}
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg flex items-center justify-center">
+                        <span className="text-white font-gazpacho font-bold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center px-2">
+                          {brand.name}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -128,7 +137,10 @@ const Brands = () => {
               }`}>
                 {brands.slice(Math.ceil(brands.length / 2)).map((brand, index) => (
                   <div key={brand._id} className="flex justify-center">
-                    <div className="flex items-center justify-center p-4 transition-all duration-500 transform hover:scale-110 group">
+                    <Link 
+                      href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
+                      className="flex items-center justify-center p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer"
+                    >
                       <div className="relative">
                         <Image
                           src={brand.logoUrl || brand.imageUrl || config.images.defaultBrandImage}
@@ -141,8 +153,14 @@ const Brands = () => {
                             target.src = config.images.defaultBrandImage;
                           }}
                         />
+                        {/* Hover overlay with brand name */}
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg flex items-center justify-center">
+                          <span className="text-white font-gazpacho font-bold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center px-2">
+                            {brand.name}
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 ))}
               </div>
@@ -163,12 +181,20 @@ const Brands = () => {
         <div className={`text-center transition-all duration-1000 ease-out delay-800 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <Link 
-            href="/products" 
-            className="inline-flex bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-110 text-lg uppercase tracking-wide"
-          >
-            View All Products
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link 
+              href="/brands" 
+              className="inline-flex bg-green-600 hover:bg-green-700 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-110 text-lg uppercase tracking-wide"
+            >
+              Learn More About Our Brands
+            </Link>
+            <Link 
+              href="/products" 
+              className="inline-flex bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-110 text-lg uppercase tracking-wide"
+            >
+              View All Products
+            </Link>
+          </div>
         </div>
       </div>
     </section>
