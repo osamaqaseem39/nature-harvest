@@ -37,6 +37,7 @@ const Brands = () => {
         const response = await apiService.getBrands()
         // Filter only active brands
         const activeBrands = response.data.filter(brand => brand.status === 'Active')
+        console.log('Fetched brands:', activeBrands) // Debug log
         setBrands(activeBrands)
       } catch (err) {
         console.error('Error fetching brands:', err)
@@ -108,14 +109,23 @@ const Brands = () => {
                   >
                     <div className="relative">
                       <Image
-                        src={brand.logoUrl || brand.imageUrl || config.images.defaultBrandImage}
+                        src={brand.logoUrl || brand.imageUrl || `/images/brands/${brand.name.replace(/\s+/g, '')} Logo PET.jpg`}
                         alt={`${brand.name} logo`}
                         width={160}
                         height={120}
                         className="object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = config.images.defaultBrandImage;
+                          console.log(`Image failed for ${brand.name}:`, target.src) // Debug log
+                          // Try to use local brand image as fallback
+                          const localBrandImage = `/images/brands/${brand.name.replace(/\s+/g, '')} Logo PET.jpg`;
+                          console.log(`Trying fallback:`, localBrandImage) // Debug log
+                          if (target.src !== localBrandImage) {
+                            target.src = localBrandImage;
+                          } else {
+                            // If local image also fails, use a generic placeholder
+                            target.src = '/images/logo.png';
+                          }
                         }}
                       />
                       {/* Hover overlay with brand name */}
@@ -143,14 +153,23 @@ const Brands = () => {
                     >
                       <div className="relative">
                         <Image
-                          src={brand.logoUrl || brand.imageUrl || config.images.defaultBrandImage}
+                          src={brand.logoUrl || brand.imageUrl || `/images/brands/${brand.name.replace(/\s+/g, '')} Logo PET.jpg`}
                           alt={`${brand.name} logo`}
                           width={160}
                           height={120}
                           className="object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.src = config.images.defaultBrandImage;
+                            console.log(`Image failed for ${brand.name}:`, target.src) // Debug log
+                            // Try to use local brand image as fallback
+                            const localBrandImage = `/images/brands/${brand.name.replace(/\s+/g, '')} Logo PET.jpg`;
+                            console.log(`Trying fallback:`, localBrandImage) // Debug log
+                            if (target.src !== localBrandImage) {
+                              target.src = localBrandImage;
+                            } else {
+                              // If local image also fails, use a generic placeholder
+                              target.src = '/images/logo.png';
+                            }
                           }}
                         />
                         {/* Hover overlay with brand name */}
