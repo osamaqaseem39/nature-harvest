@@ -51,11 +51,11 @@ const Brands = () => {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-white to-green-50 py-24 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 pt-32 pb-24 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-1/4 w-32 h-32 bg-green-300 rounded-full"></div>
-        <div className="absolute bottom-20 right-1/4 w-24 h-24 bg-green-200 rounded-full"></div>
+        <div className="absolute top-20 left-1/4 w-32 h-32 bg-purple-300 rounded-full"></div>
+        <div className="absolute bottom-20 right-1/4 w-24 h-24 bg-purple-200 rounded-full"></div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

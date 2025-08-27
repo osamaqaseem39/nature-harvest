@@ -64,7 +64,7 @@ const ValuesSection = () => {
   ]
 
   return (
-    <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-white to-green-50 py-24 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-white to-green-50 pt-32 pb-24 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-10 w-32 h-32 bg-green-400 rounded-full"></div>

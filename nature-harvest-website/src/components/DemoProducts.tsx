@@ -178,7 +178,7 @@ const DemoProducts = () => {
 
   if (loading) {
     return (
-      <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-white to-green-50 py-20 overflow-hidden">
+      <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-white to-green-50 pt-32 pb-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
@@ -191,7 +191,7 @@ const DemoProducts = () => {
 
   if (error) {
     return (
-      <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-white to-green-50 py-20 overflow-hidden">
+      <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-white to-green-50 pt-32 pb-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-red-600 font-jost">Error: {error}</p>
@@ -208,7 +208,7 @@ const DemoProducts = () => {
   }
 
   return (
-    <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-white to-green-50 py-20 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-white to-green-50 pt-32 pb-20 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-20 w-32 h-32 bg-green-300 rounded-full"></div>

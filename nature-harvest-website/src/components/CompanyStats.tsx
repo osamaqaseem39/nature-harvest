@@ -53,7 +53,7 @@ const CompanyStats = () => {
   ]
 
   return (
-    <section ref={sectionRef} className="relative bg-gradient-to-br from-green-600 via-green-500 to-green-700 py-20 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-gradient-to-br from-green-600 via-green-500 to-green-700 pt-32 pb-20 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full transform -translate-x-48 -translate-y-48"></div>

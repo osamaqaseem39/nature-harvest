@@ -54,7 +54,7 @@ const OurStory = () => {
   ]
 
   return (
-    <section ref={sectionRef} className="relative bg-gradient-to-br from-white via-green-50 to-white py-24 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-gradient-to-br from-white via-green-50 to-white pt-32 pb-24 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 right-20 w-40 h-40 bg-green-300 rounded-full"></div>

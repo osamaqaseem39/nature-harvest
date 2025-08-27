@@ -95,7 +95,7 @@ const BrandsPage = () => {
               {/* Variant: image left or right */}
               {variant === "left" ? (
                 <>
-                  <div className="w-full md:w-1/2 h-64 md:h-auto flex items-center justify-center bg-gray-100 relative overflow-hidden">
+                  <div className="w-full md:w-1/2 h-64 md:h-auto flex items-center justify-center bg-white relative overflow-hidden">
                     <Image
                       src={brand.logoUrl || brand.imageUrl || config.images.defaultBrandImage}
                       alt={`${brand.name} logo`}
@@ -140,7 +140,7 @@ const BrandsPage = () => {
                       </svg>
                     </Link>
                   </div>
-                  <div className="w-full md:w-1/2 h-64 md:h-auto flex items-center justify-center bg-gray-100 relative overflow-hidden">
+                  <div className="w-full md:w-1/2 h-64 md:h-auto flex items-center justify-center bg-white relative overflow-hidden">
                     <Image
                       src={brand.logoUrl || brand.imageUrl || config.images.defaultBrandImage}
                       alt={`${brand.name} logo`}
@@ -166,13 +166,13 @@ const BrandsPage = () => {
             Ready to Explore Our Products?
           </h3>
           <p className="text-lg text-gray-600 mb-8">
-            Browse our complete collection of premium beverages and discover your new favorites.
+            Explore our complete range of premium beverages and discover exceptional quality.
           </p>
           <Link 
             href="/products" 
             className="inline-flex bg-green-600 hover:bg-green-700 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-lg uppercase tracking-wide"
           >
-            Shop All Products
+            View All Products
           </Link>
         </div>
       </div>
