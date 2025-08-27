@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { apiService, Product, Brand, Flavor, Size } from '../../lib/api'
@@ -14,7 +14,7 @@ interface FilterData {
   imageUrl?: string
 }
 
-const FilterPage = () => {
+const FilterPageContent = () => {
   const searchParams = useSearchParams()
   const [filterData, setFilterData] = useState<FilterData | null>(null)
   const [products, setProducts] = useState<Product[]>([])
@@ -380,6 +380,21 @@ const FilterPage = () => {
         </div>
       </div>
     </div>
+  )
+}
+
+const FilterPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 font-jost text-lg">Loading...</p>
+        </div>
+      </div>
+    }>
+      <FilterPageContent />
+    </Suspense>
   )
 }
 
