@@ -26,11 +26,11 @@ const WhyChooseUs = () => {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative bg-gradient-to-br from-white via-green-50 to-white pt-32 pb-20 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-gradient-to-br from-emerald-50 via-teal-50 to-emerald-50 pt-32 pb-20 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-10 right-20 w-40 h-40 bg-green-300 rounded-full"></div>
-        <div className="absolute bottom-10 left-20 w-32 h-32 bg-green-200 rounded-full"></div>
+        <div className="absolute top-10 right-20 w-40 h-40 bg-emerald-300 rounded-full"></div>
+        <div className="absolute bottom-10 left-20 w-32 h-32 bg-emerald-200 rounded-full"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

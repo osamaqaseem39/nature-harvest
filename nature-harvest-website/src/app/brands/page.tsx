@@ -60,7 +60,7 @@ const BrandsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50">
       {/* Page Header */}
       <div className="pt-24 pb-16 text-center bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,7 +75,7 @@ const BrandsPage = () => {
       </div>
 
       {/* Brands Stack */}
-      <div className="relative flex flex-col items-center pt-16 pb-24 bg-gradient-to-br from-gray-50 via-white to-gray-50" style={{ scrollBehavior: 'smooth' }}>
+      <div className="relative flex flex-col items-center pt-16 pb-24 bg-gradient-to-br from-green-50 via-white to-green-50" style={{ scrollBehavior: 'smooth' }}>
         {brands.map((brand, idx) => {
           const variant = idx % 2 === 0 ? "left" : "right"
           
@@ -108,7 +108,7 @@ const BrandsPage = () => {
                     />
                   </div>
                   {/* Separator */}
-                  <div className="hidden md:block w-px bg-gray-200 mx-4"></div>
+                  <div className="hidden md:block w-px bg-green-200 mx-4"></div>
                   <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-12">
                     <h2 className="text-3xl md:text-4xl font-gazpacho font-bold mb-4 text-gray-800">{brand.name}</h2>
                     <p className="mb-6 text-lg text-gray-600 leading-relaxed">
@@ -143,7 +143,7 @@ const BrandsPage = () => {
                     </Link>
                   </div>
                   {/* Separator */}
-                  <div className="hidden md:block w-px bg-gray-200 mx-4"></div>
+                  <div className="hidden md:block w-px bg-green-200 mx-4"></div>
                   <div className="w-full md:w-1/2 h-64 md:h-auto flex items-center justify-center bg-white relative overflow-hidden">
                     <Image
                       src={brand.logoUrl || brand.imageUrl || config.images.defaultBrandImage}
