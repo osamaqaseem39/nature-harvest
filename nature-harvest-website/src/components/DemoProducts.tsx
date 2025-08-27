@@ -6,7 +6,7 @@ import { Star, ShoppingCart, Heart, Eye } from 'lucide-react'
 import { apiService, Product } from '../lib/api'
 import { config } from '../lib/config'
 
-interface Product {
+interface DemoProduct {
   _id: string
   name: string
   description: string
@@ -33,13 +33,13 @@ interface Product {
 
 const DemoProducts = () => {
   const [isVisible, setIsVisible] = useState(false)
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<DemoProduct[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
   // Fallback hardcoded products when API has no data
-  const fallbackProducts: Product[] = [
+  const fallbackProducts: DemoProduct[] = [
     {
       _id: 'fallback-1',
       name: 'FreshLay Apple Juice',
@@ -107,31 +107,7 @@ const DemoProducts = () => {
       flavorId: {
         _id: 'flavor-3',
         name: 'Orange',
-        description: 'Citrus orange flavor'
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    },
-    {
-      _id: 'fallback-4',
-      name: 'AquaLife Pure Water',
-      description: 'Pure mineral water sourced from natural springs. Essential hydration for daily wellness.',
-      imageUrl: '/images/brands/AquaLife Water Logo PET.jpg',
-      status: 'Active',
-      brandId: {
-        _id: 'brand-4',
-        name: 'AquaLife',
-        logoUrl: '/images/brands/AquaLife Water Logo PET.jpg'
-      },
-      sizeId: {
-        _id: 'size-4',
-        name: '500ml',
-        description: 'Standard bottle size'
-      },
-      flavorId: {
-        _id: 'flavor-4',
-        name: 'Natural',
-        description: 'Pure natural water'
+        description: 'Zesty orange flavor'
       },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -179,7 +155,7 @@ const DemoProducts = () => {
     fetchProducts()
   }, [])
 
-  const getProductImage = (product: Product) => {
+  const getProductImage = (product: DemoProduct) => {
     if (product.imageUrl) {
       return product.imageUrl
     }
@@ -190,7 +166,7 @@ const DemoProducts = () => {
     return config.images.defaultProductImage
   }
 
-  const getProductCategory = (product: Product) => {
+  const getProductCategory = (product: DemoProduct) => {
     if (product.flavorId?.name) {
       return product.flavorId.name
     }
