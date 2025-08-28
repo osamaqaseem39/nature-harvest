@@ -188,20 +188,12 @@ const Brands = () => {
         <div className={`text-center transition-all duration-1000 ease-out delay-800 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
-              href="/brands" 
-              className="inline-flex bg-green-600 hover:bg-green-700 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-110 text-lg uppercase tracking-wide"
-            >
-              Learn More About Our Brands
-            </Link>
-            <Link 
-              href="/products" 
-              className="inline-flex bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-110 text-lg uppercase tracking-wide"
-            >
-              View All Products
-            </Link>
-          </div>
+          <Link 
+            href="/products" 
+            className="inline-flex bg-green-600 hover:bg-green-700 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-110 text-lg uppercase tracking-wide"
+          >
+            Learn More
+          </Link>
         </div>
       </div>
     </section>

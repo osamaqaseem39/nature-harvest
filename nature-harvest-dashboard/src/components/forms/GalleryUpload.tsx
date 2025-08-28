@@ -95,13 +95,13 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
       <div className="space-y-3">
         {/* Current Gallery Display */}
         {currentGallery.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {currentGallery.map((imageUrl, index) => (
               <div key={index} className="relative">
                 <img
                   src={imageUrl}
                   alt={`Gallery ${index + 1}`}
-                  className="w-full h-24 object-cover rounded-lg border border-gray-300"
+                  className="w-full h-32 object-cover rounded-lg border border-gray-300"
                 />
                 <button
                   type="button"
@@ -121,7 +121,7 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
             type="button"
             onClick={handleClick}
             disabled={uploading}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 border border-gray-300 rounded-md text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {uploading ? 'Uploading...' : 'Add Images'}
           </button>

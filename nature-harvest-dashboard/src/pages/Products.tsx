@@ -301,45 +301,97 @@ const Products = () => {
 
                  {/* Nutrients Display */}
                  {product.nutrients && Object.keys(product.nutrients).length > 0 && (
-                   <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                     <h4 className="text-sm font-medium text-gray-900 mb-2">Nutrition Facts</h4>
-                     <div className="grid grid-cols-2 gap-2 text-xs">
+                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                     <h4 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+                       <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                       Nutrition Facts
+                     </h4>
+                     <div className="grid grid-cols-2 gap-3 text-xs">
+                       {/* Energy */}
                        {product.nutrients.calories && (
-                         <div className="flex justify-between">
-                           <span className="text-gray-600">Calories:</span>
-                           <span className="font-medium">{product.nutrients.calories} kcal</span>
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600 font-medium">Calories</span>
+                           <span className="font-bold text-green-600">{product.nutrients.calories} kcal</span>
                          </div>
                        )}
+                       
+                       {/* Macronutrients */}
                        {product.nutrients.protein && (
-                         <div className="flex justify-between">
-                           <span className="text-gray-600">Protein:</span>
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Protein</span>
                            <span className="font-medium">{product.nutrients.protein}g</span>
                          </div>
                        )}
                        {product.nutrients.carbohydrates && (
-                         <div className="flex justify-between">
-                           <span className="text-gray-600">Carbs:</span>
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Carbs</span>
                            <span className="font-medium">{product.nutrients.carbohydrates}g</span>
                          </div>
                        )}
                        {product.nutrients.fat && (
-                         <div className="flex justify-between">
-                           <span className="text-gray-600">Fat:</span>
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Fat</span>
                            <span className="font-medium">{product.nutrients.fat}g</span>
                          </div>
                        )}
                        {product.nutrients.fiber && (
-                         <div className="flex justify-between">
-                           <span className="text-gray-600">Fiber:</span>
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Fiber</span>
                            <span className="font-medium">{product.nutrients.fiber}g</span>
                          </div>
                        )}
                        {product.nutrients.sugar && (
-                         <div className="flex justify-between">
-                           <span className="text-gray-600">Sugar:</span>
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Sugar</span>
                            <span className="font-medium">{product.nutrients.sugar}g</span>
                          </div>
                        )}
+                       
+                       {/* Minerals */}
+                       {product.nutrients.sodium && (
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Sodium</span>
+                           <span className="font-medium">{product.nutrients.sodium}mg</span>
+                         </div>
+                       )}
+                       {product.nutrients.calcium && (
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Calcium</span>
+                           <span className="font-medium">{product.nutrients.calcium}mg</span>
+                         </div>
+                       )}
+                       {product.nutrients.iron && (
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Iron</span>
+                           <span className="font-medium">{product.nutrients.iron}mg</span>
+                         </div>
+                       )}
+                       
+                       {/* Vitamins */}
+                       {product.nutrients.vitaminC && (
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Vitamin C</span>
+                           <span className="font-medium">{product.nutrients.vitaminC}mg</span>
+                         </div>
+                       )}
+                       {product.nutrients.vitaminA && (
+                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
+                           <span className="text-gray-600">Vitamin A</span>
+                           <span className="font-medium">{product.nutrients.vitaminA}IU</span>
+                         </div>
+                       )}
+                     </div>
+                     
+                     {/* Nutrients Summary */}
+                     <div className="mt-3 pt-3 border-t border-gray-200">
+                       <div className="flex items-center justify-between text-xs text-gray-500">
+                         <span>Total Nutrients: {Object.keys(product.nutrients || {}).filter(key => {
+                           const nutrients = product.nutrients || {};
+                           return nutrients[key as keyof typeof nutrients] !== undefined && 
+                                  nutrients[key as keyof typeof nutrients] !== null;
+                         }).length}</span>
+                         <span className="text-green-600 font-medium">✓ Complete</span>
+                       </div>
                      </div>
                    </div>
                  )}
