@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, Heart, Share2, Leaf, Zap, Droplets, Scale, Home, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Heart, Share2, Leaf, Zap, Droplets, Scale, Home, ChevronRight, MessageCircle } from 'lucide-react'
 import { apiService, Product } from '../../../lib/api'
 import { config } from '../../../lib/config'
 
@@ -86,6 +86,43 @@ const ProductDetailContent = () => {
     return Math.round((value / dailyValue) * 100)
   }
 
+  const handleGetQuote = () => {
+    // Navigate to contact page or open quote form
+    router.push('/contact')
+  }
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: product?.name || 'Product',
+          text: product?.description || 'Check out this amazing product!',
+          url: window.location.href,
+        })
+      } catch (error) {
+        console.log('Error sharing:', error)
+      }
+    } else {
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href)
+        alert('Link copied to clipboard!')
+      } catch (error) {
+        console.log('Error copying to clipboard:', error)
+      }
+    }
+  }
+
+  const handleFavorite = () => {
+    setIsFavorite(!isFavorite)
+    // Here you could also save to localStorage or send to backend
+    if (!isFavorite) {
+      alert('Product added to favorites!')
+    } else {
+      alert('Product removed from favorites!')
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white flex items-center justify-center">
@@ -158,13 +195,15 @@ const ProductDetailContent = () => {
             <div className="space-y-4 lg:space-y-6">
               {/* Main Image */}
               <div className="relative bg-white rounded-2xl shadow-lg p-4 lg:p-8 border border-gray-100">
-                <Image
-                  src={selectedImage || getProductImage(product)}
-                  alt={product.name}
-                  width={500}
-                  height={500}
-                  className="w-full h-auto object-contain transition-all duration-300"
-                />
+                <div className="max-w-md mx-auto">
+                  <Image
+                    src={selectedImage || getProductImage(product)}
+                    alt={product.name}
+                    width={400}
+                    height={400}
+                    className="w-full h-auto max-h-96 object-contain transition-all duration-300"
+                  />
+                </div>
                 
                 {/* Brand Badge */}
                 <div className="absolute top-2 lg:top-4 left-2 lg:left-4">
@@ -254,13 +293,16 @@ const ProductDetailContent = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
-                <button className="flex items-center justify-center gap-2 px-6 lg:px-8 py-3 lg:py-4 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-200 font-jost font-semibold text-base lg:text-lg">
-                  <Leaf className="h-4 w-4 lg:h-5 lg:w-5" />
-                  Order Now
+                <button 
+                  onClick={handleGetQuote}
+                  className="flex items-center justify-center gap-2 px-6 lg:px-8 py-3 lg:py-4 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-200 font-jost font-semibold text-base lg:text-lg"
+                >
+                  <MessageCircle className="h-4 w-4 lg:h-5 lg:w-5" />
+                  Get a Quote
                 </button>
                 
                 <button
-                  onClick={() => setIsFavorite(!isFavorite)}
+                  onClick={handleFavorite}
                   className={`flex items-center justify-center gap-2 px-4 lg:px-6 py-3 lg:py-4 rounded-full transition-colors duration-200 font-jost font-medium ${
                     isFavorite 
                       ? 'bg-red-100 text-red-600 hover:bg-red-200' 
@@ -272,7 +314,10 @@ const ProductDetailContent = () => {
                   <span className="sm:hidden">{isFavorite ? '✓' : '♥'}</span>
                 </button>
 
-                <button className="flex items-center justify-center gap-2 px-4 lg:px-6 py-3 lg:py-4 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors duration-200 font-jost font-medium">
+                <button 
+                  onClick={handleShare}
+                  className="flex items-center justify-center gap-2 px-4 lg:px-6 py-3 lg:py-4 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors duration-200 font-jost font-medium"
+                >
                   <Share2 className="h-4 w-4 lg:h-5 lg:w-5" />
                   <span className="hidden sm:inline">Share</span>
                   <span className="sm:hidden">↗</span>
