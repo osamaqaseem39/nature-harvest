@@ -70,6 +70,11 @@ export interface ProductsResponse {
   };
 }
 
+export interface ProductResponse {
+  success: boolean;
+  data: Product;
+}
+
 export interface BrandsResponse {
   success: boolean;
   data: Brand[];
@@ -151,6 +156,10 @@ class ApiService {
     const endpoint = `/products${queryString ? `?${queryString}` : ''}`;
     
     return this.request<ProductsResponse>(endpoint);
+  }
+
+  async getProduct(id: string): Promise<ProductResponse> {
+    return this.request<ProductResponse>(`/products/${id}`);
   }
 
   // Flavors API

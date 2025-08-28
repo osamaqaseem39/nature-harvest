@@ -98,14 +98,14 @@ const Brands = () => {
         {!loading && !error && brands.length > 0 && (
           <>
             {/* First Row */}
-            <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-12 transition-all duration-1000 ease-out delay-400 ${
+            <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-8 mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-400 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               {brands.slice(0, Math.ceil(brands.length / 2)).map((brand, index) => (
                 <div key={brand._id} className="flex justify-center">
                   <Link 
                     href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
-                    className="flex items-center justify-center p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer"
+                    className="flex items-center justify-center p-2 lg:p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer"
                   >
                     <div className="relative">
                       <Image
@@ -113,7 +113,7 @@ const Brands = () => {
                         alt={`${brand.name} logo`}
                         width={160}
                         height={120}
-                        className="object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
+                        className="w-20 h-16 lg:w-40 lg:h-30 object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           console.log(`Image failed for ${brand.name}:`, target.src) // Debug log
@@ -136,14 +136,14 @@ const Brands = () => {
 
             {/* Second Row */}
             {brands.length > Math.ceil(brands.length / 2) && (
-              <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-12 transition-all duration-1000 ease-out delay-600 ${
+              <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-8 mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-600 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}>
                 {brands.slice(Math.ceil(brands.length / 2)).map((brand, index) => (
                   <div key={brand._id} className="flex justify-center">
                     <Link 
                       href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
-                      className="flex items-center justify-center p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer"
+                      className="flex items-center justify-center p-2 lg:p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer"
                     >
                       <div className="relative">
                         <Image
@@ -151,7 +151,7 @@ const Brands = () => {
                           alt={`${brand.name} logo`}
                           width={160}
                           height={120}
-                          className="object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
+                          className="w-20 h-16 lg:w-40 lg:h-30 object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             console.log(`Image failed for ${brand.name}:`, target.src) // Debug log

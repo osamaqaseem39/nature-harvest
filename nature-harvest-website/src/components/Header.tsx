@@ -50,16 +50,16 @@ const Header = () => {
             ? 'bg-white backdrop-blur-md shadow-2xl border border-gray-100/30' 
             : 'bg-white backdrop-blur-sm shadow-lg border border-white/30'
         }`}>
-          <div className="flex justify-between items-center h-[90px] px-12">
+          <div className="flex justify-between items-center h-[70px] lg:h-[90px] px-4 lg:px-12">
             {/* Logo */}
-            <Link href="/" className="flex items-center z-10 px-4 py-2">
+            <Link href="/" className="flex items-center z-10 px-2 lg:px-4 py-2">
               <Image
                 src="/images/logo-full.png"
                 alt="Nature Harvest Logo"
                 width={160}
                 height={36}
                 priority
-                className="hover:opacity-80 transition-opacity duration-200"
+                className="w-32 lg:w-40 h-auto hover:opacity-80 transition-opacity duration-200"
               />
             </Link>
 
@@ -93,12 +93,12 @@ const Header = () => {
             <div className="lg:hidden">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-gray-800 hover:text-yellow-300 p-3 transition-colors duration-200 rounded-full hover:bg-gray-100/50"
+                className="text-gray-800 hover:text-yellow-300 p-2 lg:p-3 transition-colors duration-200 rounded-full hover:bg-gray-100/50"
               >
                 {mobileMenuOpen ? (
-                  <X className="h-6 w-6" />
+                  <X className="h-5 w-5 lg:h-6 lg:w-6" />
                 ) : (
-                  <Menu className="h-6 w-6" />
+                  <Menu className="h-5 w-5 lg:h-6 lg:w-6" />
                 )}
               </button>
             </div>
@@ -107,12 +107,12 @@ const Header = () => {
           {/* Mobile Navigation */}
           {mobileMenuOpen && (
             <div className="lg:hidden bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 mx-4 mb-4">
-              <div className="px-6 pt-4 pb-6 space-y-2">
+              <div className="px-4 lg:px-6 pt-3 lg:pt-4 pb-4 lg:pb-6 space-y-1 lg:space-y-2">
                 {navigation.map((item) => (
                   <div key={item.name}>
                     <Link
                       href={item.href}
-                      className={`text-gray-800 hover:text-green-500 block px-4 py-3 text-base font-medium transition-colors duration-200 font-jost rounded-lg hover:bg-gray-50 ${
+                      className={`text-gray-800 hover:text-green-500 block px-3 lg:px-4 py-2 lg:py-3 text-base font-medium transition-colors duration-200 font-jost rounded-lg hover:bg-gray-50 ${
                         item.active ? 'text-green-500' : ''
                       }`}
                       onClick={() => setMobileMenuOpen(false)}
@@ -123,7 +123,7 @@ const Header = () => {
                 ))}
                 
                 {/* Mobile Contact Button */}
-                <div className="pt-4">
+                <div className="pt-3 lg:pt-4">
                   <Link
                     href="/contact"
                     className="bg-green-500 hover:bg-green-600 text-white block px-4 py-3 rounded-full text-base font-bold transition-all duration-200 text-center font-jost uppercase tracking-wide"

@@ -416,6 +416,16 @@ const ProductsContent = () => {
                       </Link>
                     ))}
                   </div>
+                  
+                  {/* View All Products Link */}
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <Link
+                      href="/products"
+                      className="block w-full text-center px-4 py-3 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200 font-jost"
+                    >
+                      View All Products
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -427,7 +437,7 @@ const ProductsContent = () => {
             <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-100">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <p className="text-gray-600 font-jost">
+                  <p className="text-gray-600 font-jost text-sm lg:text-base">
                     Showing <span className="font-bold text-green-600">{products.length}</span> of <span className="font-bold text-green-600">{totalProducts}</span> products
                     {hasActiveFilters && ' (filtered)'}
                   </p>
@@ -474,67 +484,76 @@ const ProductsContent = () => {
             {!loading && !error && products.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
                 {products.map((product, index) => (
-                  <div 
+                  <Link 
                     key={product._id} 
-                    className="relative transition-all duration-500 ease-out hover:scale-105"
+                    href={`/products/${product._id}`}
+                    className="block"
                   >
-                    {/* Product Image Container */}
-                    <div className="relative overflow-hidden">
-                      {/* Brand Tag - Top Left */}
-                      <div className="absolute top-2 left-1 z-10">
-                        <Link 
-                          href={product.brandId?._id ? `/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
-                          className="block"
-                        >
-                          <div className="bg-white rounded-full w-20 h-20 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
-                            <span className="text-green-600 font-gazpacho font-bold text-sm">
-                              {product.brandId?.name || 'Nature Harvest'}
-                            </span>
-                            <span className="text-green-600 font-jost font-medium text-xs">
-                              {product.sizeId?.name || '125 ML'}
-                            </span>
-                          </div>
-                        </Link>
-                      </div>
+                    <div className="relative transition-all duration-500 ease-out hover:scale-105 cursor-pointer">
+                      {/* Product Image Container */}
+                      <div className="relative overflow-hidden">
+                        {/* Brand Tag - Top Left */}
+                        <div className="absolute top-2 left-1 z-10">
+                          <Link 
+                            href={product.brandId?._id ? `/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
+                            className="block"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <div className="bg-white rounded-full w-20 h-20 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
+                              <span className="text-green-600 font-gazpacho font-bold text-sm">
+                                {product.brandId?.name || 'Nature Harvest'}
+                              </span>
+                              <span className="text-green-600 font-jost font-medium text-xs">
+                                {product.sizeId?.name || '125 ML'}
+                              </span>
+                            </div>
+                          </Link>
+                        </div>
 
-                      {/* Main Product Image */}
-                      <div className="relative w-full p-8">
-                        <Image
-                          src={getProductImage(product)}
-                          alt={product.name}
-                          width={300}
-                          height={400}
-                          className="object-contain transition-all duration-500 hover:scale-105 hover:-rotate-6"
-                        />
-                      </div>
-
-                      {/* Flavor Image - Bottom Left */}
-                      <div className="absolute bottom-0 left-40">
-                        <Link 
-                          href={product.flavorId?._id ? `/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
-                          className="block"
-                        >
+                        {/* Main Product Image */}
+                        <div className="relative w-full p-8">
                           <Image
-                            src={getFlavorImage(product)}
-                            alt={product.flavorId?.name || 'Flavor'}
-                            width={180}
-                            height={180}
-                            className="object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
+                            src={getProductImage(product)}
+                            alt={product.name}
+                            width={300}
+                            height={400}
+                            className="object-contain transition-all duration-500 hover:scale-105 hover:-rotate-6"
                           />
-                        </Link>
+                        </div>
+
+                        {/* Flavor Image - Bottom Left */}
+                        <div className="absolute bottom-0 left-40">
+                          <Link 
+                            href={product.flavorId?._id ? `/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
+                            className="block"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Image
+                              src={getFlavorImage(product)}
+                              alt={product.flavorId?.name || 'Flavor'}
+                              width={180}
+                              height={180}
+                              className="object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
+                            />
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Product Info */}
+                      <div className="text-center mt-4">
+                        <h3 className="font-gazpacho font-bold text-lg text-gray-800 mb-2">
+                          {product.name}
+                        </h3>
+                        <p className="text-gray-600 font-jost text-sm line-clamp-2 mb-3">
+                          {product.description}
+                        </p>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200">
+                          View Details
+                          <ChevronRight className="h-4 w-4" />
+                        </div>
                       </div>
                     </div>
-
-                    {/* Product Info */}
-                    <div className="text-center mt-4">
-                      <h3 className="font-gazpacho font-bold text-lg text-gray-800 mb-2">
-                        {product.name}
-                      </h3>
-                      <p className="text-gray-600 font-jost text-sm line-clamp-2">
-                        {product.description}
-                      </p>
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
