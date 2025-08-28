@@ -38,121 +38,121 @@ api.interceptors.response.use(
 
 // Auth API
 export const authAPI = {
-  login: (credentials) => api.post('/api/auth/login', credentials),
-  register: (userData) => api.post('/api/auth/register', userData),
-  logout: () => api.post('/api/auth/logout'),
-  getProfile: () => api.get('/api/auth/me'),
-  updateProfile: (userData) => api.put('/api/auth/profile', userData),
+  login: (credentials) => api.post('/auth/login', credentials),
+  register: (userData) => api.post('/auth/register', userData),
+  logout: () => api.post('/auth/logout'),
+  getProfile: () => api.get('/auth/me'),
+  updateProfile: (userData) => api.put('/auth/profile', userData),
 };
 
 // Dashboard API
 export const dashboardAPI = {
-  getStats: () => api.get('/api/dashboard/stats'),
-  getHealth: () => api.get('/api/dashboard/health'),
-  getActivity: () => api.get('/api/dashboard/activity'),
-  getRecentProducts: () => api.get('/api/dashboard/recent-products'),
-  getRecentServices: () => api.get('/api/dashboard/recent-services'),
-  getRecentBlogs: () => api.get('/api/dashboard/recent-blogs'),
+  getStats: () => api.get('/dashboard/stats'),
+  getHealth: () => api.get('/dashboard/health'),
+  getActivity: () => api.get('/dashboard/activity'),
+  getRecentProducts: () => api.get('/dashboard/recent-products'),
+  getRecentServices: () => api.get('/dashboard/recent-services'),
+  getRecentBlogs: () => api.get('/dashboard/recent-blogs'),
 };
 
 // Products API
 export const productsAPI = {
-  getAll: (params = {}) => api.get('/api/products', { params }),
-  getById: (id) => api.get(`/api/products/${id}`),
-  create: (productData) => api.post('/api/products', productData),
-  update: (id, productData) => api.put(`/api/products/${id}`, productData),
-  delete: (id) => api.delete(`/api/products/${id}`),
-  getByCategory: (categoryId) => api.get(`/api/products/category/${categoryId}`),
-  getBySubcategory: (subcategoryId) => api.get(`/api/products/subcategory/${subcategoryId}`),
-  search: (query) => api.get('/api/products/search', { params: { q: query } }),
+  getAll: (params = {}) => api.get('/products', { params }),
+  getById: (id) => api.get(`/products/${id}`),
+  create: (productData) => api.post('/products', productData),
+  update: (id, productData) => api.put(`/products/${id}`, productData),
+  delete: (id) => api.delete(`/products/${id}`),
+  getByCategory: (categoryId) => api.get(`/products/category/${categoryId}`),
+  getBySubcategory: (subcategoryId) => api.get(`/products/subcategory/${subcategoryId}`),
+  search: (query) => api.get('/products/search', { params: { q: query } }),
 };
 
 // Categories API
 export const categoriesAPI = {
-  getAll: () => api.get('/api/categories'),
-  getById: (id) => api.get(`/api/categories/${id}`),
-  create: (categoryData) => api.post('/api/categories', categoryData),
-  update: (id, categoryData) => api.put(`/api/categories/${id}`, categoryData),
-  delete: (id) => api.delete(`/api/categories/${id}`),
+  getAll: () => api.get('/categories'),
+  getById: (id) => api.get(`/categories/${id}`),
+  create: (categoryData) => api.post('/categories', categoryData),
+  update: (id, categoryData) => api.put(`/categories/${id}`, categoryData),
+  delete: (id) => api.delete(`/categories/${id}`),
 };
 
 // Subcategories API
 export const subcategoriesAPI = {
-  getAll: () => api.get('/api/subcategories'),
-  getById: (id) => api.get(`/api/subcategories/${id}`),
-  create: (subcategoryData) => api.post('/api/subcategories', subcategoryData),
-  update: (id, subcategoryData) => api.put(`/api/subcategories/${id}`, subcategoryData),
-  delete: (id) => api.delete(`/api/subcategories/${id}`),
-  getByCategory: (categoryId) => api.get(`/api/subcategories/category/${categoryId}`),
+  getAll: () => api.get('/subcategories'),
+  getById: (id) => api.get(`/subcategories/${id}`),
+  create: (subcategoryData) => api.post('/subcategories', subcategoryData),
+  update: (id, subcategoryData) => api.put(`/subcategories/${id}`, subcategoryData),
+  delete: (id) => api.delete(`/subcategories/${id}`),
+  getByCategory: (categoryId) => api.get(`/subcategories/category/${categoryId}`),
 };
 
 // Brands API
 export const brandsAPI = {
-  getAll: () => api.get('/api/brands'),
-  getById: (id) => api.get(`/api/brands/${id}`),
-  create: (brandData) => api.post('/api/brands', brandData),
-  update: (id, brandData) => api.put(`/api/brands/${id}`, brandData),
-  delete: (id) => api.delete(`/api/brands/${id}`),
+  getAll: () => api.get('/brands'),
+  getById: (id) => api.get(`/brands/${id}`),
+  create: (brandData) => api.post('/brands', brandData),
+  update: (id, brandData) => api.put(`/brands/${id}`, brandData),
+  delete: (id) => api.delete(`/brands/${id}`),
 };
 
 // Flavors API
 export const flavorsAPI = {
-  getAll: () => api.get('/api/flavors'),
-  getById: (id) => api.get(`/api/flavors/${id}`),
-  create: (flavorData) => api.post('/api/flavors', flavorData),
-  update: (id, flavorData) => api.put(`/api/flavors/${id}`, flavorData),
-  delete: (id) => api.delete(`/api/flavors/${id}`),
+  getAll: () => api.get('/flavors'),
+  getById: (id) => api.get(`/flavors/${id}`),
+  create: (flavorData) => api.post('/flavors', flavorData),
+  update: (id, flavorData) => api.put(`/flavors/${id}`, flavorData),
+  delete: (id) => api.delete(`/flavors/${id}`),
 };
 
 // Sizes API
 export const sizesAPI = {
-  getAll: () => api.get('/api/sizes'),
-  getById: (id) => api.get(`/api/sizes/${id}`),
-  create: (sizeData) => api.post('/api/sizes', sizeData),
-  update: (id, sizeData) => api.put(`/api/sizes/${id}`, sizeData),
-  delete: (id) => api.delete(`/api/sizes/${id}`),
+  getAll: () => api.get('/sizes'),
+  getById: (id) => api.get(`/sizes/${id}`),
+  create: (sizeData) => api.post('/sizes', sizeData),
+  update: (id, sizeData) => api.put(`/sizes/${id}`, sizeData),
+  delete: (id) => api.delete(`/sizes/${id}`),
 };
 
 // Services API
 export const servicesAPI = {
-  getAll: () => api.get('/api/services'),
-  getById: (id) => api.get(`/api/services/${id}`),
-  create: (serviceData) => api.post('/api/services', serviceData),
-  update: (id, serviceData) => api.put(`/api/services/${id}`, serviceData),
-  delete: (id) => api.delete(`/api/services/${id}`),
+  getAll: () => api.get('/services'),
+  getById: (id) => api.get(`/services/${id}`),
+  create: (serviceData) => api.post('/services', serviceData),
+  update: (id, serviceData) => api.put(`/services/${id}`, serviceData),
+  delete: (id) => api.delete(`/services/${id}`),
 };
 
 // Blogs API
 export const blogsAPI = {
-  getAll: (params = {}) => api.get('/api/blogs', { params }),
-  getById: (id) => api.get(`/api/blogs/${id}`),
-  create: (blogData) => api.post('/api/blogs', blogData),
-  update: (id, blogData) => api.put(`/api/blogs/${id}`, blogData),
-  delete: (id) => api.delete(`/api/blogs/${id}`),
-  publish: (id) => api.put(`/api/blogs/${id}/publish`),
-  unpublish: (id) => api.put(`/api/blogs/${id}/unpublish`),
+  getAll: (params = {}) => api.get('/blogs', { params }),
+  getById: (id) => api.get(`/blogs/${id}`),
+  create: (blogData) => api.post('/blogs', blogData),
+  update: (id, blogData) => api.put(`/blogs/${id}`, blogData),
+  delete: (id) => api.delete(`/blogs/${id}`),
+  publish: (id) => api.put(`/blogs/${id}/publish`),
+  unpublish: (id) => api.put(`/blogs/${id}/unpublish`),
 };
 
 // Quotes API
 export const quotesAPI = {
-  getAll: () => api.get('/api/quotes'),
-  getById: (id) => api.get(`/api/quotes/${id}`),
-  create: (quoteData) => api.post('/api/quotes', quoteData),
-  update: (id, quoteData) => api.put(`/api/quotes/${id}`, quoteData),
-  delete: (id) => api.delete(`/api/quotes/${id}`),
-  approve: (id) => api.put(`/api/quotes/${id}/approve`),
-  reject: (id) => api.put(`/api/quotes/${id}/reject`),
+  getAll: () => api.get('/quotes'),
+  getById: (id) => api.get(`/quotes/${id}`),
+  create: (quoteData) => api.post('/quotes', quoteData),
+  update: (id, quoteData) => api.put(`/quotes/${id}`, quoteData),
+  delete: (id) => api.delete(`/quotes/${id}`),
+  approve: (id) => api.put(`/quotes/${id}/approve`),
+  reject: (id) => api.put(`/quotes/${id}/reject`),
 };
 
 // Suppliers API
 export const suppliersAPI = {
-  getAll: () => api.get('/api/suppliers'),
-  getById: (id) => api.get(`/api/suppliers/${id}`),
-  create: (supplierData) => api.post('/api/suppliers', supplierData),
-  update: (id, supplierData) => api.put(`/api/suppliers/${id}`, supplierData),
-  delete: (id) => api.delete(`/api/suppliers/${id}`),
-  approve: (id) => api.put(`/api/suppliers/${id}/approve`),
-  reject: (id) => api.put(`/api/suppliers/${id}/reject`),
+  getAll: () => api.get('/suppliers'),
+  getById: (id) => api.get(`/suppliers/${id}`),
+  create: (supplierData) => api.post('/suppliers', supplierData),
+  update: (id, supplierData) => api.put(`/suppliers/${id}`, supplierData),
+  delete: (id) => api.delete(`/suppliers/${id}`),
+  approve: (id) => api.put(`/suppliers/${id}/approve`),
+  reject: (id) => api.put(`/suppliers/${id}/reject`),
 };
 
 // File upload helper
@@ -161,7 +161,7 @@ export const uploadFile = async (file, type = 'product') => {
   formData.append('file', file);
   formData.append('type', type);
   
-  return api.post('/api/upload', formData, {
+  return api.post('/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
