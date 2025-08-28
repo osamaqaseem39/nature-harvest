@@ -428,47 +428,47 @@ const ProductDetailContent = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Total Fat</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.fat, 'g')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.fat, 'g')}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Saturated Fat</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">0g</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">0g</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Sodium</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.sodium, 'mg')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.sodium, 'mg')}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Total Carbohydrates</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.carbohydrates, 'g')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.carbohydrates, 'g')}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Dietary Fiber</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.fiber, 'g')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.fiber, 'g')}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Total Sugars</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.sugar, 'g')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.sugar, 'g')}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Protein</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.protein, 'g')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.protein, 'g')}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Vitamin C</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.vitaminC, 'mg')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.vitaminC, 'mg')}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Vitamin A</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.vitaminA, 'IU')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.vitaminA, 'IU')}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Calcium</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.calcium, 'mg')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.calcium, 'mg')}</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="font-jost text-gray-700 text-sm lg:text-base">Iron</span>
-                      <span className="font-jost font-medium text-sm lg:text-base">{getNutrientValue(product.nutrients.iron, 'mg')}</span>
+                      <span className="font-jost font-medium text-black text-sm lg:text-base">{getNutrientValue(product.nutrients.iron, 'mg')}</span>
                     </div>
                   </div>
                 </div>

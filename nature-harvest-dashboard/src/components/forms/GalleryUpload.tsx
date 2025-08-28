@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { uploadGalleryImages } from '../../services/api';
 
 interface GalleryUploadProps {
   onGalleryUpdate: (gallery: string[]) => void;
@@ -38,39 +39,22 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
     setError(null);
 
     try {
-      const uploadedUrls: string[] = [];
+      // Convert FileList to Array for the API service
+      const filesArray = Array.from(files);
       
-      for (let i = 0; i < files.length; i++) {
-        const formData = new FormData();
-        formData.append('file', files[i]);
-
-        const response = await fetch('https://natureharvest.osamaqaseem.online/upload.php', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error(`Upload failed: ${response.statusText}`);
-        }
-
-        const result = await response.json();
-        
-        if (result.error) {
-          throw new Error(result.error);
-        }
-
-        if (result.url) {
-          uploadedUrls.push(result.url);
-        } else {
-          throw new Error('No URL returned from upload');
-        }
+      // Use the local API service
+      const response = await uploadGalleryImages(filesArray);
+      
+      if (response.data && response.data.urls) {
+        // Add new images to existing gallery
+        const updatedGallery = [...currentGallery, ...response.data.urls];
+        onGalleryUpdate(updatedGallery);
+        setError(null);
+      } else {
+        throw new Error('No URLs returned from upload');
       }
-
-      // Add new images to existing gallery
-      const updatedGallery = [...currentGallery, ...uploadedUrls];
-      onGalleryUpdate(updatedGallery);
-      setError(null);
     } catch (err) {
+      console.error('Upload error:', err);
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setUploading(false);

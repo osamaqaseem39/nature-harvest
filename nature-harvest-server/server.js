@@ -87,10 +87,15 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Check MongoDB connection middleware
+// Check MongoDB connection middleware - Modified to be less strict
 app.use((req, res, next) => {
   const state = mongoose.connection.readyState;
   const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+  
+  // Only block critical operations, allow health checks and basic routes
+  if (req.path === '/' || req.path === '/health' || req.path === '/api-docs') {
+    return next();
+  }
   
   if (state !== 1) {
     console.error('MongoDB not connected. Current state:', states[state] || 'unknown');
@@ -100,15 +105,19 @@ app.use((req, res, next) => {
       name: mongoose.connection.name || 'unknown',
       port: mongoose.connection.port || 'unknown'
     });
-    return res.status(503).json({ 
-      message: 'Database connection not ready',
-      state: states[state] || 'unknown',
-      details: {
-        host: mongoose.connection.host || 'unknown',
-        name: mongoose.connection.name || 'unknown',
-        port: mongoose.connection.port || 'unknown'
-      }
-    });
+    
+    // For API routes, return 503 but don't block health checks
+    if (req.path.startsWith('/api/')) {
+      return res.status(503).json({ 
+        message: 'Database connection not ready',
+        state: states[state] || 'unknown',
+        details: {
+          host: mongoose.connection.host || 'unknown',
+          name: mongoose.connection.name || 'unknown',
+          port: mongoose.connection.port || 'unknown'
+        }
+      });
+    }
   }
   next();
 });
@@ -125,22 +134,29 @@ if (process.env.NODE_ENV !== 'production') {
 const connectDB = async () => {
   try {
     const mongoURI = process.env.MONGODB_URI;
+    if (!mongoURI) {
+      console.error('❌ MONGODB_URI environment variable is not set');
+      return false;
+    }
+    
     console.log('Attempting to connect to MongoDB...');
     console.log('MongoDB URI:', mongoURI.replace(/\/\/[^:]+:[^@]+@/, '//****:****@')); // Hide credentials in logs
 
     const options = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 30000, // Increased timeout
       socketTimeoutMS: 45000,
       family: 4,
       maxPoolSize: 10,
-      minPoolSize: 5,
+      minPoolSize: 1, // Reduced minimum pool size
       retryWrites: true,
       w: 'majority',
-      connectTimeoutMS: 10000,
-      heartbeatFrequencyMS: 2000,
-      retryReads: true
+      connectTimeoutMS: 30000, // Increased connection timeout
+      heartbeatFrequencyMS: 10000, // Increased heartbeat frequency
+      retryReads: true,
+      bufferCommands: false, // Disable mongoose buffering
+      bufferMaxEntries: 0
     };
 
     await mongoose.connect(mongoURI, options);
@@ -198,6 +214,35 @@ app.use('/api/subcategories', subcategoryRoutes);
 app.use('/api/flavors', flavorRoutes);
 app.use('/api/sizes', sizeRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+
+// Upload routes
+const { uploadMultiple } = require('./middleware/externalUpload');
+app.post('/api/upload', uploadMultiple('file', 10, 'products'), (req, res) => {
+  try {
+    if (!req.uploadResults || req.uploadResults.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'No files uploaded'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Files uploaded successfully',
+      data: {
+        urls: req.fileUrls,
+        files: req.uploadResults
+      }
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Upload failed',
+      error: error.message
+    });
+  }
+});
 app.use('/uploads/products', express.static(path.join(__dirname, '../uploads/products')));
 app.use('/uploads/brochures', express.static(path.join(__dirname, '../uploads/brochures')));
 app.use('/uploads/brand-category', express.static(path.join(__dirname, '../uploads/brand-category')));
@@ -295,6 +340,36 @@ app.use('/uploads/flavors', express.static(path.join(__dirname, '../uploads/flav
  *                   type: object
  *                   description: Connection details
  */
+// Health check endpoint
+app.get('/health', (req, res) => {
+  const mongoStatus = {
+    isConnected: mongoose.connection.readyState === 1,
+    state: ['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState] || 'unknown',
+    database: mongoose.connection.name || 'not connected',
+    host: mongoose.connection.host || 'not connected',
+    port: mongoose.connection.port || 'not connected',
+    models: Object.keys(mongoose.models),
+    collections: mongoose.connection.collections ? Object.keys(mongoose.connection.collections) : []
+  };
+
+  const serverStatus = {
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    cpu: process.cpuUsage(),
+    env: process.env.NODE_ENV || 'development',
+    nodeVersion: process.version,
+    platform: process.platform
+  };
+
+  res.json({ 
+    status: mongoStatus.isConnected ? 'healthy' : 'unhealthy',
+    message: mongoStatus.isConnected ? 'Server is running' : 'Server is running but database is not connected',
+    timestamp: new Date().toISOString(),
+    mongodb: mongoStatus,
+    server: serverStatus
+  });
+});
+
 // Root route for API health check
 app.get('/', (req, res) => {
   const mongoStatus = {
@@ -339,26 +414,44 @@ const startServer = async () => {
   let retries = 5;
   let connected = false;
 
+  console.log('🚀 Starting Nature Harvest Server...');
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔌 Port: ${process.env.PORT || 3002}`);
+
   while (retries > 0 && !connected) {
     console.log(`Attempting to connect to MongoDB (${retries} retries left)...`);
     connected = await connectDB();
     if (!connected) {
       retries--;
       if (retries > 0) {
-        console.log('Waiting 5 seconds before retrying...');
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log('Waiting 10 seconds before retrying...');
+        await new Promise(resolve => setTimeout(resolve, 10000));
       }
     }
   }
 
   if (!connected) {
-    console.error('Failed to connect to MongoDB after multiple attempts');
-    process.exit(1);
+    console.error('❌ Failed to connect to MongoDB after multiple attempts');
+    console.log('⚠️  Server will start but API endpoints will return 503 errors');
+    console.log('💡 Check your MongoDB connection string and network connectivity');
+    
+    // Start server anyway but log the issue
+    const PORT = process.env.PORT || 3002;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running on port ${PORT} (Database not connected)`);
+      console.log(`📊 Health check available at /health`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`📚 Swagger documentation available at /api-docs`);
+      }
+      console.log('⚠️  API endpoints will return 503 errors until database connects');
+    });
+    return;
   }
 
   const PORT = process.env.PORT || 3002;
   app.listen(PORT, () => {
     console.log(`🚀 Server is running on port ${PORT}`);
+    console.log(`📊 Health check available at /health`);
     if (process.env.NODE_ENV !== 'production') {
       console.log(`📚 Swagger documentation available at /api-docs`);
     }

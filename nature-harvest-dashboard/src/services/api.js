@@ -161,7 +161,27 @@ export const uploadFile = async (file, type = 'product') => {
   formData.append('file', file);
   formData.append('type', type);
   
-  return api.post('/upload', formData, {
+  return api.post('/api/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+// Gallery upload helper for multiple images
+export const uploadGalleryImages = async (files) => {
+  const formData = new FormData();
+  
+  // Append multiple files
+  if (Array.isArray(files)) {
+    files.forEach((file, index) => {
+      formData.append('file', file);
+    });
+  } else {
+    formData.append('file', files);
+  }
+  
+  return api.post('/api/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
