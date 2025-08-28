@@ -154,9 +154,7 @@ const connectDB = async () => {
       w: 'majority',
       connectTimeoutMS: 30000, // Increased connection timeout
       heartbeatFrequencyMS: 10000, // Increased heartbeat frequency
-      retryReads: true,
-      bufferCommands: false, // Disable mongoose buffering
-      bufferMaxEntries: 0
+      retryReads: true
     };
 
     await mongoose.connect(mongoURI, options);
