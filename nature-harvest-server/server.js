@@ -28,12 +28,10 @@ const app = express();
 // Middleware - CORS must be first!
 app.use(cors({
   origin: [
-    'https://natureharvest-dashbaord.vercel.app',
+    'https://nature-harvest-dashboard.vercel.app',
     'https://nature-harvest-q2ra.vercel.app',
     'https://admin.wingzimpex.com',
-    'https://wingzimpex.osamaqaseem.online',
     'https://nature-harvest-sooty.vercel.app',
-    'https://nature-harvest-dashboard.vercel.app',
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:3002',
@@ -62,12 +60,9 @@ app.use(cors({
 // Also add a pre-flight middleware to ensure headers are set
 app.use((req, res, next) => {
   const allowedOrigins = [
-    'https://natureharvest-dashbaord.vercel.app',
-    'https://nature-harvest-sooty.vercel.app',
     'https://nature-harvest-dashboard.vercel.app',
+    'https://nature-harvest-sooty.vercel.app',
     'https://nature-harvest-q2ra.vercel.app',
-    'https://admin.wingzimpex.com',
-    'https://wingzimpex.osamaqaseem.online',
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:3002',
