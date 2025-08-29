@@ -9,7 +9,7 @@ const {
   getPartnerStats 
 } = require('../controllers/partnerController');
 const { partnerValidation } = require('../middleware/validation');
-const { authenticate } = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 
 /**
  * @swagger
@@ -142,7 +142,7 @@ router.post('/', partnerValidation.create, createPartner);
  *       500:
  *         description: Server error
  */
-router.get('/', authenticate, getAllPartners);
+router.get('/', authenticateToken, getAllPartners);
 
 /**
  * @swagger
@@ -160,7 +160,7 @@ router.get('/', authenticate, getAllPartners);
  *       500:
  *         description: Server error
  */
-router.get('/stats', authenticate, getPartnerStats);
+router.get('/stats', authenticateToken, getPartnerStats);
 
 /**
  * @swagger
@@ -187,7 +187,7 @@ router.get('/stats', authenticate, getPartnerStats);
  *       500:
  *         description: Server error
  */
-router.get('/:id', authenticate, getPartnerById);
+router.get('/:id', authenticateToken, getPartnerById);
 
 /**
  * @swagger
@@ -231,7 +231,7 @@ router.get('/:id', authenticate, getPartnerById);
  *       500:
  *         description: Server error
  */
-router.put('/:id/status', authenticate, updatePartnerStatus);
+router.put('/:id/status', authenticateToken, updatePartnerStatus);
 
 /**
  * @swagger
@@ -258,6 +258,6 @@ router.put('/:id/status', authenticate, updatePartnerStatus);
  *       500:
  *         description: Server error
  */
-router.delete('/:id', authenticate, deletePartner);
+router.delete('/:id', authenticateToken, deletePartner);
 
 module.exports = router; 
