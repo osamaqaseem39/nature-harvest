@@ -216,7 +216,7 @@ const BecomePartner = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white pt-20">
       {/* Header Section */}
       <div className="relative py-20 overflow-hidden">
         {/* Background decorative elements */}
