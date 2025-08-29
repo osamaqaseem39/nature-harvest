@@ -25,7 +25,7 @@ const {
   deleteApplication 
 } = require('../controllers/applicationController');
 const { careerValidation } = require('../middleware/validation');
-const { authenticate } = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 
 /**
  * @swagger
@@ -138,7 +138,7 @@ const { authenticate } = require('../middleware/auth');
  *       500:
  *         description: Server error
  */
-router.post('/jobs', authenticate, careerValidation.job.create, createJob);
+router.post('/jobs', authenticateToken, careerValidation.job.create, createJob);
 
 /**
  * @swagger
@@ -370,7 +370,7 @@ router.get('/jobs/:id', getJobById);
  *       500:
  *         description: Server error
  */
-router.put('/jobs/:id', authenticate, careerValidation.job.update, updateJob);
+router.put('/jobs/:id', authenticateToken, careerValidation.job.update, updateJob);
 
 /**
  * @swagger
@@ -397,7 +397,7 @@ router.put('/jobs/:id', authenticate, careerValidation.job.update, updateJob);
  *       500:
  *         description: Server error
  */
-router.put('/jobs/:id/publish', authenticate, publishJob);
+router.put('/jobs/:id/publish', authenticateToken, publishJob);
 
 /**
  * @swagger
@@ -424,7 +424,7 @@ router.put('/jobs/:id/publish', authenticate, publishJob);
  *       500:
  *         description: Server error
  */
-router.put('/jobs/:id/close', authenticate, closeJob);
+router.put('/jobs/:id/close', authenticateToken, closeJob);
 
 /**
  * @swagger
@@ -451,7 +451,7 @@ router.put('/jobs/:id/close', authenticate, closeJob);
  *       500:
  *         description: Server error
  */
-router.delete('/jobs/:id', authenticate, deleteJob);
+router.delete('/jobs/:id', authenticateToken, deleteJob);
 
 /**
  * @swagger
@@ -469,7 +469,7 @@ router.delete('/jobs/:id', authenticate, deleteJob);
  *       500:
  *         description: Server error
  */
-router.get('/jobs/stats', authenticate, getJobStats);
+router.get('/jobs/stats', authenticateToken, getJobStats);
 
 /**
  * @swagger
@@ -555,7 +555,7 @@ router.post('/applications', careerValidation.application.submit, submitApplicat
  *       500:
  *         description: Server error
  */
-router.get('/applications', authenticate, getAllApplications);
+router.get('/applications', authenticateToken, getAllApplications);
 
 /**
  * @swagger
@@ -582,7 +582,7 @@ router.get('/applications', authenticate, getAllApplications);
  *       500:
  *         description: Server error
  */
-router.get('/applications/:id', authenticate, getApplicationById);
+router.get('/applications/:id', authenticateToken, getApplicationById);
 
 /**
  * @swagger
@@ -625,7 +625,7 @@ router.get('/applications/:id', authenticate, getApplicationById);
  *       500:
  *         description: Server error
  */
-router.put('/applications/:id/status', authenticate, updateApplicationStatus);
+router.put('/applications/:id/status', authenticateToken, updateApplicationStatus);
 
 /**
  * @swagger
@@ -687,7 +687,7 @@ router.put('/applications/:id/status', authenticate, updateApplicationStatus);
  *       500:
  *         description: Server error
  */
-router.post('/applications/:id/interview', authenticate, scheduleInterview);
+router.post('/applications/:id/interview', authenticateToken, scheduleInterview);
 
 /**
  * @swagger
@@ -720,7 +720,7 @@ router.post('/applications/:id/interview', authenticate, scheduleInterview);
  *       500:
  *         description: Server error
  */
-router.put('/applications/:id/interview/:interviewId', authenticate, updateInterview);
+router.put('/applications/:id/interview/:interviewId', authenticateToken, updateInterview);
 
 /**
  * @swagger
@@ -767,7 +767,7 @@ router.put('/applications/:id/interview/:interviewId', authenticate, updateInter
  *       500:
  *         description: Server error
  */
-router.put('/applications/:id/interview/:interviewId/complete', authenticate, completeInterview);
+router.put('/applications/:id/interview/:interviewId/complete', authenticateToken, completeInterview);
 
 /**
  * @swagger
@@ -814,7 +814,7 @@ router.put('/applications/:id/interview/:interviewId/complete', authenticate, co
  *       500:
  *         description: Server error
  */
-router.put('/applications/:id/screening', authenticate, addScreeningFeedback);
+router.put('/applications/:id/screening', authenticateToken, addScreeningFeedback);
 
 /**
  * @swagger
@@ -832,7 +832,7 @@ router.put('/applications/:id/screening', authenticate, addScreeningFeedback);
  *       500:
  *         description: Server error
  */
-router.get('/applications/stats', authenticate, getApplicationStats);
+router.get('/applications/stats', authenticateToken, getApplicationStats);
 
 /**
  * @swagger
@@ -859,6 +859,6 @@ router.get('/applications/stats', authenticate, getApplicationStats);
  *       500:
  *         description: Server error
  */
-router.delete('/applications/:id', authenticate, deleteApplication);
+router.delete('/applications/:id', authenticateToken, deleteApplication);
 
 module.exports = router; 
