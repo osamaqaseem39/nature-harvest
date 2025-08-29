@@ -27,34 +27,57 @@ const app = express();
 
 // Middleware - CORS must be first!
 app.use(cors({
-  origin: [
-    'https://nature-harvest-dashboard.vercel.app',
-    'https://nature-harvest-q2ra.vercel.app',
-    'https://admin.wingzimpex.com',
-    'https://nature-harvest-sooty.vercel.app',
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://localhost:3002',
-    'http://localhost:3003'
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'https://nature-harvest-dashboard.vercel.app',
+      'https://nature-harvest-q2ra.vercel.app',
+      'https://admin.wingzimpex.com',
+      'https://wingzimpex.osamaqaseem.online',
+      'https://nature-harvest-sooty.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:3002',
+      'http://localhost:3003',
+      'http://localhost:3004',
+      'http://localhost:3005',
+      'http://localhost:5000',
+      'http://localhost:5001',
+      'http://localhost:8000',
+      'http://localhost:8080'
+    ];
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(null, true); // Temporarily allow all origins for debugging
+    }
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
     'Content-Type',
+    'Accept',
     'Authorization',
     'x-auth-token',
     'Access-Control-Allow-Headers',
     'Access-Control-Allow-Origin',
     'Access-Control-Allow-Methods',
-    'Access-Control-Allow-Credentials',
-    'X-Requested-With'
+    'Access-Control-Allow-Credentials'
   ],
   exposedHeaders: [
     'Content-Type',
     'Authorization',
     'x-auth-token'
   ],
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  preflightContinue: false
 }));
 
 // Also add a pre-flight middleware to ensure headers are set
@@ -63,19 +86,30 @@ app.use((req, res, next) => {
     'https://nature-harvest-dashboard.vercel.app',
     'https://nature-harvest-sooty.vercel.app',
     'https://nature-harvest-q2ra.vercel.app',
+    'https://admin.wingzimpex.com',
+    'https://wingzimpex.osamaqaseem.online',
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:3002',
-    'http://localhost:3003'
+    'http://localhost:3003',
+    'http://localhost:3004',
+    'http://localhost:3005',
+    'http://localhost:5000',
+    'http://localhost:5001',
+    'http://localhost:8000',
+    'http://localhost:8080'
   ];
   
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
+  } else {
+    // Temporarily allow all origins for debugging
+    res.header('Access-Control-Allow-Origin', origin || '*');
   }
   
   res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-auth-token');
   next();
 });
