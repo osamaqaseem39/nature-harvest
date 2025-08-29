@@ -36,6 +36,8 @@ const Header = () => {
     { name: 'About', href: '/about', active: pathname === '/about' },
     { name: 'Brands', href: '/brands', active: pathname === '/brands' },
     { name: 'Products', href: '/products', active: pathname.startsWith('/products') },
+    { name: 'Partner', href: '/partner', active: pathname === '/partner' },
+    { name: 'Careers', href: '/careers', active: pathname === '/careers' },
   ]
 
   return (

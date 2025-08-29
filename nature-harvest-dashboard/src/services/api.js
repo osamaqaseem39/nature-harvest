@@ -55,6 +55,30 @@ export const dashboardAPI = {
   getRecentBlogs: () => api.get('/dashboard/recent-blogs'),
 };
 
+// Career API
+export const careersAPI = {
+  // Jobs
+  createJob: (jobData) => api.post('/careers/jobs', jobData),
+  getAllJobs: (params = {}) => api.get('/careers/jobs', { params }),
+  getJobById: (id) => api.get(`/careers/jobs/${id}`),
+  updateJob: (id, jobData) => api.put(`/careers/jobs/${id}`, jobData),
+  deleteJob: (id) => api.delete(`/careers/jobs/${id}`),
+  publishJob: (id) => api.put(`/careers/jobs/${id}/publish`),
+  closeJob: (id) => api.put(`/careers/jobs/${id}/close`),
+  getJobStats: () => api.get('/careers/jobs/stats'),
+  
+  // Applications
+  getAllApplications: (params = {}) => api.get('/careers/applications', { params }),
+  getApplicationById: (id) => api.get(`/careers/applications/${id}`),
+  updateApplicationStatus: (id, statusData) => api.put(`/careers/applications/${id}/status`, statusData),
+  scheduleInterview: (id, interviewData) => api.post(`/careers/applications/${id}/interview`, interviewData),
+  updateInterview: (id, interviewId, updateData) => api.put(`/careers/applications/${id}/interview/${interviewId}`, updateData),
+  completeInterview: (id, interviewId, feedbackData) => api.put(`/careers/applications/${id}/interview/${interviewId}/complete`, feedbackData),
+  addScreeningFeedback: (id, screeningData) => api.put(`/careers/applications/${id}/screening`, screeningData),
+  getApplicationStats: () => api.get('/careers/applications/stats'),
+  deleteApplication: (id) => api.delete(`/careers/applications/${id}`),
+};
+
 // Products API
 export const productsAPI = {
   getAll: (params = {}) => api.get('/products', { params }),
@@ -153,6 +177,15 @@ export const suppliersAPI = {
   delete: (id) => api.delete(`/suppliers/${id}`),
   approve: (id) => api.put(`/suppliers/${id}/approve`),
   reject: (id) => api.put(`/suppliers/${id}/reject`),
+};
+
+// Partners API
+export const partnersAPI = {
+  getAll: (params = {}) => api.get('/partners', { params }),
+  getById: (id) => api.get(`/partners/${id}`),
+  updateStatus: (id, statusData) => api.put(`/partners/${id}/status`, statusData),
+  delete: (id) => api.delete(`/partners/${id}`),
+  getStats: () => api.get('/partners/stats'),
 };
 
 // File upload helper

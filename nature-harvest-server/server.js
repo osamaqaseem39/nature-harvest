@@ -212,6 +212,8 @@ app.use('/api/subcategories', subcategoryRoutes);
 app.use('/api/flavors', flavorRoutes);
 app.use('/api/sizes', sizeRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/partners', require('./routes/partners'));
+app.use('/api/careers', require('./routes/careers'));
 
 // Upload routes
 const { uploadMultiple } = require('./middleware/externalUpload');

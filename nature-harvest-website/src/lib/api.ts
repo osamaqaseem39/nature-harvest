@@ -90,6 +90,201 @@ export interface SizesResponse {
   data: Size[];
 }
 
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Partner {
+  _id: string;
+  companyName: string;
+  contactPerson: string;
+  email: string;
+  phone: string;
+  companyType: string;
+  businessDescription: string;
+  partnershipType: string[];
+  targetMarkets: string[];
+  annualRevenue: string;
+  employeeCount: string;
+  website?: string;
+  socialMedia?: {
+    linkedin?: string;
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+  };
+  additionalInfo?: string;
+  status: 'Pending' | 'Under Review' | 'Approved' | 'Rejected' | 'Contacted';
+  notes?: string;
+  adminResponse?: string;
+  respondedBy?: User;
+  respondedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PartnerFormData {
+  companyName: string;
+  contactPerson: string;
+  email: string;
+  phone: string;
+  companyType: string;
+  businessDescription: string;
+  partnershipType: string[];
+  targetMarkets: string[];
+  annualRevenue: string;
+  employeeCount: string;
+  website?: string;
+  socialMedia?: {
+    linkedin?: string;
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+  };
+  additionalInfo?: string;
+}
+
+export interface PartnersResponse {
+  success: boolean;
+  data: Partner[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
+
+export interface PartnerResponse {
+  success: boolean;
+  data: Partner;
+}
+
+export interface Job {
+  _id: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  experience: string;
+  description: string;
+  requirements: string[];
+  responsibilities: string[];
+  benefits: string[];
+  salary: {
+    min?: number;
+    max?: number;
+    currency: string;
+    period: string;
+  };
+  skills: string[];
+  education: string;
+  applicationDeadline: string;
+  positions: number;
+  isRemote: boolean;
+  isUrgent: boolean;
+  tags: string[];
+  status: string;
+  views: number;
+  applications: number;
+  createdBy: User;
+  publishedAt?: string;
+  closedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface JobsResponse {
+  success: boolean;
+  data: Job[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
+
+export interface JobResponse {
+  success: boolean;
+  data: Job;
+}
+
+export interface CandidateData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  dateOfBirth: string;
+  gender: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+  };
+  education: Array<{
+    degree: string;
+    institution: string;
+    fieldOfStudy: string;
+    startDate: string;
+    endDate: string;
+    gpa: string;
+    isCurrent: boolean;
+  }>;
+  experience: Array<{
+    title: string;
+    company: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    isCurrent: boolean;
+    description: string;
+    achievements: string[];
+  }>;
+  skills: Array<{
+    name: string;
+    level: string;
+    yearsOfExperience: string;
+  }>;
+  resume: {
+    url: string;
+    filename: string;
+  };
+  coverLetter?: {
+    content: string;
+  };
+}
+
+export interface ApplicationData {
+  jobId: string;
+  candidateData: CandidateData;
+  coverLetter?: {
+    content: string;
+  };
+  additionalDocuments?: Array<{
+    name: string;
+    url: string;
+    filename: string;
+  }>;
+}
+
+export interface ApplicationResponse {
+  success: boolean;
+  message: string;
+  data: {
+    applicationId: string;
+    candidateId: string;
+    status: string;
+  };
+}
+
 class ApiService {
   private async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
     const url = `${API_BASE_URL}${endpoint}`;
@@ -185,6 +380,98 @@ class ApiService {
   // Sizes API
   async getSizes(): Promise<SizesResponse> {
     return this.request<SizesResponse>('/sizes');
+  }
+
+  // Partner API
+  async submitPartnerApplication(data: PartnerFormData): Promise<PartnerResponse> {
+    return this.request<PartnerResponse>('/partners', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getPartners(params?: { page?: number; limit?: number; status?: string; search?: string }): Promise<PartnersResponse> {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    if (params?.status) queryParams.append('status', params.status);
+    if (params?.search) queryParams.append('search', params.search);
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/partners?${queryString}` : '/partners';
+    
+    return this.request<PartnersResponse>(endpoint);
+  }
+
+  async getPartner(id: string): Promise<PartnerResponse> {
+    return this.request<PartnerResponse>(`/partners/${id}`);
+  }
+
+  async updatePartnerStatus(id: string, data: { status: string; notes?: string; adminResponse?: string }): Promise<PartnerResponse> {
+    return this.request<PartnerResponse>(`/partners/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deletePartner(id: string): Promise<{ success: boolean; message: string }> {
+    return this.request<{ success: boolean; message: string }>(`/partners/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getPartnerStats(): Promise<{ success: boolean; data: any }> {
+    return this.request<{ success: boolean; data: any }>('/partners/stats');
+  }
+
+  // Career API
+  async getJobs(params?: { page?: number; limit?: number; department?: string; location?: string; type?: string; experience?: string; search?: string; status?: string }): Promise<JobsResponse> {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    if (params?.department) queryParams.append('department', params.department);
+    if (params?.location) queryParams.append('location', params.location);
+    if (params?.type) queryParams.append('type', params.type);
+    if (params?.experience) queryParams.append('experience', params.experience);
+    if (params?.search) queryParams.append('search', params.search);
+    if (params?.status) queryParams.append('status', params.status);
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/careers/jobs?${queryString}` : '/careers/jobs';
+    
+    return this.request<JobsResponse>(endpoint);
+  }
+
+  async getJob(id: string): Promise<JobResponse> {
+    return this.request<JobResponse>(`/careers/jobs/${id}`);
+  }
+
+  async searchJobs(params: { q?: string; department?: string; location?: string; type?: string; experience?: string; page?: number; limit?: number }): Promise<JobsResponse> {
+    const queryParams = new URLSearchParams();
+    if (params.q) queryParams.append('q', params.q);
+    if (params.department) queryParams.append('department', params.department);
+    if (params.location) queryParams.append('location', params.location);
+    if (params.type) queryParams.append('type', params.type);
+    if (params.experience) queryParams.append('experience', params.experience);
+    if (params.page) queryParams.append('page', params.page.toString());
+    if (params.limit) queryParams.append('limit', params.limit.toString());
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/careers/jobs/search?${queryString}` : '/careers/jobs/search';
+    
+    return this.request<JobsResponse>(endpoint);
+  }
+
+  async getJobsByDepartment(department: string, limit?: number): Promise<JobsResponse> {
+    const params = limit ? `?limit=${limit}` : '';
+    return this.request<JobsResponse>(`/careers/jobs/department/${department}${params}`);
+  }
+
+  async submitJobApplication(data: ApplicationData): Promise<ApplicationResponse> {
+    return this.request<ApplicationResponse>('/careers/applications', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   }
 }
 
