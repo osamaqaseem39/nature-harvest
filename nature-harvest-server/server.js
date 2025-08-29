@@ -63,6 +63,8 @@ app.use(cors({
 app.use((req, res, next) => {
   const allowedOrigins = [
     'https://natureharvest-dashbaord.vercel.app',
+    'https://nature-harvest-sooty.vercel.app',
+    'https://nature-harvest-dashboard.vercel.app',
     'https://nature-harvest-q2ra.vercel.app',
     'https://admin.wingzimpex.com',
     'https://wingzimpex.osamaqaseem.online',
