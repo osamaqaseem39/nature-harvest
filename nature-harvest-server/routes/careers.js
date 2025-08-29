@@ -861,4 +861,4 @@ router.get('/applications/stats', authenticateToken, getApplicationStats);
  */
 router.delete('/applications/:id', authenticateToken, deleteApplication);
 
-module.exports = router; 
+module.exports = router;

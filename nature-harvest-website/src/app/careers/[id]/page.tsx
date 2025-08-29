@@ -19,6 +19,7 @@ import {
   X
 } from 'lucide-react'
 import JobApplicationForm from '@/components/JobApplicationForm'
+import { config } from '@/lib/config'
 
 interface Job {
   _id: string;
@@ -68,7 +69,7 @@ const JobDetail = () => {
   const fetchJob = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/careers/jobs/${params.id}`)
+      const response = await fetch(`${config.api.baseUrl}/careers/jobs/${params.id}`)
       const result = await response.json()
 
       if (response.ok) {

@@ -16,6 +16,7 @@ import {
   Filter,
   X
 } from 'lucide-react'
+import { config } from '@/lib/config'
 
 interface Job {
   _id: string;
@@ -45,6 +46,18 @@ interface Job {
   applications: number;
   createdAt: string;
   publishedAt: string;
+}
+
+interface JobsResponse {
+  success: boolean;
+  data: Job[];
+  message?: string;
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
 }
 
 const Careers = () => {
@@ -82,8 +95,8 @@ const Careers = () => {
       if (filters.type) params.append('type', filters.type)
       if (filters.experience) params.append('experience', filters.experience)
 
-      const response = await fetch(`/api/careers/jobs?${params}`)
-      const result = await response.json()
+      const response = await fetch(`${config.api.baseUrl}/careers/jobs?${params}`)
+      const result: JobsResponse = await response.json()
 
       if (response.ok) {
         setJobs(result.data)

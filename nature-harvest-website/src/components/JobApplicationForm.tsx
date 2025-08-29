@@ -13,6 +13,7 @@ import {
   FileText,
   AlertCircle
 } from 'lucide-react'
+import { config } from '@/lib/config'
 
 interface JobApplicationFormProps {
   jobId: string
@@ -244,7 +245,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
         const formDataFile = new FormData()
         formDataFile.append('file', resumeFile)
         
-        const uploadResponse = await fetch('/api/upload', {
+        const uploadResponse = await fetch(`${config.api.baseUrl}/upload`, {
           method: 'POST',
           body: formDataFile,
         })
@@ -268,7 +269,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
         additionalDocuments: []
       }
 
-      const response = await fetch('/api/careers/applications', {
+      const response = await fetch(`${config.api.baseUrl}/careers/applications`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
