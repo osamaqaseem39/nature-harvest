@@ -6,6 +6,11 @@ import Products from './pages/Products';
 import Brands from './pages/Brands';
 import Flavors from './pages/Flavors';
 import Sizes from './pages/Sizes';
+import Jobs from './pages/Jobs';
+import Applications from './pages/Applications';
+import Departments from './pages/Departments';
+import Skills from './pages/Skills';
+import CareerAnalytics from './pages/CareerAnalytics';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -37,6 +42,11 @@ const App: React.FC = () => {
               <Route path="brands" element={<Brands />} />
               <Route path="flavors" element={<Flavors />} />
               <Route path="sizes" element={<Sizes />} />
+              <Route path="jobs" element={<Jobs />} />
+              <Route path="applications" element={<Applications />} />
+              <Route path="departments" element={<Departments />} />
+              <Route path="skills" element={<Skills />} />
+              <Route path="career-analytics" element={<CareerAnalytics />} />
             </Route>
           </Routes>
         </div>

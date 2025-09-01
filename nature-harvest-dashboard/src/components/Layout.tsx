@@ -9,7 +9,15 @@ import {
   Bars3Icon,
   XMarkIcon,
   UserIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  BriefcaseIcon,
+  UserGroupIcon,
+  DocumentTextIcon,
+  ClipboardDocumentListIcon,
+  CalendarIcon,
+  ChartBarIcon,
+  BuildingOfficeIcon,
+  AcademicCapIcon,
 } from '@heroicons/react/24/outline';
 
 const Layout: React.FC = () => {
@@ -24,11 +32,61 @@ const Layout: React.FC = () => {
     { name: 'Brands', href: '/brands', icon: TagIcon },
     { name: 'Flavors', href: '/flavors', icon: StarIcon },
     { name: 'Sizes', href: '/sizes', icon: TagIcon },
+    // Career Management Section
+    { name: 'Job Postings', href: '/jobs', icon: BriefcaseIcon, section: 'careers' },
+    { name: 'Applications', href: '/applications', icon: ClipboardDocumentListIcon, section: 'careers' },
+    { name: 'Departments', href: '/departments', icon: BuildingOfficeIcon, section: 'careers' },
+    { name: 'Skills & Requirements', href: '/skills', icon: AcademicCapIcon, section: 'careers' },
+    { name: 'Career Analytics', href: '/career-analytics', icon: ChartBarIcon, section: 'careers' },
   ];
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  // Group navigation items by section
+  const groupedNavigation = navigation.reduce((groups, item) => {
+    const section = item.section || 'main';
+    if (!groups[section]) {
+      groups[section] = [];
+    }
+    groups[section].push(item);
+    return groups;
+  }, {} as Record<string, typeof navigation>);
+
+  const renderNavigationItem = (item: any) => {
+    const isActive = location.pathname === item.href;
+    return (
+      <Link
+        key={item.name}
+        to={item.href}
+        className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+          isActive
+            ? 'bg-primary-100 text-primary-900'
+            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+        }`}
+        onClick={() => setSidebarOpen(false)}
+      >
+        <item.icon className="mr-3 h-5 w-5" />
+        {item.name}
+      </Link>
+    );
+  };
+
+  const renderNavigationSection = (section: string, items: typeof navigation) => {
+    if (section === 'main') {
+      return items.map(renderNavigationItem);
+    }
+    
+    return (
+      <div key={section} className="space-y-1">
+        <div className="px-2 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          {section === 'careers' ? 'Career Management' : section}
+        </div>
+        {items.map(renderNavigationItem)}
+      </div>
+    );
   };
 
   return (
@@ -44,24 +102,9 @@ const Layout: React.FC = () => {
             </button>
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">
-            {navigation.map((item) => {
-              const isActive = location.pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
-                    isActive
-                      ? 'bg-primary-100 text-primary-900'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <item.icon className="mr-3 h-5 w-5" />
-                  {item.name}
-                </Link>
-              );
-            })}
+            {Object.entries(groupedNavigation).map(([section, items]) => (
+              renderNavigationSection(section, items)
+            ))}
           </nav>
         </div>
       </div>
@@ -73,23 +116,9 @@ const Layout: React.FC = () => {
             <h1 className="text-xl font-bold text-gray-900">Nature Harvest</h1>
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">
-            {navigation.map((item) => {
-              const isActive = location.pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
-                    isActive
-                      ? 'bg-primary-100 text-primary-900'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                >
-                  <item.icon className="mr-3 h-5 w-5" />
-                  {item.name}
-                </Link>
-              );
-            })}
+            {Object.entries(groupedNavigation).map(([section, items]) => (
+              renderNavigationSection(section, items)
+            ))}
           </nav>
         </div>
       </div>

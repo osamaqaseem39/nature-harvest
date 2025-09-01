@@ -269,11 +269,12 @@ const FeaturedProducts = () => {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           {products.slice(0, 8).map((product, index) => (
-            <div 
+            <Link 
               key={product._id} 
+              href={`/products/${product._id}`}
               className={`relative transition-all duration-1000 ease-out delay-${600 + index * 200} ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
+              } block group cursor-pointer hover:shadow-lg hover:-translate-y-2 transition-all duration-300`}
             >
               {/* Product Image Container - No Background Container */}
               <div className="relative overflow-hidden">
@@ -302,7 +303,7 @@ const FeaturedProducts = () => {
                     alt={product.name}
                     width={300}
                     height={400}
-                    className="object-contain transition-all duration-500 hover:scale-105 hover:-rotate-6"
+                    className="object-contain transition-all duration-500 group-hover:scale-105 group-hover:-rotate-6"
                   />
                 </div>
 
@@ -324,7 +325,7 @@ const FeaturedProducts = () => {
               </div>
 
               {/* No Product Info Section - Clean Minimal Design */}
-            </div>
+            </Link>
           ))}
         </div>
 

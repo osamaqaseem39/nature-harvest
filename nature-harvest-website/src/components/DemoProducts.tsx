@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Star, ShoppingCart, Heart, Eye } from 'lucide-react'
 import { apiService, Product } from '../lib/api'
@@ -237,11 +238,12 @@ const DemoProducts = () => {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           {products.map((product, index) => (
-            <div 
+            <Link 
               key={product._id} 
+              href={`/products/${product._id}`}
               className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 transition-all duration-1000 ease-out delay-${600 + index * 200} ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
+              } block cursor-pointer`}
             >
               {/* Product Image Container */}
               <div className="relative h-64 bg-gradient-to-br from-green-100 to-green-50 overflow-hidden">
@@ -279,7 +281,7 @@ const DemoProducts = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="absolute bottom-4 right-4 flex gap-2">
+                <div className="absolute bottom-4 right-4 flex gap-2" onClick={(e) => e.stopPropagation()}>
                   <button className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:bg-green-50 transition-colors duration-200">
                     <Eye className="w-4 h-4 text-gray-600" />
                   </button>
@@ -323,13 +325,16 @@ const DemoProducts = () => {
                 {/* Price & Add to Cart */}
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-gazpacho font-bold text-gray-800">$12.99</span>
-                  <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center gap-2 font-jost font-medium">
+                  <button 
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center gap-2 font-jost font-medium"
+                  >
                     <ShoppingCart className="w-4 h-4" />
                     Add
                   </button>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -337,9 +342,11 @@ const DemoProducts = () => {
         <div className={`text-center transition-all duration-1000 ease-out delay-1200 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <button className="bg-green-600 hover:bg-green-700 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-lg">
-            View All Products
-          </button>
+          <Link href="/products">
+            <button className="bg-green-600 hover:bg-green-700 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-lg">
+              View All Products
+            </button>
+          </Link>
         </div>
       </div>
     </section>
