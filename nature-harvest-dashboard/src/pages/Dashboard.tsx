@@ -71,12 +71,15 @@ const Dashboard = () => {
   const { data: activity, loading: activityLoading } = useApi(dashboardAPI.getActivity);
   const { data: recentProducts, loading: productsLoading } = useApi(() => productsAPI.getAll({ limit: 5, sort: '-createdAt' }));
 
-  // Type guard for products response
+  // Type guard for products response - handle the case where useApi returns the data directly
   const isProductsResponse = (data: any): data is ProductsResponse => {
     return data && typeof data === 'object' && 'data' in data && Array.isArray(data.data);
   };
 
-  const products = isProductsResponse(recentProducts) ? recentProducts.data : [];
+  // Handle both cases: when useApi returns the full response or just the data
+  const products = recentProducts && typeof recentProducts === 'object' && 'data' in recentProducts 
+    ? (recentProducts as ProductsResponse).data 
+    : (Array.isArray(recentProducts) ? recentProducts : []);
 
   const statCards = [
     {

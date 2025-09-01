@@ -7,7 +7,7 @@ import {
   ClockIcon,
   CheckIcon,
   XMarkIcon,
-  TrendingUpIcon,
+  ArrowUpIcon,
 } from '@heroicons/react/24/outline';
 
 interface CareerStats {
@@ -142,7 +142,7 @@ const CareerAnalytics: React.FC = () => {
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <TrendingUpIcon className="h-6 w-6 text-orange-600" />
+                  <ArrowUpIcon className="h-6 w-6 text-orange-600" />
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
@@ -255,7 +255,7 @@ const CareerAnalytics: React.FC = () => {
             <h3 className="text-lg font-medium text-gray-900 mb-4">Recommendations</h3>
             <div className="space-y-3 text-sm text-gray-600">
               <div className="flex items-start">
-                <TrendingUpIcon className="w-4 h-4 text-blue-500 mr-2 mt-0.5" />
+                <ArrowUpIcon className="w-4 h-4 text-blue-500 mr-2 mt-0.5" />
                 Consider posting more jobs in Production department as it has high application rates
               </div>
               <div className="flex items-start">
