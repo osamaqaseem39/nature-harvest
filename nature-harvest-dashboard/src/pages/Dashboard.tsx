@@ -1,13 +1,16 @@
 import React from 'react';
 import { useApi } from '../hooks/useApi';
-import { dashboardAPI } from '../services/api';
+import { dashboardAPI, productsAPI } from '../services/api';
 import { 
   ChartBarIcon, 
   CubeIcon, 
   UserGroupIcon, 
   DocumentTextIcon,
   ShoppingBagIcon,
-  CogIcon
+  CogIcon,
+  EyeIcon,
+  PencilIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 
 // Type definitions
@@ -22,6 +25,27 @@ interface DashboardStats {
   blogs: number;
   suppliers: number;
   quotes: number;
+}
+
+interface Product {
+  _id: string;
+  name: string;
+  brand: string;
+  category: string;
+  price: number;
+  status: string;
+  createdAt: string;
+}
+
+interface ProductsResponse {
+  success: boolean;
+  data: Product[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
 }
 
 interface SystemHealth {
@@ -45,6 +69,14 @@ const Dashboard = () => {
   const { data: stats, loading: statsLoading, error: statsError } = useApi(dashboardAPI.getStats);
   const { data: health } = useApi(dashboardAPI.getHealth);
   const { data: activity, loading: activityLoading } = useApi(dashboardAPI.getActivity);
+  const { data: recentProducts, loading: productsLoading } = useApi(() => productsAPI.getAll({ limit: 5, sort: '-createdAt' }));
+
+  // Type guard for products response
+  const isProductsResponse = (data: any): data is ProductsResponse => {
+    return data && typeof data === 'object' && 'data' in data && Array.isArray(data.data);
+  };
+
+  const products = isProductsResponse(recentProducts) ? recentProducts.data : [];
 
   const statCards = [
     {
@@ -180,6 +212,65 @@ const Dashboard = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Recent Products List */}
+        <div className="bg-white shadow rounded-lg mb-8">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">Recent Products</h2>
+          </div>
+          <div className="p-6">
+            {productsLoading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+                <p className="mt-2 text-gray-600">Loading products...</p>
+              </div>
+            ) : products && products.length > 0 ? (
+              <div className="space-y-3">
+                {products.map((product: Product) => (
+                  <div key={product._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <CubeIcon className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-900">{product.name}</h3>
+                        <div className="flex items-center space-x-4 text-xs text-gray-500">
+                          <span>Brand: {product.brand}</span>
+                          <span>Category: {product.category}</span>
+                          <span>Price: ${product.price}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        product.status === 'active' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {product.status}
+                      </span>
+                      <div className="flex space-x-1">
+                        <button className="p-1 text-gray-400 hover:text-blue-600 transition-colors">
+                          <EyeIcon className="w-4 h-4" />
+                        </button>
+                        <button className="p-1 text-gray-400 hover:text-green-600 transition-colors">
+                          <PencilIcon className="w-4 h-4" />
+                        </button>
+                        <button className="p-1 text-gray-400 hover:text-red-600 transition-colors">
+                          <TrashIcon className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No products found
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Recent Activity */}

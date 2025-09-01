@@ -76,13 +76,18 @@ const Layout: React.FC = () => {
 
   const renderNavigationSection = (section: string, items: typeof navigation) => {
     if (section === 'main') {
-      return items.map(renderNavigationItem);
+      return (
+        <div key={section} className="space-y-1">
+          {items.map(renderNavigationItem)}
+        </div>
+      );
     }
     
     return (
-      <div key={section} className="space-y-1">
-        <div className="px-2 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          {section === 'careers' ? 'Career Management' : section}
+      <div key={section} className="space-y-1 mt-6">
+        <div className="px-3 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-200 flex items-center">
+          {section === 'careers' && <BriefcaseIcon className="w-3 h-3 mr-2" />}
+          {section === 'careers' ? 'Careers' : section}
         </div>
         {items.map(renderNavigationItem)}
       </div>
