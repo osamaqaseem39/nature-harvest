@@ -54,7 +54,7 @@ const Hero = () => {
   }, [])
 
   return (
-    <section className="relative h-[1080px] bg-contain bg-no-repeat" style={{ backgroundImage: 'url("/images/herobg.jpg")', backgroundSize: '100%', backgroundPosition: 'right 100%' }}>
+    <section className="relative min-h-screen sm:h-[1080px] bg-contain bg-no-repeat bg-center" style={{ backgroundImage: 'url("/images/herobg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       {/* Background overlay for text prominence */}
       <div className="absolute inset-0 bg-white/30 z-0"></div>
 
@@ -62,16 +62,16 @@ const Hero = () => {
       <Header />
       
       {/* Content will go here */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-50">
-        <div className="flex flex-col items-center text-center justify-center">
-          <h1 className={`text-[84px] font-gazpacho font-bold text-[#292929] transition-all duration-1500 ease-out ${
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-50">
+        <div className="flex flex-col items-center text-center justify-center min-h-[calc(100vh-80px)] sm:min-h-0">
+          <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[84px] font-gazpacho font-bold text-[#292929] transition-all duration-1500 ease-out px-4 ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
           }`}>
             Welcome to <span className="text-green-600 transition-all duration-300 hover:text-green-700 hover:scale-105 inline-block">Nature</span> Harvest
           </h1>
           
           {/* Subheading */}
-          <h2 className={`text-[16px] lg:text-[24px] font-jost font-normal text-black max-w-3xl text-center leading-relaxed transition-all duration-1500 ease-out delay-400 ${
+          <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl xl:text-[24px] font-jost font-normal text-black max-w-3xl text-center leading-relaxed transition-all duration-1500 ease-out delay-400 px-4 mt-4 ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
           Experience the authentic taste of nature&apos;s finest fruits. Every bottle is crafted with care, bringing you the purest flavors without compromise.
@@ -79,42 +79,42 @@ const Hero = () => {
           
           {/* Div with background image - Smooth animated from top */}
           <div 
-            className={`relative w-[760px] h-[760px] mb-8 mt-16 bg-center bg-no-repeat flex items-center justify-center z-20 transition-all duration-2000 ease-out delay-600 ${
+            className={`relative w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] xl:w-[760px] xl:h-[760px] mb-8 mt-8 sm:mt-16 bg-center bg-no-repeat flex items-center justify-center z-20 transition-all duration-2000 ease-out delay-600 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-32'
             }`} 
-            style={{ backgroundImage: 'url("/images/heroimagebg.png")', backgroundSize: '760px 760px' }}
+            style={{ backgroundImage: 'url("/images/heroimagebg.png")', backgroundSize: '100%' }}
           >
             {/* Decorative Leaf Images positioned around this div - Only cursor reactive */}
             {/* Leaf 1 - Top Left of image div */}
-            <div ref={leaf1Ref} className="absolute -top-8 -left-8 z-30 transition-all duration-500 ease-out">
+            <div ref={leaf1Ref} className="absolute -top-4 -left-4 sm:-top-6 sm:-left-6 lg:-top-8 lg:-left-8 z-30 transition-all duration-500 ease-out">
               <Image
                 src="/images/leaf1.png"
                 alt="Decorative Leaf"
-                width={120}
-                height={120}
-                className="object-contain drop-shadow-lg"
+                width={60}
+                height={60}
+                className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 xl:w-[120px] xl:h-[120px] object-contain drop-shadow-lg"
               />
             </div>
             
             {/* Leaf 2 - Right Center of image div */}
-            <div ref={leaf2Ref} className="absolute top-1/2 -right-8 transform -translate-y-1/2 z-30 transition-all duration-500 ease-out">
+            <div ref={leaf2Ref} className="absolute top-1/2 -right-4 sm:-right-6 lg:-right-8 transform -translate-y-1/2 z-30 transition-all duration-500 ease-out">
               <Image
                 src="/images/leaf2.png"
                 alt="Decorative Leaf"
-                width={120}
-                height={120}
-                className="object-contain drop-shadow-lg"
+                width={60}
+                height={60}
+                className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 xl:w-[120px] xl:h-[120px] object-contain drop-shadow-lg"
               />
             </div>
             
             {/* Leaf 3 - Bottom Center of image div */}
-            <div ref={leaf3Ref} className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 z-30 transition-all duration-500 ease-out">
+            <div ref={leaf3Ref} className="absolute -bottom-4 sm:-bottom-6 lg:-bottom-8 left-1/2 transform -translate-x-1/2 z-30 transition-all duration-500 ease-out">
               <Image
                 src="/images/leaf3.png"
                 alt="Decorative Leaf"
-                width={120}
-                height={120}
-                className="object-contain drop-shadow-lg"
+                width={60}
+                height={60}
+                className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 xl:w-[120px] xl:h-[120px] object-contain drop-shadow-lg"
               />
             </div>
             

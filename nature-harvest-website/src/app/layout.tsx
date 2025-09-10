@@ -11,6 +11,12 @@ export const metadata: Metadata = {
   description: 'Discover premium organic and natural products from Nature Harvest. Fresh, healthy, and sustainable products for your lifestyle.',
   keywords: 'organic, natural, healthy, sustainable, nature harvest, fresh products',
   authors: [{ name: 'Nature Harvest' }],
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
   openGraph: {
     title: 'Nature Harvest - Organic & Natural Products',
     description: 'Discover premium organic and natural products from Nature Harvest.',

@@ -241,31 +241,31 @@ const FeaturedProducts = () => {
   }
 
   return (
-          <section ref={sectionRef} className="relative bg-white pt-32 pb-20 overflow-hidden">
+          <section ref={sectionRef} className="relative bg-white pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-16 sm:pb-20 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-10 right-20 w-40 h-40 bg-green-300 rounded-full"></div>
-        <div className="absolute bottom-10 left-20 w-32 h-32 bg-green-200 rounded-full"></div>
+        <div className="absolute top-5 sm:top-10 right-10 sm:right-20 w-20 h-20 sm:w-32 sm:h-32 lg:w-40 lg:h-40 bg-green-300 rounded-full"></div>
+        <div className="absolute bottom-5 sm:bottom-10 left-10 sm:left-20 w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-green-200 rounded-full"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ease-out delay-200 ${
+        <div className={`text-center mb-12 sm:mb-16 transition-all duration-1000 ease-out delay-200 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <h3 className="text-green-600 uppercase tracking-widest font-jost font-semibold text-sm mb-4">
+          <h3 className="text-green-600 uppercase tracking-widest font-jost font-semibold text-xs sm:text-sm mb-3 sm:mb-4">
             FEATURED PRODUCTS
           </h3>
-          <h2 className="text-4xl lg:text-5xl font-gazpacho font-bold text-gray-800 leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-gazpacho font-bold text-gray-800 leading-tight px-4">
             Experience Our Premium Collection
           </h2>
-          <p className="text-lg font-jost text-gray-600 max-w-3xl mx-auto mt-6">
+          <p className="text-sm sm:text-base lg:text-lg font-jost text-gray-600 max-w-3xl mx-auto mt-4 sm:mt-6 px-4">
             Discover the taste and quality that makes Nature Harvest the preferred choice for health-conscious consumers.
           </p>
         </div>
 
         {/* Individual Product Cards */}
-        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 transition-all duration-1000 ease-out delay-400 ${
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-10 sm:mb-12 transition-all duration-1000 ease-out delay-400 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           {products.slice(0, 8).map((product, index) => (
@@ -279,36 +279,36 @@ const FeaturedProducts = () => {
               {/* Product Image Container - No Background Container */}
               <div className="relative overflow-hidden">
                 {/* Brand Tag - Top Left */}
-                                <div className="absolute top-2 left-1 z-10">
+                <div className="absolute top-1 sm:top-2 left-1 z-10">
                   <Link 
                     href={product.brandId?._id ? `/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
                     className="block"
                   >
-                    <div className="bg-white rounded-full w-20 h-20 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
-                      <span className="text-green-600 font-gazpacho font-bold text-sm">
+                    <div className="bg-white rounded-full w-16 h-16 sm:w-20 sm:h-20 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
+                      <span className="text-green-600 font-gazpacho font-bold text-xs sm:text-sm">
                         {product.brandId?.name || 'Nature Harvest'}
                       </span>
                       <span className="text-green-600 font-jost font-medium text-xs">
                         {product.sizeId?.name || '125 ML'}
                       </span>
-                                          </div>
-                    </Link>
-                  </div>
+                    </div>
+                  </Link>
+                </div>
 
               
                 {/* Main Product Image */}
-                <div className="relative w-full p-8">
+                <div className="relative w-full p-4 sm:p-6 lg:p-8">
                   <Image
                     src={getProductImage(product)}
                     alt={product.name}
                     width={300}
                     height={400}
-                    className="object-contain transition-all duration-500 group-hover:scale-105 group-hover:-rotate-6"
+                    className="w-full h-auto object-contain transition-all duration-500 group-hover:scale-105 group-hover:-rotate-6"
                   />
                 </div>
 
                 {/* Flavor Image - Bottom Left */}
-                <div className="absolute bottom-0 left-40">
+                <div className="absolute bottom-0 left-20 sm:left-32 lg:left-40">
                   <Link 
                     href={product.flavorId?._id ? `/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
                     className="block"
@@ -316,12 +316,12 @@ const FeaturedProducts = () => {
                     <Image
                       src={getFlavorImage(product)}
                       alt={product.flavorId?.name || 'Flavor'}
-                      width={180}
-                      height={180}
-                      className="object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
-                                            />
-                      </Link>
-                    </div>
+                      width={120}
+                      height={120}
+                      className="w-16 h-16 sm:w-20 sm:h-20 lg:w-[180px] lg:h-[180px] object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
+                    />
+                  </Link>
+                </div>
               </div>
 
               {/* No Product Info Section - Clean Minimal Design */}
@@ -335,7 +335,7 @@ const FeaturedProducts = () => {
         }`}>
           <Link 
             href="/products" 
-            className="inline-flex bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-4 px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-lg uppercase tracking-wide"
+            className="inline-flex bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-3 sm:py-4 px-6 sm:px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-base sm:text-lg uppercase tracking-wide"
           >
             View All Products
           </Link>
