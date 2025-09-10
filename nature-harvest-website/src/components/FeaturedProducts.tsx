@@ -284,8 +284,8 @@ const FeaturedProducts = () => {
                     href={product.brandId?._id ? `/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
                     className="block"
                   >
-                    <div className="bg-white rounded-full w-16 h-16 sm:w-20 sm:h-20 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
-                      <span className="text-green-600 font-gazpacho font-bold text-xs sm:text-sm">
+                    <div className="bg-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
+                      <span className="text-green-600 font-gazpacho font-bold text-xs">
                         {product.brandId?.name || 'Nature Harvest'}
                       </span>
                       <span className="text-green-600 font-jost font-medium text-xs">
@@ -297,18 +297,18 @@ const FeaturedProducts = () => {
 
               
                 {/* Main Product Image */}
-                <div className="relative w-full p-4 sm:p-6 lg:p-8">
+                <div className="relative w-full p-2 sm:p-3 lg:p-4">
                   <Image
                     src={getProductImage(product)}
                     alt={product.name}
-                    width={300}
-                    height={400}
+                    width={200}
+                    height={250}
                     className="w-full h-auto object-contain transition-all duration-500 group-hover:scale-105 group-hover:-rotate-6"
                   />
                 </div>
 
                 {/* Flavor Image - Bottom Left */}
-                <div className="absolute bottom-0 left-20 sm:left-32 lg:left-40">
+                <div className="absolute bottom-0 left-16 sm:left-24 lg:left-28">
                   <Link 
                     href={product.flavorId?._id ? `/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
                     className="block"
@@ -316,9 +316,9 @@ const FeaturedProducts = () => {
                     <Image
                       src={getFlavorImage(product)}
                       alt={product.flavorId?.name || 'Flavor'}
-                      width={120}
-                      height={120}
-                      className="w-16 h-16 sm:w-20 sm:h-20 lg:w-[180px] lg:h-[180px] object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
+                      width={80}
+                      height={80}
+                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
                     />
                   </Link>
                 </div>

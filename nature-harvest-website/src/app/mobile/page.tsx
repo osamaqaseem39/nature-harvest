@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useMobile } from '@/hooks/useMobile'
 import MobileHero from '@/components/MobileHero'
 import WhoWeAre from '@/components/WhoWeAre'
@@ -13,12 +14,6 @@ import { MobileSection, MobileText, MobileButton } from '@/components/MobileLayo
 
 export default function MobileHome() {
   const { isMobile } = useMobile()
-
-  // If not mobile, redirect to main page
-  if (typeof window !== 'undefined' && !isMobile) {
-    window.location.href = '/'
-    return null
-  }
 
   return (
     <div className="min-h-screen">
