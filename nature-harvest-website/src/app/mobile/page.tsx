@@ -1,15 +1,15 @@
 'use client'
 
-import { useMobile } from '../hooks/useMobile'
-import MobileHero from '../components/MobileHero'
-import WhoWeAre from '../components/WhoWeAre'
-import CEOMessage from '../components/CEOMessage'
-import WhyChooseUs from '../components/WhyChooseUs'
-import FeaturedProducts from '../components/FeaturedProducts'
-import Brands from '../components/Brands'
-import ContactInfo from '../components/ContactInfo'
-import CTA from '../components/CTA'
-import { MobileSection, MobileText, MobileButton } from '../components/MobileLayout'
+import { useMobile } from '@/hooks/useMobile'
+import MobileHero from '@/components/MobileHero'
+import WhoWeAre from '@/components/WhoWeAre'
+import CEOMessage from '@/components/CEOMessage'
+import WhyChooseUs from '@/components/WhyChooseUs'
+import FeaturedProducts from '@/components/FeaturedProducts'
+import Brands from '@/components/Brands'
+import ContactInfo from '@/components/ContactInfo'
+import CTA from '@/components/CTA'
+import { MobileSection, MobileText, MobileButton } from '@/components/MobileLayout'
 
 export default function MobileHome() {
   const { isMobile } = useMobile()
