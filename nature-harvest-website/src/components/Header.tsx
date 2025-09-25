@@ -46,7 +46,7 @@ const Header = () => {
         ? 'top-1 left-2 right-2 sm:top-2 sm:left-4 sm:right-4' 
         : 'top-2 left-2 right-2 sm:top-4 sm:left-4 sm:right-4'
     }`}>
-      <div className="max-w-7xl mx-auto">
+  <div className="max-w-[1200px] mx-auto">
         <div className={`mx-2 sm:mx-4 rounded-lg transition-all duration-500 ${
           isScrolled 
             ? 'bg-white backdrop-blur-md shadow-2xl border border-gray-100/30' 

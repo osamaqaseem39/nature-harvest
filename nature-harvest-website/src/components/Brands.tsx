@@ -58,7 +58,7 @@ const Brands = () => {
         <div className="absolute bottom-10 sm:bottom-20 right-1/4 w-12 h-12 sm:w-16 sm:h-16 lg:w-24 lg:h-24 bg-green-100 rounded-full"></div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className={`text-center mb-12 sm:mb-16 transition-all duration-1000 ease-out delay-200 ${

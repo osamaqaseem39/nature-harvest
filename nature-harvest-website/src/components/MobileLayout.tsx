@@ -28,7 +28,7 @@ const MobileLayout = ({ children, className = '' }: MobileLayoutProps) => {
     if (isTablet) {
       return 'max-w-4xl'
     }
-    return 'max-w-7xl'
+    return 'max-w-[1200px]'
   }
 
   return (

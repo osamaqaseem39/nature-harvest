@@ -3,7 +3,7 @@
 const CTA = () => {
   return (
     <section className="relative bg-gray-50 py-12 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-4">
+  <div className="max-w-[1200px] mx-auto px-4">
         {/* CTA Card */}
         <div className="bg-green-500 rounded-3xl shadow-2xl p-8 border border-green-400 relative overflow-hidden">
           {/* Background Pattern */}

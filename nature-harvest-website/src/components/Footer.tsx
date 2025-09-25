@@ -17,7 +17,7 @@ const Footer = () => {
         <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-gray-800 rounded-full transform rotate-12"></div>
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6">
      
         {/* Content Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-10">

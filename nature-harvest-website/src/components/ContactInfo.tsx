@@ -3,7 +3,7 @@
 const ContactInfo = () => {
   return (
     <section className="relative bg-gradient-to-br from-green-400 via-green-300 to-green-400 py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h3 className="text-green-500 uppercase tracking-widest font-jost font-semibold text-sm mb-4">

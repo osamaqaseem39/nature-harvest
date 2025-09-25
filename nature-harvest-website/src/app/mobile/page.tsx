@@ -22,7 +22,7 @@ export default function MobileHome() {
       
       {/* Mobile Who We Are Section */}
       <MobileSection padding="large" className="bg-gradient-to-br from-green-100 via-green-50 to-green-100 -mt-10 sm:-mt-16 lg:-mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
             
             {/* Left Content */}

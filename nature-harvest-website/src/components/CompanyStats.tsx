@@ -60,7 +60,7 @@ const CompanyStats = () => {
         <div className="absolute bottom-0 right-0 w-64 h-64 bg-white rounded-full transform translate-x-32 translate-y-32"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className={`text-center mb-16 transition-all duration-1000 ease-out delay-200 ${

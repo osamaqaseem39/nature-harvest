@@ -35,7 +35,7 @@ const WhoWeAre = () => {
           <div className="absolute bottom-10 sm:bottom-20 right-4 sm:right-10 w-12 h-12 sm:w-16 sm:h-16 lg:w-24 lg:h-24 bg-green-300 rounded-full"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
             
             {/* Left Content */}

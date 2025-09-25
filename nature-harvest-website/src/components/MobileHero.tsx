@@ -112,7 +112,7 @@ const MobileHero = () => {
       <Header />
       
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-50">
+  <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-50">
         <div className="flex flex-col items-center text-center justify-center min-h-[calc(100vh-80px)] sm:min-h-0">
           
           {/* Main Title */}

@@ -61,7 +61,7 @@ const OurStory = () => {
         <div className="absolute bottom-20 left-20 w-32 h-32 bg-green-200 rounded-full"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className={`text-center mb-20 transition-all duration-1000 ease-out delay-200 ${

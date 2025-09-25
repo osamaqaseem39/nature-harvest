@@ -72,7 +72,7 @@ const ValuesSection = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-green-200 rounded-full opacity-50"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className={`text-center mb-20 transition-all duration-1000 ease-out delay-200 ${

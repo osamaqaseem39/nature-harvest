@@ -241,7 +241,7 @@ const FilterPageContent = () => {
           <div className="absolute bottom-10 left-20 w-32 h-32 bg-green-200 rounded-full"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Filter Info Header */}
           <div className="text-center mb-16">
             <div className="text-6xl mb-6">{getFilterIcon()}</div>

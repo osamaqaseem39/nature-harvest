@@ -230,7 +230,7 @@ const FeaturedProducts = () => {
   if (loading) {
     return (
       <section ref={sectionRef} className="relative bg-white pt-32 pb-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
             <p className="mt-4 text-gray-600 font-jost">Loading featured products...</p>
@@ -248,7 +248,7 @@ const FeaturedProducts = () => {
         <div className="absolute bottom-5 sm:bottom-10 left-10 sm:left-20 w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-green-200 rounded-full"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className={`text-center mb-12 sm:mb-16 transition-all duration-1000 ease-out delay-200 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
