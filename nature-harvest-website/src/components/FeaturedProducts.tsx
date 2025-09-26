@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Star, ShoppingCart, Heart, Eye } from 'lucide-react'
 import { apiService } from '../lib/api'
 import { config } from '../lib/config'
@@ -39,6 +40,7 @@ const FeaturedProducts = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   // Fallback hardcoded products when API has no data
   const fallbackProducts: Product[] = [
@@ -161,6 +163,7 @@ const FeaturedProducts = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true)
+        setError(null) // Clear any previous errors
         const response = await apiService.getProducts({
           page: 1,
           limit: config.pagination.featuredProductsLimit,
@@ -172,7 +175,12 @@ const FeaturedProducts = () => {
         console.error('Error fetching featured products:', err)
         // On error, use fallback products instead of showing error
         setProducts(fallbackProducts)
-        setError(null)
+        setError(null) // Don't show error to users, just use fallback
+        
+        // Optional: Set a non-blocking error state for debugging
+        if (config.development.debugMode) {
+          console.warn('FeaturedProducts: Using fallback data due to API error:', err)
+        }
       } finally {
         setLoading(false)
       }
@@ -269,20 +277,25 @@ const FeaturedProducts = () => {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           {products.slice(0, 8).map((product, index) => (
-            <Link 
+            <div 
               key={product._id} 
-              href={`/products/${product._id}`}
               className={`relative transition-all duration-1000 ease-out delay-${600 + index * 200} ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              } block group cursor-pointer hover:shadow-lg hover:-translate-y-2 transition-all duration-300`}
+              } block group hover:shadow-lg hover:-translate-y-2 transition-all duration-300 cursor-pointer`}
+              onClick={() => router.push(`/products/${product._id}`)}
             >
               {/* Product Image Container - No Background Container */}
               <div className="relative overflow-hidden">
                 {/* Brand Tag - Top Left */}
                 <div className="absolute top-1 sm:top-2 left-1 z-10">
-                  <Link 
-                    href={product.brandId?._id ? `/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
+                  <div 
                     className="block"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (product.brandId?._id) {
+                        router.push(`/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}`);
+                      }
+                    }}
                   >
                     <div className="bg-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
                       <span className="text-green-600 font-gazpacho font-bold text-xs">
@@ -292,7 +305,7 @@ const FeaturedProducts = () => {
                         {product.sizeId?.name || '125 ML'}
                       </span>
                     </div>
-                  </Link>
+                  </div>
                 </div>
 
               
@@ -309,9 +322,14 @@ const FeaturedProducts = () => {
 
                 {/* Flavor Image - Bottom Left */}
                 <div className="absolute bottom-0 left-16 sm:left-24 lg:left-28">
-                  <Link 
-                    href={product.flavorId?._id ? `/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
+                  <div 
                     className="block"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (product.flavorId?._id) {
+                        router.push(`/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}`);
+                      }
+                    }}
                   >
                     <Image
                       src={getFlavorImage(product)}
@@ -320,12 +338,12 @@ const FeaturedProducts = () => {
                       height={80}
                       className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
                     />
-                  </Link>
+                  </div>
                 </div>
               </div>
 
               {/* No Product Info Section - Clean Minimal Design */}
-            </Link>
+            </div>
           ))}
         </div>
 

@@ -13,6 +13,40 @@ const Brands = () => {
   const [error, setError] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
+  // Fallback brands when API is not available
+  const fallbackBrands: Brand[] = [
+    {
+      _id: 'brand-1',
+      name: 'FreshLay',
+      description: 'Premium fresh beverages',
+      imageUrl: '/images/brands/freshlay-logo.png',
+      logoUrl: '/images/brands/freshlay-logo.png',
+      status: 'Active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: 'brand-2',
+      name: 'Nature Harvest',
+      description: 'Natural and organic products',
+      imageUrl: '/images/brands/nature-harvest-logo.png',
+      logoUrl: '/images/brands/nature-harvest-logo.png',
+      status: 'Active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: 'brand-3',
+      name: 'Pure Life',
+      description: 'Pure and healthy beverages',
+      imageUrl: '/images/brands/pure-life-logo.png',
+      logoUrl: '/images/brands/pure-life-logo.png',
+      status: 'Active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ]
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -34,14 +68,23 @@ const Brands = () => {
     const fetchBrands = async () => {
       try {
         setLoading(true)
+        setError(null) // Clear any previous errors
         const response = await apiService.getBrands()
         // Filter only active brands
         const activeBrands = response.data.filter(brand => brand.status === 'Active')
         console.log('Fetched brands:', activeBrands) // Debug log
-        setBrands(activeBrands)
+        // Use API data if available, otherwise use fallback brands
+        setBrands(activeBrands.length > 0 ? activeBrands : fallbackBrands)
       } catch (err) {
         console.error('Error fetching brands:', err)
-        setError('Failed to load brands')
+        // On error, use fallback brands instead of showing error
+        setBrands(fallbackBrands)
+        setError(null) // Don't show error to users, just use fallback
+        
+        // Optional: Set a non-blocking error state for debugging
+        if (config.development.debugMode) {
+          console.warn('Brands: Using fallback data due to API error:', err)
+        }
       } finally {
         setLoading(false)
       }

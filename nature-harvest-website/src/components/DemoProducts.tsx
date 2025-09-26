@@ -136,6 +136,7 @@ const DemoProducts = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true)
+        setError(null) // Clear any previous errors
         const response = await apiService.getProducts({
           page: 1,
           limit: config.pagination.demoProductsLimit,
@@ -147,7 +148,12 @@ const DemoProducts = () => {
         console.error('Error fetching demo products:', err)
         // On error, use fallback products instead of showing error
         setProducts(fallbackProducts)
-        setError(null)
+        setError(null) // Don't show error to users, just use fallback
+        
+        // Optional: Set a non-blocking error state for debugging
+        if (config.development.debugMode) {
+          console.warn('DemoProducts: Using fallback data due to API error:', err)
+        }
       } finally {
         setLoading(false)
       }

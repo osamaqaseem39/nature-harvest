@@ -300,24 +300,42 @@ class ApiService {
           ...options?.headers,
         },
         signal: controller.signal,
+        mode: 'cors', // Explicitly set CORS mode
         ...options,
       });
 
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error(`API request failed: ${response.statusText}`);
+        // Better error handling for different HTTP status codes
+        const errorMessage = response.status === 404 
+          ? `Endpoint not found: ${endpoint}`
+          : response.status >= 500 
+          ? `Server error (${response.status}): ${response.statusText}`
+          : `API request failed (${response.status}): ${response.statusText}`;
+        
+        console.error(`API Error - URL: ${url}, Status: ${response.status}, Message: ${response.statusText}`);
+        throw new Error(errorMessage);
       }
 
       return response.json();
     } catch (error) {
       clearTimeout(timeoutId);
+      
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
+          console.error(`API Timeout - URL: ${url}, Timeout: ${API_TIMEOUT}ms`);
           throw new Error(`API request timed out after ${API_TIMEOUT}ms`);
         }
+        if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+          console.error(`Network Error - URL: ${url}, Possible CORS or network issue`);
+          throw new Error('Network error: Unable to connect to the API server. Please check your internet connection.');
+        }
+        console.error(`API Error - URL: ${url}, Error:`, error);
         throw error;
       }
+      
+      console.error(`Unknown API Error - URL: ${url}`);
       throw new Error('Unknown API error occurred');
     }
   }
