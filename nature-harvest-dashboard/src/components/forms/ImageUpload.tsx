@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { uploadFile } from '../../services/api';
 
 interface ImageUploadProps {
   onImageUpload: (imageUrl: string) => void;
@@ -38,26 +39,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      const { data } = await uploadFile(file, 'products');
 
-             const response = await fetch('https://natureharvest.osamaqaseem.online/upload.php', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Upload failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      
-      if (result.error) {
-        throw new Error(result.error);
-      }
-
-      if (result.url) {
-        onImageUpload(result.url);
+      const url = data?.data?.urls?.[0] || data?.data?.url || data?.url;
+      if (url) {
+        onImageUpload(url);
         setError(null);
       } else {
         throw new Error('No URL returned from upload');
