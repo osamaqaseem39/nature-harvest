@@ -70,12 +70,14 @@ exports.getFlavorById = async (req, res) => {
 // Create new flavor
 exports.createFlavor = async (req, res) => {
   try {
-    const { name, description, status = 'Active' } = req.body;
+    const { name, description, status = 'Active', imageUrl: imageUrlFromBody } = req.body;
     
-    // Handle image upload - use the URL from external upload service
+    // Handle image - prefer uploaded file URL, otherwise accept provided imageUrl in payload
     let imageUrl = '';
     if (req.fileUrl) {
       imageUrl = req.fileUrl;
+    } else if (typeof imageUrlFromBody === 'string' && imageUrlFromBody.trim().length > 0) {
+      imageUrl = imageUrlFromBody.trim();
     }
 
     const flavor = new Flavor({
@@ -103,12 +105,14 @@ exports.createFlavor = async (req, res) => {
 // Update flavor
 exports.updateFlavor = async (req, res) => {
   try {
-    const { name, description, status } = req.body;
+    const { name, description, status, imageUrl: imageUrlFromBody } = req.body;
     const updateData = { name, description, status };
 
-    // Handle image upload - use the URL from external upload service
+    // Handle image - prefer uploaded file URL, otherwise accept provided imageUrl in payload
     if (req.fileUrl) {
       updateData.imageUrl = req.fileUrl;
+    } else if (typeof imageUrlFromBody === 'string' && imageUrlFromBody.trim().length > 0) {
+      updateData.imageUrl = imageUrlFromBody.trim();
     }
 
     const flavor = await Flavor.findByIdAndUpdate(
