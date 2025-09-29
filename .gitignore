@@ -103,6 +103,9 @@ temp/
 uploads/
 public/uploads/
 
+# Large archives (avoid committing big bundles)
+nature-harvest-website/public/*.zip
+
 # Database files
 *.db
 *.sqlite
