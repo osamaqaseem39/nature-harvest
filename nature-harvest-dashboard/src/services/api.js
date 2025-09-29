@@ -194,7 +194,7 @@ export const uploadFile = async (file, type = 'product') => {
   formData.append('file', file);
   formData.append('type', type);
   
-  return api.post('/api/upload', formData, {
+  return api.post('/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -214,7 +214,7 @@ export const uploadGalleryImages = async (files) => {
     formData.append('file', files);
   }
   
-  return api.post('/api/upload', formData, {
+  return api.post('/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
