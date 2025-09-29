@@ -1,4 +1,5 @@
 import { config } from './config';
+import { getToken } from './auth';
 
 const { baseUrl: API_BASE_URL, timeout: API_TIMEOUT, retryAttempts: API_RETRY_ATTEMPTS } = config.api;
 
@@ -294,9 +295,11 @@ class ApiService {
     const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
 
     try {
+      const bearer = getToken()
       const response = await fetch(url, {
         headers: {
           'Content-Type': 'application/json',
+          ...(bearer ? { Authorization: `Bearer ${bearer}` } : {}),
           ...options?.headers,
         },
         signal: controller.signal,
