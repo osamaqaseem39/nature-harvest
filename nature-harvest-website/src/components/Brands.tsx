@@ -139,9 +139,10 @@ const Brands = () => {
 
         {/* Brands Grid */}
         {!loading && !error && brands.length > 0 && (
-          <>
+          <div className="flex flex-col items-center">
+            {/* Brands Container */}
             {/* First Row */}
-            <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-8 mb-6 sm:mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-400 ${
+            <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-8 mb-6 sm:mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-400 justify-items-center ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               {brands.slice(0, Math.ceil(brands.length / 2)).map((brand, index) => (
@@ -179,7 +180,7 @@ const Brands = () => {
 
             {/* Second Row */}
             {brands.length > Math.ceil(brands.length / 2) && (
-              <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-8 mb-6 sm:mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-600 ${
+              <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-8 mb-6 sm:mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-600 justify-items-center ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}>
                 {brands.slice(Math.ceil(brands.length / 2)).map((brand, index) => (
@@ -215,7 +216,7 @@ const Brands = () => {
                 ))}
               </div>
             )}
-          </>
+          </div>
         )}
 
         {/* No Brands State */}
