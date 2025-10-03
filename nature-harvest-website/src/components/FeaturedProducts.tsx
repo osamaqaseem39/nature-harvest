@@ -316,7 +316,7 @@ const FeaturedProducts = () => {
                     alt={product.name}
                     width={200}
                     height={250}
-                    className="w-full h-auto object-contain transition-all duration-500 group-hover:scale-105 group-hover:-rotate-6"
+                    className="w-full h-auto object-contain transition-all duration-500"
                   />
                 </div>
 

@@ -307,7 +307,7 @@ const FilterPageContent = () => {
                         alt={product.name}
                         width={200}
                         height={200}
-                        className="object-contain transition-all duration-500 hover:scale-110"
+                        className="object-contain transition-all duration-500"
                       />
                     </div>
 

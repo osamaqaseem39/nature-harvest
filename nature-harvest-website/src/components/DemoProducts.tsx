@@ -282,7 +282,7 @@ const DemoProducts = () => {
                     src={getProductImage(product)}
                     alt={product.name}
                     fill
-                    className="object-contain transition-transform duration-700 hover:scale-110"
+                    className="object-contain transition-transform duration-700"
                   />
                 </div>
 

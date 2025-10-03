@@ -489,7 +489,7 @@ const ProductsContent = () => {
                     href={`/products/${product._id}`}
                     className="block"
                   >
-                    <div className="relative transition-all duration-500 ease-out hover:scale-105 cursor-pointer">
+                    <div className="relative transition-all duration-500 ease-out cursor-pointer">
                       {/* Product Image Container */}
                       <div className="relative overflow-hidden">
                         {/* Brand Tag - Top Left */}
@@ -517,7 +517,7 @@ const ProductsContent = () => {
                             alt={product.name}
                             width={300}
                             height={400}
-                            className="object-contain transition-all duration-500 hover:scale-105 hover:-rotate-6"
+                            className="object-contain transition-all duration-500"
                           />
                         </div>
 
