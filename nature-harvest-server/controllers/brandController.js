@@ -1,5 +1,6 @@
 const Brand = require('../models/Brand');
 const { validationResult } = require('express-validator');
+const { sendErrorResponse } = require('../utils/errorHandler');
 
 // Create brand with logo upload
 exports.createBrand = async (req, res) => {
@@ -43,11 +44,7 @@ exports.createBrand = async (req, res) => {
     });
   } catch (error) {
     console.error('Create brand error:', error);
-    res.status(400).json({
-      success: false,
-      message: error.message || 'Failed to create brand',
-      error: process.env.NODE_ENV === 'development' ? error : {}
-    });
+    sendErrorResponse(res, error, 'Failed to create brand');
   }
 };
 
@@ -175,11 +172,7 @@ exports.updateBrand = async (req, res) => {
     });
   } catch (error) {
     console.error('Update brand error:', error);
-    res.status(400).json({
-      success: false,
-      message: error.message || 'Failed to update brand',
-      error: process.env.NODE_ENV === 'development' ? error : {}
-    });
+    sendErrorResponse(res, error, 'Failed to update brand');
   }
 };
 

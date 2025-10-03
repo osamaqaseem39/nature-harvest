@@ -3,6 +3,7 @@ const Brand = require('../models/Brand');
 const Size = require('../models/Size');
 const Flavor = require('../models/Flavor');
 const { validationResult } = require('express-validator');
+const { sendErrorResponse } = require('../utils/errorHandler');
 
 // Create product
 exports.createProduct = async (req, res) => {
@@ -92,11 +93,7 @@ exports.createProduct = async (req, res) => {
     });
   } catch (error) {
     console.error('Create product error:', error);
-    res.status(400).json({
-      success: false,
-      message: error.message || 'Failed to create product',
-      error: process.env.NODE_ENV === 'development' ? error : {}
-    });
+    sendErrorResponse(res, error, 'Failed to create product');
   }
 };
 
@@ -197,11 +194,7 @@ exports.updateProduct = async (req, res) => {
     });
   } catch (error) {
     console.error('Update product error:', error);
-    res.status(400).json({
-      success: false,
-      message: error.message || 'Failed to update product',
-      error: process.env.NODE_ENV === 'development' ? error : {}
-    });
+    sendErrorResponse(res, error, 'Failed to update product');
   }
 };
 

@@ -246,9 +246,18 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/partners', require('./routes/partners'));
 app.use('/api/careers', require('./routes/careers'));
 
-// Upload routes
+// Upload routes with increased timeout
 const { uploadMultiple } = require('./middleware/externalUpload');
-app.post('/api/upload', uploadMultiple('file', 10, 'products'), (req, res) => {
+app.post('/api/upload', (req, res, next) => {
+  // Set timeout for upload requests (5 minutes)
+  req.setTimeout(300000, () => {
+    res.status(408).json({
+      success: false,
+      message: 'Upload request timed out. Please try again with smaller files.'
+    });
+  });
+  next();
+}, uploadMultiple('file', 10, 'products'), (req, res) => {
   try {
     if (!req.uploadResults || req.uploadResults.length === 0) {
       return res.status(400).json({

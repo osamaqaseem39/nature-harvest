@@ -35,6 +35,7 @@ interface AuthContextType {
   register: (userData: RegisterCredentials) => Promise<LoginResult>;
   logout: () => Promise<void>;
   updateProfile: (profileData: Partial<User>) => Promise<LoginResult>;
+  validateToken: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -54,10 +55,12 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('authToken'));
+  const [token, setToken] = useState<string | null>(sessionStorage.getItem('authToken'));
 
   useEffect(() => {
     const initializeAuth = async () => {
+      setLoading(true);
+      
       // Only try to get profile if we have a valid, non-empty token
       if (token && typeof token === 'string' && token.trim().length > 10) {
         try {
@@ -66,22 +69,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         } catch (error) {
           console.error('Failed to get user profile:', error);
           // Clear invalid token
-          localStorage.removeItem('authToken');
+          sessionStorage.removeItem('authToken');
           setToken(null);
           setUser(null);
         }
       } else {
         // Clear any invalid tokens
         if (token && (typeof token !== 'string' || token.trim().length <= 10)) {
-          localStorage.removeItem('authToken');
+          sessionStorage.removeItem('authToken');
           setToken(null);
         }
+        setUser(null);
       }
       setLoading(false);
     };
 
     initializeAuth();
-  }, [token]); // Include token in dependencies
+  }, []); // Remove token from dependencies to prevent infinite loops
 
   const login = async (credentials: LoginCredentials): Promise<LoginResult> => {
     try {
@@ -89,7 +93,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       const { token: authToken, user: userData } = response.data;
       
-      localStorage.setItem('authToken', authToken);
+      sessionStorage.setItem('authToken', authToken);
       setToken(authToken);
       setUser(userData);
       
@@ -108,7 +112,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authAPI.register(userData);
       const { token: authToken, user: newUser } = response.data;
       
-      localStorage.setItem('authToken', authToken);
+      sessionStorage.setItem('authToken', authToken);
       setToken(authToken);
       setUser(newUser);
       
@@ -129,9 +133,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      localStorage.removeItem('authToken');
+      // Clear all authentication data
+      sessionStorage.removeItem('authToken');
       setToken(null);
       setUser(null);
+      setLoading(false);
     }
   };
 
@@ -148,6 +154,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Function to validate token and refresh user data if needed
+  const validateToken = async (): Promise<boolean> => {
+    if (!token || typeof token !== 'string' || token.trim().length <= 10) {
+      return false;
+    }
+
+    try {
+      const response = await authAPI.getProfile();
+      setUser(response.data);
+      return true;
+    } catch (error) {
+      console.error('Token validation failed:', error);
+      // Clear invalid token
+      sessionStorage.removeItem('authToken');
+      setToken(null);
+      setUser(null);
+      return false;
+    }
+  };
+
   const isAuthenticated = !!token && !!user;
   const isAdmin = user?.role === 'Admin';
 
@@ -161,6 +187,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     updateProfile,
+    validateToken,
   };
 
   return (

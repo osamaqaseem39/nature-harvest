@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import Image from 'next/image'
 import { config } from '../lib/config'
+import { validateFiles, formatFileSize } from '../lib/fileValidation'
 
 interface GalleryUploadProps {
   onImagesChange: (images: string[]) => void
@@ -34,97 +35,135 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
   const [images, setImages] = useState<string[]>(initialImages)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string>('')
+  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
   const fileInputRef = useRef<HTMLInputElement>(null)
+
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
     if (files.length === 0) return
 
-    // Validate file count
-    if (images.length + files.length > maxImages) {
-      setError(`Maximum ${maxImages} images allowed`)
+    // Validate files
+    const validation = validateFiles(files, {
+      maxFiles: maxImages - images.length,
+      maxSize: config.upload.maxFileSize,
+      allowedTypes: [...config.upload.allowedTypes]
+    })
+
+    if (!validation.valid) {
+      setError(validation.error || 'Invalid files')
       return
     }
 
     setUploading(true)
     setError('')
+    setUploadProgress({})
 
     try {
-      // Upload files one by one to handle the response structure properly
-      const uploadedUrls: string[] = []
-
-      for (const file of files) {
+      // Upload files in parallel for better performance
+      const uploadPromises = files.map(async (file) => {
+        // Initialize progress for this file
+        setUploadProgress(prev => ({ ...prev, [file.name]: 0 }))
         const formData = new FormData()
         formData.append('file', file)
 
-        const response = await fetch(`${config.api.baseUrl}/upload`, {
-          method: 'POST',
-          body: formData,
-        })
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), config.upload.timeout)
 
-        if (!response.ok) {
-          throw new Error(`Upload failed for ${file.name}`)
-        }
+        let progressInterval: NodeJS.Timeout | null = null
+        
+        try {
+          // Simulate progress for better UX
+          progressInterval = setInterval(() => {
+            setUploadProgress(prev => ({
+              ...prev,
+              [file.name]: Math.min(prev[file.name] + Math.random() * 20, 90)
+            }))
+          }, 200)
 
-        const result: UploadResponse = await response.json()
-        
-        // Debug logging
-        console.log(`Upload response for ${file.name}:`, result)
-        
-        if (!result.success) {
-          throw new Error(`Upload failed: ${result.message || 'Unknown error'}`)
-        }
-        
-        if (!result.data) {
-          throw new Error(`No data in response for ${file.name}`)
-        }
-        
-        let url: string | undefined
-        
-        // Try to get URL from urls array first
-        if (result.data.urls && result.data.urls.length > 0) {
-          url = result.data.urls[0]
-          console.log(`Using URL from urls array: ${url}`)
-        } 
-        // Fallback to files array
-        else if (result.data.files && result.data.files.length > 0) {
-          const fileData = result.data.files.find(f => f.success && f.url)
-          if (fileData?.url) {
-            url = fileData.url
-            console.log(`Using URL from files array: ${url}`)
+          const response = await fetch(`${config.api.baseUrl}/upload`, {
+            method: 'POST',
+            body: formData,
+            signal: controller.signal,
+          })
+
+          clearTimeout(timeoutId)
+          if (progressInterval) {
+            clearInterval(progressInterval)
           }
-        }
-        
-        if (!url) {
-          console.error('No valid URL found in response:', result)
+
+          if (!response.ok) {
+            throw new Error(`Upload failed for ${file.name}: ${response.status} ${response.statusText}`)
+          }
+
+          const result: UploadResponse = await response.json()
           
-          // Additional fallback: check if there's a direct URL property
-          if (result.url) {
-            url = result.url
-            console.log(`Using direct URL property: ${url}`)
-          } else if (result.data && typeof result.data === 'string') {
-            url = result.data
-            console.log(`Using data as string URL: ${url}`)
-          } else {
-            throw new Error(`No valid URL returned for ${file.name}. Response: ${JSON.stringify(result)}`)
+          if (!result.success) {
+            throw new Error(`Upload failed: ${result.message || 'Unknown error'}`)
           }
+          
+          if (!result.data) {
+            throw new Error(`No data in response for ${file.name}`)
+          }
+          
+          let url: string | undefined
+          
+          // Try to get URL from urls array first
+          if (result.data && typeof result.data === 'object' && result.data.urls && result.data.urls.length > 0) {
+            url = result.data.urls[0]
+          } 
+          // Fallback to files array
+          else if (result.data && typeof result.data === 'object' && result.data.files && result.data.files.length > 0) {
+            const fileData = result.data.files.find(f => f.success && f.url)
+            if (fileData?.url) {
+              url = fileData.url
+            }
+          }
+          
+          if (!url) {
+            // Additional fallback: check if there's a direct URL property
+            if (result.url) {
+              url = result.url
+            } else if (result.data && typeof result.data === 'string') {
+              url = result.data
+            } else {
+              throw new Error(`No valid URL returned for ${file.name}`)
+            }
+          }
+          
+          // Mark as complete
+          setUploadProgress(prev => ({ ...prev, [file.name]: 100 }))
+          return url
+        } catch (error) {
+          clearTimeout(timeoutId)
+          if (progressInterval) {
+            clearInterval(progressInterval)
+          }
+          throw error
         }
-        
-        if (url) {
-          uploadedUrls.push(url)
-          console.log(`Successfully uploaded ${file.name}:`, url)
-        }
-      }
+      })
+
+      // Wait for all uploads to complete
+      const uploadedUrls = await Promise.all(uploadPromises)
 
       // Update images state
       const newImages = [...images, ...uploadedUrls]
       setImages(newImages)
       onImagesChange(newImages)
       
-      console.log('All images uploaded successfully:', newImages)
     } catch (err) {
       console.error('Upload error:', err)
-      setError(err instanceof Error ? err.message : 'Upload failed')
+      
+      let errorMessage = 'Upload failed'
+      if (err instanceof Error) {
+        if (err.name === 'AbortError') {
+          errorMessage = 'Upload timed out. Please try again with smaller files or check your connection.'
+        } else {
+          errorMessage = err.message
+        }
+      }
+      
+      setError(errorMessage)
     } finally {
       setUploading(false)
       // Reset file input
@@ -148,14 +187,20 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
     <div className={`space-y-4 ${className}`}>
       {/* Upload Button */}
       <div className="flex items-center gap-4">
-        <button
-          type="button"
-          onClick={openFileDialog}
-          disabled={uploading || images.length >= maxImages}
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-        >
-          {uploading ? 'Uploading...' : `Add Images (${images.length}/${maxImages})`}
-        </button>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={openFileDialog}
+            disabled={uploading || images.length >= maxImages}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          >
+            {uploading ? 'Uploading...' : `Add Images (${images.length}/${maxImages})`}
+          </button>
+          
+          <div className="text-xs text-gray-500">
+            Max {formatFileSize(config.upload.maxFileSize)} per file • {config.upload.allowedTypes.join(', ')}
+          </div>
+        </div>
         
         <input
           ref={fileInputRef}
@@ -204,9 +249,27 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
 
       {/* Upload Progress */}
       {uploading && (
-        <div className="text-center text-gray-600">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 mx-auto mb-2"></div>
-          Uploading images...
+        <div className="space-y-2">
+          <div className="text-center text-gray-600 mb-2">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 mx-auto mb-2"></div>
+            Uploading images...
+          </div>
+          
+          {/* Individual file progress */}
+          {Object.entries(uploadProgress).map(([filename, progress]) => (
+            <div key={filename} className="space-y-1">
+              <div className="flex justify-between text-sm text-gray-600">
+                <span className="truncate">{filename}</span>
+                <span>{Math.round(progress)}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>

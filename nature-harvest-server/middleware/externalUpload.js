@@ -33,7 +33,7 @@ const documentFilter = (req, file, cb) => {
 };
 
 // Configure multer with options
-const createUpload = (fileFilter, fileSizeLimit = 5 * 1024 * 1024) => {
+const createUpload = (fileFilter, fileSizeLimit = 10 * 1024 * 1024) => { // Increased to 10MB
   return multer({
     storage: storage,
     limits: {
@@ -69,7 +69,7 @@ const uploadToExternalService = async (file, folder = '') => {
       headers: {
         ...formData.getHeaders(),
       },
-      timeout: 30000 // 30 second timeout
+      timeout: 300000 // 5 minutes timeout for large files
     });
 
     if (response.data && response.data.success) {
@@ -88,7 +88,7 @@ const uploadToExternalService = async (file, folder = '') => {
 };
 
 // Middleware for single file upload
-const uploadSingle = (fieldName, folder = '', fileType = 'image', fileSizeLimit = 5 * 1024 * 1024) => {
+const uploadSingle = (fieldName, folder = '', fileType = 'image', fileSizeLimit = 10 * 1024 * 1024) => {
   const fileFilter = fileType === 'document' ? documentFilter : imageFilter;
   const upload = createUpload(fileFilter, fileSizeLimit);
   
@@ -121,7 +121,7 @@ const uploadSingle = (fieldName, folder = '', fileType = 'image', fileSizeLimit 
 };
 
 // Middleware for multiple file uploads
-const uploadMultiple = (fieldName, maxCount = 5, folder = '', fileType = 'image', fileSizeLimit = 5 * 1024 * 1024) => {
+const uploadMultiple = (fieldName, maxCount = 5, folder = '', fileType = 'image', fileSizeLimit = 10 * 1024 * 1024) => {
   const fileFilter = fileType === 'document' ? documentFilter : imageFilter;
   const upload = createUpload(fileFilter, fileSizeLimit);
   
@@ -164,7 +164,7 @@ const handleUploadError = (err, req, res, next) => {
     if (err.code === 'LIMIT_FILE_SIZE') {
       return res.status(400).json({
         success: false,
-        message: 'File too large. Maximum size is 5MB.'
+        message: 'File too large. Maximum size is 10MB.'
       });
     }
     if (err.code === 'LIMIT_FILE_COUNT') {

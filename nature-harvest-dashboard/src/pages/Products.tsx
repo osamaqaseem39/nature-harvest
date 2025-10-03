@@ -6,6 +6,7 @@ import ProductForm from '../components/forms/ProductForm';
 import Modal from '../components/Modal';
 import { Product, Brand } from '../types';
 import MarkdownDisplay from '../components/common/MarkdownDisplay';
+import ErrorMessage from '../components/common/ErrorMessage';
 
 
 const Products = () => {
@@ -14,6 +15,7 @@ const Products = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const { data: productsResponse, loading: productsLoading, error: productsError, refetch: refetchProducts } = useApi(productsAPI.getAll);
   const { data: brandsResponse } = useApi(brandsAPI.getAll);
@@ -75,16 +77,19 @@ const Products = () => {
 
   const handleAddProduct = () => {
     setEditingProduct(null);
+    setFormError(null);
     setShowProductModal(true);
   };
 
   const handleEditProduct = (product: Product) => {
     setEditingProduct(product);
+    setFormError(null);
     setShowProductModal(true);
   };
 
   const handleProductSubmit = async (productData: any) => {
     try {
+      setFormError(null);
       if (editingProduct) {
         await updateProduct(editingProduct._id, productData);
       } else {
@@ -93,14 +98,17 @@ const Products = () => {
       setShowProductModal(false);
       setEditingProduct(null);
       refetchProducts();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to save product:', error);
+      const errorMessage = error?.response?.data?.message || error?.message || 'Failed to save product. Please try again.';
+      setFormError(errorMessage);
     }
   };
 
   const handleCancelProduct = () => {
     setShowProductModal(false);
     setEditingProduct(null);
+    setFormError(null);
   };
 
   const filteredProducts = (Array.isArray(products) ? products : []).filter((product: Product) => {
@@ -446,6 +454,13 @@ const Products = () => {
         title={editingProduct ? 'Edit Product' : 'Add New Product'}
         size="xl"
       >
+        {formError && (
+          <ErrorMessage 
+            message={formError} 
+            onDismiss={() => setFormError(null)}
+            className="mb-4"
+          />
+        )}
         <ProductForm
           product={editingProduct || undefined}
           onSubmit={handleProductSubmit}

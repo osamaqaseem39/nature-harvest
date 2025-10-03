@@ -29,11 +29,17 @@ export async function uploadFile(
   const formData = new FormData()
   formData.append('file', file)
 
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), config.upload.timeout)
+
   try {
     const response = await fetch(`${config.api.baseUrl}/upload`, {
       method: 'POST',
       body: formData,
+      signal: controller.signal,
     })
+
+    clearTimeout(timeoutId)
 
     if (!response.ok) {
       throw new Error(`Upload failed: ${response.status} ${response.statusText}`)
@@ -67,6 +73,7 @@ export async function uploadFile(
     options?.onSuccess?.([url])
     return url
   } catch (error) {
+    clearTimeout(timeoutId)
     const errorMessage = error instanceof Error ? error.message : 'Upload failed'
     options?.onError?.(errorMessage)
     throw error
@@ -80,33 +87,26 @@ export async function uploadFiles(
   files: File[],
   options?: UploadOptions
 ): Promise<string[]> {
-  const uploadedUrls: string[] = []
-  
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i]
+  try {
+    // Upload all files in parallel for better performance
+    const uploadPromises = files.map(file => uploadFile(file, {
+      onError: (error) => {
+        console.error(`Failed to upload ${file.name}:`, error)
+      }
+    }))
     
-    try {
-      // Update progress
-      const progress = ((i + 1) / files.length) * 100
-      options?.onProgress?.(progress)
-      
-      const url = await uploadFile(file, {
-        onSuccess: (urls) => {
-          uploadedUrls.push(...urls)
-        },
-        onError: (error) => {
-          console.error(`Failed to upload ${file.name}:`, error)
-        }
-      })
-      
-      uploadedUrls.push(url)
-    } catch (error) {
-      console.error(`Failed to upload ${file.name}:`, error)
-      // Continue with other files even if one fails
-    }
+    const uploadedUrls = await Promise.all(uploadPromises)
+    
+    // Update progress to 100% when all uploads complete
+    options?.onProgress?.(100)
+    options?.onSuccess?.(uploadedUrls)
+    
+    return uploadedUrls
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Upload failed'
+    options?.onError?.(errorMessage)
+    throw error
   }
-
-  return uploadedUrls
 }
 
 /**
@@ -116,7 +116,10 @@ export function validateFile(file: File, options?: {
   maxSize?: number // in bytes
   allowedTypes?: string[]
 }): { valid: boolean; error?: string } {
-  const { maxSize = 5 * 1024 * 1024, allowedTypes = ['image/jpeg', 'image/png', 'image/webp'] } = options || {}
+  const { 
+    maxSize = config.upload.maxFileSize, 
+    allowedTypes = config.upload.allowedTypes 
+  } = options || {}
 
   if (file.size > maxSize) {
     return {
