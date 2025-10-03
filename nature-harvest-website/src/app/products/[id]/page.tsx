@@ -240,24 +240,35 @@ const ProductDetailContent = () => {
 
               {/* Gallery Thumbnails */}
               {product.gallery && product.gallery.length > 0 && (
-                <div className="grid grid-cols-4 gap-2 lg:gap-4">
-                  {product.gallery.map((image, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImage(image)}
-                      className={`relative bg-white rounded-lg p-2 lg:p-4 border-2 transition-all duration-200 ${
-                        selectedImage === image ? 'border-green-500' : 'border-gray-200 hover:border-green-300'
-                      }`}
-                    >
-                      <Image
-                        src={image}
-                        alt={`${product.name} - Image ${index + 1}`}
-                        width={100}
-                        height={100}
-                        className="w-full h-auto object-contain"
-                      />
-                    </button>
-                  ))}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-gray-700">
+                    Gallery Images ({product.gallery.length})
+                  </h4>
+                  <div className="grid grid-cols-4 gap-2 lg:gap-4">
+                    {product.gallery.map((image, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImage(image)}
+                        className={`relative bg-white rounded-lg p-2 lg:p-4 border-2 transition-all duration-200 ${
+                          selectedImage === image ? 'border-green-500' : 'border-gray-200 hover:border-green-300'
+                        }`}
+                      >
+                        <Image
+                          src={image}
+                          alt={`${product.name} - Image ${index + 1}`}
+                          width={100}
+                          height={100}
+                          className="w-full h-auto object-contain"
+                          onError={(e) => {
+                            console.error(`Failed to load gallery image ${index + 1}:`, image)
+                            // Hide broken images
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                          }}
+                        />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

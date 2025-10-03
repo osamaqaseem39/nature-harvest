@@ -14,6 +14,7 @@ import {
   AlertCircle
 } from 'lucide-react'
 import { config } from '@/lib/config'
+import { uploadFile } from '@/lib/upload'
 
 interface JobApplicationFormProps {
   jobId: string
@@ -242,18 +243,11 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
       // First upload resume if there's a file
       let resumeUrl = formData.resume.url
       if (resumeFile) {
-        const formDataFile = new FormData()
-        formDataFile.append('file', resumeFile)
-        
-        const uploadResponse = await fetch(`${config.api.baseUrl}/upload`, {
-          method: 'POST',
-          body: formDataFile,
-        })
-
-        if (uploadResponse.ok) {
-          const uploadResult = await uploadResponse.json()
-          resumeUrl = uploadResult.data.urls[0]
-        } else {
+        try {
+          resumeUrl = await uploadFile(resumeFile)
+          console.log('Resume uploaded successfully:', resumeUrl)
+        } catch (error) {
+          console.error('Resume upload failed:', error)
           throw new Error('Failed to upload resume')
         }
       }
