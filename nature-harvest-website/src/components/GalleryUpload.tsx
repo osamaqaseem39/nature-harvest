@@ -14,14 +14,15 @@ interface GalleryUploadProps {
 interface UploadResponse {
   success: boolean
   message: string
-  data: {
-    urls: string[]
-    files: Array<{
+  url?: string // Fallback direct URL property
+  data?: {
+    urls?: string[]
+    files?: Array<{
       success: boolean
       url: string
       filename: string
     }>
-  }
+  } | string // Data can be an object or string
 }
 
 const GalleryUpload: React.FC<GalleryUploadProps> = ({
@@ -67,22 +68,51 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
 
         const result: UploadResponse = await response.json()
         
-        if (result.success && result.data?.urls?.length > 0) {
-          // Use the first URL from the response
-          uploadedUrls.push(result.data.urls[0])
-          console.log(`Successfully uploaded ${file.name}:`, result.data.urls[0])
-        } else if (result.success && result.data?.files?.length > 0) {
-          // Fallback to files array if urls is empty
-          const fileData = result.data.files.find(f => f.success)
+        // Debug logging
+        console.log(`Upload response for ${file.name}:`, result)
+        
+        if (!result.success) {
+          throw new Error(`Upload failed: ${result.message || 'Unknown error'}`)
+        }
+        
+        if (!result.data) {
+          throw new Error(`No data in response for ${file.name}`)
+        }
+        
+        let url: string | undefined
+        
+        // Try to get URL from urls array first
+        if (result.data.urls && result.data.urls.length > 0) {
+          url = result.data.urls[0]
+          console.log(`Using URL from urls array: ${url}`)
+        } 
+        // Fallback to files array
+        else if (result.data.files && result.data.files.length > 0) {
+          const fileData = result.data.files.find(f => f.success && f.url)
           if (fileData?.url) {
-            uploadedUrls.push(fileData.url)
-            console.log(`Successfully uploaded ${file.name} (via files):`, fileData.url)
-          } else {
-            throw new Error(`No valid file data for ${file.name}`)
+            url = fileData.url
+            console.log(`Using URL from files array: ${url}`)
           }
-        } else {
-          console.error('Upload response:', result)
-          throw new Error(`Invalid response for ${file.name}: ${result.message || 'Unknown error'}`)
+        }
+        
+        if (!url) {
+          console.error('No valid URL found in response:', result)
+          
+          // Additional fallback: check if there's a direct URL property
+          if (result.url) {
+            url = result.url
+            console.log(`Using direct URL property: ${url}`)
+          } else if (result.data && typeof result.data === 'string') {
+            url = result.data
+            console.log(`Using data as string URL: ${url}`)
+          } else {
+            throw new Error(`No valid URL returned for ${file.name}. Response: ${JSON.stringify(result)}`)
+          }
+        }
+        
+        if (url) {
+          uploadedUrls.push(url)
+          console.log(`Successfully uploaded ${file.name}:`, url)
         }
       }
 
