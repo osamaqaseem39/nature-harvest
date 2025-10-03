@@ -1,5 +1,6 @@
 import { config } from './config';
 import { getToken } from './auth';
+import { apiCache } from './apiCache';
 
 const { baseUrl: API_BASE_URL, timeout: API_TIMEOUT, retryAttempts: API_RETRY_ATTEMPTS } = config.api;
 
@@ -287,7 +288,7 @@ export interface ApplicationResponse {
 }
 
 class ApiService {
-  private async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  private async request<T>(endpoint: string, options?: RequestInit, retryCount = 0): Promise<T> {
     const url = `${API_BASE_URL}${endpoint}`;
     
     // Create AbortController for timeout
@@ -321,9 +322,26 @@ class ApiService {
         throw new Error(errorMessage);
       }
 
-      return response.json();
+      const data = await response.json();
+      
+      // Validate response data
+      if (!data) {
+        console.warn(`API returned null/undefined data for ${endpoint}`);
+        throw new Error('API returned null response');
+      }
+
+      return data;
     } catch (error) {
       clearTimeout(timeoutId);
+      
+      // Retry logic for network errors
+      if (retryCount < API_RETRY_ATTEMPTS && error instanceof Error) {
+        if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+          console.warn(`Network error, retrying... (${retryCount + 1}/${API_RETRY_ATTEMPTS})`);
+          await new Promise(resolve => setTimeout(resolve, 1000 * (retryCount + 1))); // Exponential backoff
+          return this.request<T>(endpoint, options, retryCount + 1);
+        }
+      }
       
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
@@ -345,7 +363,11 @@ class ApiService {
 
   // Brands API
   async getBrands(): Promise<BrandsResponse> {
-    return this.request<BrandsResponse>('/brands');
+    return apiCache.getOrSet(
+      'brands',
+      () => this.request<BrandsResponse>('/brands'),
+      5 * 60 * 1000 // 5 minutes cache
+    );
   }
 
   // Products API
@@ -370,8 +392,13 @@ class ApiService {
 
     const queryString = searchParams.toString();
     const endpoint = `/products${queryString ? `?${queryString}` : ''}`;
+    const cacheKey = `products_${queryString || 'default'}`;
     
-    return this.request<ProductsResponse>(endpoint);
+    return apiCache.getOrSet(
+      cacheKey,
+      () => this.request<ProductsResponse>(endpoint),
+      2 * 60 * 1000 // 2 minutes cache for products
+    );
   }
 
   async getProduct(id: string): Promise<ProductResponse> {

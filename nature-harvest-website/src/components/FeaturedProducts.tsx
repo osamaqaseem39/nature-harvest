@@ -164,11 +164,21 @@ const FeaturedProducts = () => {
       try {
         setLoading(true)
         setError(null) // Clear any previous errors
+        console.log('Products: Starting API call...')
         const response = await apiService.getProducts({
           page: 1,
           limit: config.pagination.featuredProductsLimit,
           status: 'Active'
         })
+        console.log('Products Response:', response)
+        console.log('Products Array:', response?.data)
+        
+        if (!response || !response.data) {
+          console.warn('Products: Invalid response structure, using fallback')
+          setProducts(fallbackProducts)
+          return
+        }
+        
         // Use API data if available, otherwise use fallback products
         setProducts(response.data.length > 0 ? response.data : fallbackProducts)
       } catch (err) {
