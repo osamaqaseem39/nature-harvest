@@ -45,11 +45,25 @@ export async function uploadFile(
       throw new Error(result.message || 'Upload failed')
     }
 
-    if (!result.data?.urls?.length) {
-      throw new Error('No URLs returned from upload')
+    let url: string | undefined
+
+    // Try to get URL from urls array first
+    if (result.data?.urls?.length > 0) {
+      url = result.data.urls[0]
+    } 
+    // Fallback to files array
+    else if (result.data?.files?.length > 0) {
+      const fileData = result.data.files.find(f => f.success)
+      if (fileData?.url) {
+        url = fileData.url
+      }
     }
 
-    const url = result.data.urls[0]
+    if (!url) {
+      console.error('Upload response:', result)
+      throw new Error('No valid URL returned from upload')
+    }
+
     options?.onSuccess?.([url])
     return url
   } catch (error) {

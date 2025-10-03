@@ -41,21 +41,21 @@ class ApiCache {
     // Check cache first
     const cached = this.get<T>(key);
     if (cached) {
-      console.log(`Cache hit for ${key}`);
       return cached;
     }
 
     // Check if request is already pending
     const pending = this.pendingRequests.get(key);
     if (pending) {
-      console.log(`Waiting for pending request for ${key}`);
       return pending;
     }
 
     // Make new request
-    console.log(`Cache miss for ${key}, fetching...`);
     const promise = fetcher().then(data => {
-      this.set(key, data, ttl);
+      // Only cache successful responses with valid data
+      if (data && typeof data === 'object' && data !== null) {
+        this.set(key, data, ttl);
+      }
       this.pendingRequests.delete(key);
       return data;
     }).catch(error => {

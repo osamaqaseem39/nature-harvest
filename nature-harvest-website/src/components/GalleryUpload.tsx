@@ -71,8 +71,18 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
           // Use the first URL from the response
           uploadedUrls.push(result.data.urls[0])
           console.log(`Successfully uploaded ${file.name}:`, result.data.urls[0])
+        } else if (result.success && result.data?.files?.length > 0) {
+          // Fallback to files array if urls is empty
+          const fileData = result.data.files.find(f => f.success)
+          if (fileData?.url) {
+            uploadedUrls.push(fileData.url)
+            console.log(`Successfully uploaded ${file.name} (via files):`, fileData.url)
+          } else {
+            throw new Error(`No valid file data for ${file.name}`)
+          }
         } else {
-          throw new Error(`Invalid response for ${file.name}`)
+          console.error('Upload response:', result)
+          throw new Error(`Invalid response for ${file.name}: ${result.message || 'Unknown error'}`)
         }
       }
 

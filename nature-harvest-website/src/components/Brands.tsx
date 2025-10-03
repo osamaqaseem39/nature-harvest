@@ -69,11 +69,13 @@ const Brands = () => {
       try {
         setLoading(true)
         setError(null) // Clear any previous errors
-        console.log('Brands: Starting API call...')
         const response = await apiService.getBrands()
-        console.log('Brands Response:', response)
-        console.log('Brands Response Type:', typeof response)
-        console.log('Brands Response Data:', response?.data)
+        
+        if (config.development.debugMode) {
+          console.log('Brands Response:', response)
+          console.log('Brands Response Type:', typeof response)
+          console.log('Brands Response Data:', response?.data)
+        }
         
         if (!response || !response.data) {
           console.warn('Brands: Invalid response structure, using fallback')
@@ -83,8 +85,11 @@ const Brands = () => {
         
         // Filter only active brands
         const activeBrands = response.data.filter(brand => brand.status === 'Active')
-        console.log('Brands Array:', activeBrands)
-        console.log('Active brands count:', activeBrands.length)
+        
+        if (config.development.debugMode) {
+          console.log('Brands Array:', activeBrands)
+          console.log('Active brands count:', activeBrands.length)
+        }
         
         // Use API data if available, otherwise use fallback brands
         setBrands(activeBrands.length > 0 ? activeBrands : fallbackBrands)
