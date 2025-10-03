@@ -35,7 +35,7 @@ const GalleryUploadFixed: React.FC<GalleryUploadProps> = ({
     const filesArray = Array.from(files);
     for (const file of filesArray) {
       const validation = validateFile(file, {
-        maxSize: 5 * 1024 * 1024, // 5MB
+        // maxSize removed - no maximum size restriction
         allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
       });
       
@@ -166,7 +166,7 @@ const GalleryUploadFixed: React.FC<GalleryUploadProps> = ({
 
         {/* Help Text */}
         <p className="text-xs text-gray-500">
-          Supported formats: JPG, PNG, GIF, WEBP. Max size: 5MB per image. You can select multiple images.
+          Supported formats: JPG, PNG, GIF, WEBP. You can select multiple images.
         </p>
       </div>
     </div>

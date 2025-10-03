@@ -113,20 +113,13 @@ export async function uploadFiles(
  * Validate file before upload
  */
 export function validateFile(file: File, options?: {
-  maxSize?: number // in bytes
   allowedTypes?: string[]
 }): { valid: boolean; error?: string } {
   const { 
-    maxSize = config.upload.maxFileSize, 
     allowedTypes = config.upload.allowedTypes 
   } = options || {}
 
-  if (file.size > maxSize) {
-    return {
-      valid: false,
-      error: `File size must be less than ${Math.round(maxSize / 1024 / 1024)}MB`
-    }
-  }
+  // File size validation removed - no maximum size restriction
 
   if (!allowedTypes.includes(file.type)) {
     return {

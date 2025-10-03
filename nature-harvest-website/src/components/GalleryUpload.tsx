@@ -46,7 +46,6 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
     // Validate files
     const validation = validateFiles(files, {
       maxFiles: maxImages - images.length,
-      maxSize: config.upload.maxFileSize,
       allowedTypes: [...config.upload.allowedTypes]
     })
 
@@ -198,7 +197,7 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
           </button>
           
           <div className="text-xs text-gray-500">
-            Max {formatFileSize(config.upload.maxFileSize)} per file • {config.upload.allowedTypes.join(', ')}
+            {config.upload.allowedTypes.join(', ')}
           </div>
         </div>
         

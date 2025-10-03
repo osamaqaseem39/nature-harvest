@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 header('Content-Type: application/json');
 
 $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-$max_size = 10 * 1024 * 1024; // 10MB (increased from 5MB)
+// File size limit removed - no maximum size restriction
 
 // Function to send JSON response
 function sendResponse($data, $statusCode = 200) {
@@ -94,10 +94,7 @@ if(isset($_FILES['file'])){
         sendError('Invalid file type. Only JPG, PNG, GIF, and WEBP are allowed.');
     }
     
-    // Validate file size
-    if ($file['size'] > $max_size) {
-        sendError('File too large. Maximum allowed size is 10MB.');
-    }
+    // File size validation removed - no maximum size restriction
     
     // Additional security: check file extension
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));

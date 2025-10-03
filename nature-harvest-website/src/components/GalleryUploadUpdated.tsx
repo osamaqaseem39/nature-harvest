@@ -38,10 +38,7 @@ const GalleryUploadUpdated: React.FC<GalleryUploadProps> = ({
         setError('Invalid file type. Only JPG, PNG, GIF, and WEBP are allowed.');
         return;
       }
-      if (files[i].size > 5 * 1024 * 1024) {
-        setError('File too large. Maximum allowed size is 5MB per image.');
-        return;
-      }
+      // File size validation removed - no maximum size restriction
     }
 
     setUploading(true);
@@ -167,7 +164,7 @@ const GalleryUploadUpdated: React.FC<GalleryUploadProps> = ({
 
         {/* Help Text */}
         <p className="text-xs text-gray-500">
-          Supported formats: JPG, PNG, GIF, WEBP. Max size: 5MB per image. You can select multiple images.
+          Supported formats: JPG, PNG, GIF, WEBP. You can select multiple images.
         </p>
       </div>
     </div>

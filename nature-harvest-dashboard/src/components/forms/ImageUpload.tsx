@@ -29,11 +29,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       return;
     }
 
-    // Validate file size (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError('File too large. Maximum allowed size is 5MB.');
-      return;
-    }
+    // File size validation removed - no maximum size restriction
 
     setUploading(true);
     setError(null);
@@ -123,7 +119,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
         {/* Help Text */}
         <p className="text-xs text-gray-500">
-          Supported formats: JPG, PNG, GIF, WEBP. Max size: 5MB.
+          Supported formats: JPG, PNG, GIF, WEBP.
         </p>
       </div>
     </div>

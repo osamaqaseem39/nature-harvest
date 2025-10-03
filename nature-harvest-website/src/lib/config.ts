@@ -12,7 +12,7 @@ export const config = {
     baseUrl: process.env.NEXT_PUBLIC_UPLOAD_URL || 'https://natureharvest.osamaqaseem.online',
     endpoint: '/upload.php',
     timeout: parseInt(process.env.NEXT_PUBLIC_UPLOAD_TIMEOUT || '300000'), // 5 minutes
-    maxFileSize: parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE || '10485760'), // 10MB in bytes
+    // maxFileSize removed - no maximum size restriction
     maxFiles: parseInt(process.env.NEXT_PUBLIC_MAX_FILES || '10'),
     allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
   },

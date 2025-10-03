@@ -1,7 +1,6 @@
 import { config } from './config'
 
 export interface FileValidationOptions {
-  maxSize?: number
   allowedTypes?: string[]
   maxFiles?: number
 }
@@ -19,7 +18,6 @@ export function validateFile(
   options: FileValidationOptions = {}
 ): FileValidationResult {
   const {
-    maxSize = config.upload.maxFileSize,
     allowedTypes = config.upload.allowedTypes,
   } = options
 
@@ -31,14 +29,7 @@ export function validateFile(
     }
   }
   
-  // Check file size
-  if (file.size > maxSize) {
-    const maxSizeMB = Math.round(maxSize / (1024 * 1024))
-    return {
-      valid: false,
-      error: `File too large. Maximum size is ${maxSizeMB}MB.`
-    }
-  }
+  // File size validation removed - no maximum size restriction
   
   return { valid: true }
 }
