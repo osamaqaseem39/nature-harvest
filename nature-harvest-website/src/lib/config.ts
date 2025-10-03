@@ -12,6 +12,9 @@ export const config = {
     baseUrl: process.env.NEXT_PUBLIC_UPLOAD_URL || 'https://natureharvest.osamaqaseem.online',
     endpoint: '/upload.php',
     timeout: parseInt(process.env.NEXT_PUBLIC_UPLOAD_TIMEOUT || '300000'), // 5 minutes
+    maxFileSize: parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE || '10485760'), // 10MB in bytes
+    maxFiles: parseInt(process.env.NEXT_PUBLIC_MAX_FILES || '10'),
+    allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
   },
 
   // Website Configuration
@@ -66,14 +69,6 @@ export const config = {
     defaultProductImage: process.env.NEXT_PUBLIC_DEFAULT_PRODUCT_IMAGE || '/images/product-placeholder.png',
     defaultBrandImage: process.env.NEXT_PUBLIC_DEFAULT_BRAND_IMAGE || '/images/placeholder-brand.png',
     quality: parseInt(process.env.NEXT_PUBLIC_IMAGE_QUALITY || '85'),
-  },
-
-  // Upload Configuration
-  upload: {
-    maxFileSize: parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE || '10485760'), // 10MB in bytes
-    maxFiles: parseInt(process.env.NEXT_PUBLIC_MAX_FILES || '10'),
-    allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-    timeout: parseInt(process.env.NEXT_PUBLIC_UPLOAD_TIMEOUT || '300000'), // 5 minutes
   },
 
   // Development Settings
