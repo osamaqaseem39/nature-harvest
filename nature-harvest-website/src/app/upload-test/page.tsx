@@ -21,9 +21,9 @@ export default function UploadTestPage() {
       formData.append('file', file)
 
       console.log('Uploading file:', file.name, 'Size:', file.size, 'Type:', file.type)
-      console.log('API URL:', `${config.api.baseUrl}/upload`)
+      console.log('Upload URL:', `${config.upload.baseUrl}${config.upload.endpoint}`)
 
-      const response = await fetch(`${config.api.baseUrl}/upload`, {
+      const response = await fetch(`${config.upload.baseUrl}${config.upload.endpoint}`, {
         method: 'POST',
         body: formData,
       })

@@ -80,7 +80,7 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
             }))
           }, 200)
 
-          const response = await fetch(`${config.api.baseUrl}/upload`, {
+          const response = await fetch(`${config.upload.baseUrl}${config.upload.endpoint}`, {
             method: 'POST',
             body: formData,
             signal: controller.signal,

@@ -188,20 +188,27 @@ export const partnersAPI = {
   getStats: () => api.get('/partners/stats'),
 };
 
-// File upload helper
+// File upload helper - using direct upload.php instead of API
 export const uploadFile = async (file, type = 'product') => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('type', type);
   
-  return api.post('/upload', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+  // Use direct upload.php URL instead of API
+  const uploadUrl = 'https://natureharvest.osamaqaseem.online/upload.php';
+  
+  return fetch(uploadUrl, {
+    method: 'POST',
+    body: formData,
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
   });
 };
 
-// Gallery upload helper for multiple images
+// Gallery upload helper for multiple images - using direct upload.php
 export const uploadGalleryImages = async (files) => {
   const formData = new FormData();
   
@@ -214,10 +221,17 @@ export const uploadGalleryImages = async (files) => {
     formData.append('file', files);
   }
   
-  return api.post('/upload', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+  // Use direct upload.php URL instead of API
+  const uploadUrl = 'https://natureharvest.osamaqaseem.online/upload.php';
+  
+  return fetch(uploadUrl, {
+    method: 'POST',
+    body: formData,
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
   });
 };
 

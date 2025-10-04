@@ -33,7 +33,7 @@ export async function uploadFile(
   const timeoutId = setTimeout(() => controller.abort(), config.upload.timeout)
 
   try {
-    const response = await fetch(`${config.api.baseUrl}/upload`, {
+    const response = await fetch(`${config.upload.baseUrl}${config.upload.endpoint}`, {
       method: 'POST',
       body: formData,
       signal: controller.signal,
