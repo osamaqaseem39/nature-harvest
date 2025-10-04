@@ -1,10 +1,11 @@
 <?php
 // Increase execution time and memory limit for large file uploads
 set_time_limit(300); // 5 minutes
-ini_set('memory_limit', '256M');
+ini_set('memory_limit', '512M'); // Increased for larger files
 ini_set('max_execution_time', 300);
-ini_set('upload_max_filesize', '10M');
-ini_set('post_max_size', '10M');
+// File size limits removed - no maximum size restriction
+ini_set('upload_max_filesize', '0'); // 0 means no limit
+ini_set('post_max_size', '0'); // 0 means no limit
 
 // Allow CORS from multiple domains including localhost for development
 $allowed_origins = [
@@ -115,13 +116,34 @@ if(isset($_FILES['file'])){
         }
     }
     
+    // Ensure upload directory is writable
+    if (!is_writable($upload_dir)) {
+        sendError('Upload directory is not writable', 500);
+    }
+    
     $target = $upload_dir . $uniqueName;
     
     // Move uploaded file
     if (move_uploaded_file($file['tmp_name'], $target)) {
         // Verify the file was actually uploaded and is readable
         if (file_exists($target) && is_readable($target)) {
-            $fileUrl = 'https://natureharvest.osamaqaseem.online/uploads/' . $uniqueName;
+            // Generate URL dynamically based on the current domain
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+            $host = $_SERVER['HTTP_HOST'] ?? 'natureharvest.osamaqaseem.online';
+            $fileUrl = $protocol . '://' . $host . '/uploads/' . $uniqueName;
+            
+            // Debug information to help identify any issues
+            $debug_info = [
+                'original_filename' => $file['name'],
+                'saved_filename' => $uniqueName,
+                'target_path' => $target,
+                'file_exists' => file_exists($target),
+                'file_size' => filesize($target),
+                'generated_url' => $fileUrl,
+                'upload_dir' => $upload_dir,
+                'server_host' => $host,
+                'server_protocol' => $protocol
+            ];
             
             // Return response in the format expected by GalleryUpload component
             sendSuccess([
@@ -130,9 +152,11 @@ if(isset($_FILES['file'])){
                     [
                         'success' => true,
                         'url' => $fileUrl,
-                        'filename' => $uniqueName
+                        'filename' => $uniqueName,
+                        'original_name' => $file['name']
                     ]
-                ]
+                ],
+                'debug' => $debug_info // Remove this in production
             ]);
         } else {
             sendError('File upload verification failed', 500);
