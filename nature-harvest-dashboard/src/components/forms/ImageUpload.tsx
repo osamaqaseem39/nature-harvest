@@ -37,7 +37,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     try {
       const { data } = await uploadFile(file, 'products');
 
-      const url = data?.data?.urls?.[0] || data?.data?.url || data?.url;
+      const url = data?.data?.urls?.[0] || data?.data?.url;
       if (url) {
         onImageUpload(url);
         setError(null);
