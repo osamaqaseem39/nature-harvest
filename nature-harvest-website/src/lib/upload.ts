@@ -113,7 +113,7 @@ export async function uploadFiles(
  * Validate file before upload
  */
 export function validateFile(file: File, options?: {
-  allowedTypes?: string[]
+  allowedTypes?: readonly string[]
 }): { valid: boolean; error?: string } {
   const { 
     allowedTypes = config.upload.allowedTypes 

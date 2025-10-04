@@ -1,7 +1,7 @@
 import { config } from './config'
 
 export interface FileValidationOptions {
-  allowedTypes?: string[]
+  allowedTypes?: readonly string[]
   maxFiles?: number
 }
 
