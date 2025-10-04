@@ -16,7 +16,7 @@ $allowed_origins = [
     'https://admin.wingzimpex.com',
     'https://natureharvest.osamaqaseem.online',
     'https://juice-company-server.vercel.app',
-    'https://nature-harvest-dashbaord.vercel.app',
+    'https://nature-harvest-dashboard.vercel.app',
     'https://natureharvest-web.vercel.app'
 ];
 
