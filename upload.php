@@ -132,19 +132,6 @@ if(isset($_FILES['file'])){
             $host = $_SERVER['HTTP_HOST'] ?? 'natureharvest.osamaqaseem.online';
             $fileUrl = $protocol . '://' . $host . '/uploads/' . $uniqueName;
             
-            // Debug information to help identify any issues
-            $debug_info = [
-                'original_filename' => $file['name'],
-                'saved_filename' => $uniqueName,
-                'target_path' => $target,
-                'file_exists' => file_exists($target),
-                'file_size' => filesize($target),
-                'generated_url' => $fileUrl,
-                'upload_dir' => $upload_dir,
-                'server_host' => $host,
-                'server_protocol' => $protocol
-            ];
-            
             // Return response in the format expected by GalleryUpload component
             sendSuccess([
                 'urls' => [$fileUrl],
@@ -155,8 +142,7 @@ if(isset($_FILES['file'])){
                         'filename' => $uniqueName,
                         'original_name' => $file['name']
                     ]
-                ],
-                'debug' => $debug_info // Remove this in production
+                ]
             ]);
         } else {
             sendError('File upload verification failed', 500);

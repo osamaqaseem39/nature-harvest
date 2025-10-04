@@ -42,9 +42,9 @@ const GalleryUpload: React.FC<GalleryUploadProps> = ({
       // Use the local API service
       const response = await uploadGalleryImages(filesArray);
       
-      if (response.data && response.data.urls) {
+      if (response.data?.data?.urls) {
         // Add new images to existing gallery
-        const updatedGallery = [...currentGallery, ...response.data.urls];
+        const updatedGallery = [...currentGallery, ...response.data.data.urls];
         onGalleryUpdate(updatedGallery);
         setError(null);
       } else {

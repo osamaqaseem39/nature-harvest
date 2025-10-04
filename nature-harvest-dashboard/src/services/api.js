@@ -205,6 +205,17 @@ export const uploadFile = async (file, type = 'product') => {
       throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
     }
     return response.json();
+  }).then(result => {
+    // Transform the response to match the expected format
+    return {
+      data: {
+        data: {
+          urls: result.data?.urls || [],
+          url: result.data?.urls?.[0] || result.data?.files?.[0]?.url,
+          files: result.data?.files || []
+        }
+      }
+    };
   });
 };
 
@@ -232,6 +243,16 @@ export const uploadGalleryImages = async (files) => {
       throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
     }
     return response.json();
+  }).then(result => {
+    // Transform the response to match the expected format
+    return {
+      data: {
+        data: {
+          urls: result.data?.urls || [],
+          files: result.data?.files || []
+        }
+      }
+    };
   });
 };
 
