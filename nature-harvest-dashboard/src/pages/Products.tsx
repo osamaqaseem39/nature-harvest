@@ -21,15 +21,17 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  // Fetch products with server-side pagination and search
-  const { data: productsResponse, loading: productsLoading, error: productsError, refetch: refetchProducts } = useApi(
-    () => productsAPI.getAll({
+  // Stable fetcher to avoid infinite re-fetch loops
+  const fetchProducts = React.useCallback(() => {
+    return productsAPI.getAll({
       page: currentPage,
       limit,
-      // Keep status optional; backend supports status and search
       search: searchTerm?.trim() ? searchTerm.trim() : undefined,
-    })
-  );
+    });
+  }, [currentPage, limit, searchTerm]);
+
+  // Fetch products with server-side pagination and search
+  const { data: productsResponse, loading: productsLoading, error: productsError, refetch: refetchProducts } = useApi(fetchProducts);
   const { data: brandsResponse } = useApi(brandsAPI.getAll);
   
   // Extract arrays from the response structure
