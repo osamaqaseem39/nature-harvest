@@ -17,12 +17,25 @@ const Products = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const { data: productsResponse, loading: productsLoading, error: productsError, refetch: refetchProducts } = useApi(productsAPI.getAll);
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  // Fetch products with server-side pagination and search
+  const { data: productsResponse, loading: productsLoading, error: productsError, refetch: refetchProducts } = useApi(
+    () => productsAPI.getAll({
+      page: currentPage,
+      limit,
+      // Keep status optional; backend supports status and search
+      search: searchTerm?.trim() ? searchTerm.trim() : undefined,
+    })
+  );
   const { data: brandsResponse } = useApi(brandsAPI.getAll);
   
   // Extract arrays from the response structure
   const products = Array.isArray(productsResponse) ? productsResponse : 
                    (productsResponse as any)?.value || (productsResponse as any)?.data || [];
+  const pagination = (productsResponse as any)?.pagination || { page: currentPage, limit, total: products?.length || 0, pages: 1 };
   const brands: Brand[] = Array.isArray(brandsResponse) ? brandsResponse : 
                          (brandsResponse as any)?.data || [];
 
@@ -231,203 +244,113 @@ const Products = () => {
            )}
         </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product: Product) => (
-            <div key={product._id} className="bg-white rounded-lg shadow overflow-hidden">
-                             {/* Product Image */}
-               <div className="aspect-w-16 aspect-h-9 bg-gray-200">
-                 {product.imageUrl ? (
-                   <img
-                     src={product.imageUrl}
-                     alt={product.name}
-                     className="w-full h-48 object-cover"
-                   />
-                 ) : (
-                   <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                     <span className="text-gray-400">No Image</span>
-                   </div>
-                 )}
-               </div>
+        {/* Products List */}
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brand</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flavor</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredProducts.map((product: Product) => (
+                  <tr key={product._id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="h-12 w-12 rounded bg-gray-100 overflow-hidden flex items-center justify-center mr-4">
+                          {product.imageUrl ? (
+                            <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover" />
+                          ) : (
+                            <span className="text-gray-400 text-xs">No Image</span>
+                          )}
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                          <div className="text-sm text-gray-500 truncate max-w-xs">{product.description || ''}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{getBrandName(product)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{getFlavorName(product) || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{getSizeName(product) || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${product.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                        {product.status || 'Inactive'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button 
+                        onClick={() => handleEditProduct(product)}
+                        className="p-2 text-primary-600 hover:bg-primary-50 rounded-lg mr-2"
+                      >
+                        <PencilIcon className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(product._id || product.id || '')}
+                        disabled={deleteLoading}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-               {/* Gallery Preview */}
-               {product.gallery && product.gallery.length > 0 && (
-                 <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
-                   <div className="flex space-x-2 overflow-x-auto">
-                     {product.gallery.slice(0, 4).map((imageUrl, index) => (
-                       <img
-                         key={index}
-                         src={imageUrl}
-                         alt={`Gallery ${index + 1}`}
-                         className="w-12 h-12 object-cover rounded border border-gray-300 flex-shrink-0"
-                       />
-                     ))}
-                     {product.gallery.length > 4 && (
-                       <div className="w-12 h-12 bg-gray-200 rounded border border-gray-300 flex items-center justify-center flex-shrink-0">
-                         <span className="text-xs text-gray-500">+{product.gallery.length - 4}</span>
-                       </div>
-                     )}
-                   </div>
-                 </div>
-               )}
-
-              {/* Product Info */}
-              <div className="p-6">
-                                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                   {product.name}
-                 </h3>
-                <div className="text-gray-600 text-sm mb-4">
-                  <MarkdownDisplay 
-                    content={product.description || ''} 
-                    maxLength={100}
-                    className="line-clamp-2"
-                  />
-                </div>
-
-                                 {/* Product Meta */}
-                 <div className="space-y-2 mb-4">
-                   {product.brandId && (
-                     <div className="flex items-center text-sm text-gray-500">
-                       <span className="font-medium">Brand:</span>
-                       <span className="ml-2">{getBrandName(product)}</span>
-                     </div>
-                   )}
-                   
-                   {product.flavorId && (
-                     <div className="flex items-center text-sm text-gray-500">
-                       <span className="font-medium">Flavor:</span>
-                       <span className="ml-2">{getFlavorName(product)}</span>
-                     </div>
-                   )}
-                   {product.sizeId && (
-                     <div className="flex items-center text-sm text-gray-500">
-                       <span className="font-medium">Size:</span>
-                       <span className="ml-2">{getSizeName(product)}</span>
-                     </div>
-                   )}
-                 </div>
-
-                 {/* Nutrients Display */}
-                 {product.nutrients && Object.keys(product.nutrients).length > 0 && (
-                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                     <h4 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
-                       <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                       Nutrition Facts
-                     </h4>
-                     <div className="grid grid-cols-2 gap-3 text-xs">
-                       {/* Energy */}
-                       {product.nutrients.calories && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600 font-medium">Calories</span>
-                           <span className="font-bold text-green-600">{product.nutrients.calories} kcal</span>
-                         </div>
-                       )}
-                       
-                       {/* Macronutrients */}
-                       {product.nutrients.protein && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Protein</span>
-                           <span className="font-medium">{product.nutrients.protein}g</span>
-                         </div>
-                       )}
-                       {product.nutrients.carbohydrates && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Carbs</span>
-                           <span className="font-medium">{product.nutrients.carbohydrates}g</span>
-                         </div>
-                       )}
-                       {product.nutrients.fat && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Fat</span>
-                           <span className="font-medium">{product.nutrients.fat}g</span>
-                         </div>
-                       )}
-                       {product.nutrients.fiber && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Fiber</span>
-                           <span className="font-medium">{product.nutrients.fiber}g</span>
-                         </div>
-                       )}
-                       {product.nutrients.sugar && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Sugar</span>
-                           <span className="font-medium">{product.nutrients.sugar}g</span>
-                         </div>
-                       )}
-                       
-                       {/* Minerals */}
-                       {product.nutrients.sodium && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Sodium</span>
-                           <span className="font-medium">{product.nutrients.sodium}mg</span>
-                         </div>
-                       )}
-                       {product.nutrients.calcium && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Calcium</span>
-                           <span className="font-medium">{product.nutrients.calcium}mg</span>
-                         </div>
-                       )}
-                       {product.nutrients.iron && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Iron</span>
-                           <span className="font-medium">{product.nutrients.iron}mg</span>
-                         </div>
-                       )}
-                       
-                       {/* Vitamins */}
-                       {product.nutrients.vitaminC && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Vitamin C</span>
-                           <span className="font-medium">{product.nutrients.vitaminC}mg</span>
-                         </div>
-                       )}
-                       {product.nutrients.vitaminA && (
-                         <div className="flex justify-between items-center p-2 bg-white rounded border border-gray-200">
-                           <span className="text-gray-600">Vitamin A</span>
-                           <span className="font-medium">{product.nutrients.vitaminA}IU</span>
-                         </div>
-                       )}
-                     </div>
-                     
-                     {/* Nutrients Summary */}
-                     <div className="mt-3 pt-3 border-t border-gray-200">
-                       <div className="flex items-center justify-between text-xs text-gray-500">
-                         <span>Total Nutrients: {Object.keys(product.nutrients || {}).filter(key => {
-                           const nutrients = product.nutrients || {};
-                           return nutrients[key as keyof typeof nutrients] !== undefined && 
-                                  nutrients[key as keyof typeof nutrients] !== null;
-                         }).length}</span>
-                         <span className="text-green-600 font-medium">✓ Complete</span>
-                       </div>
-                     </div>
-                   </div>
-                 )}
-
-                {/* Actions */}
-                <div className="flex justify-between items-center">
-                  <div className="flex space-x-2">
-                    <button 
-                      onClick={() => handleEditProduct(product)}
-                      className="p-2 text-primary-600 hover:bg-primary-50 rounded-lg"
-                    >
-                      <PencilIcon className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(product._id || product.id || '')}
-                      disabled={deleteLoading}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
-                    >
-                      <TrashIcon className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <span className="text-sm text-gray-500">
-                    {product.createdAt ? new Date(product.createdAt).toLocaleDateString() : 'N/A'}
-                  </span>
-                </div>
-              </div>
+          {/* Pagination Controls */}
+          <div className="px-6 py-4 bg-white border-t border-gray-200 flex items-center justify-between">
+            <div className="text-sm text-gray-600">
+              Page {pagination.page} of {pagination.pages} • Total {pagination.total}
             </div>
-          ))}
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={pagination.page <= 1}
+                className="px-3 py-1 border border-gray-300 rounded disabled:opacity-50"
+              >
+                Previous
+              </button>
+              {Array.from({ length: Math.min(5, pagination.pages || 1) }, (_, i) => {
+                const pageNum = i + Math.max(1, Math.min((pagination.page || 1) - 2, (pagination.pages || 1) - 4));
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`px-3 py-1 rounded ${pageNum === pagination.page ? 'bg-primary-600 text-white' : 'border border-gray-300'}`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => setCurrentPage((p) => Math.min((pagination.pages || 1), p + 1))}
+                disabled={(pagination.page || 1) >= (pagination.pages || 1)}
+                className="px-3 py-1 border border-gray-300 rounded disabled:opacity-50"
+              >
+                Next
+              </button>
+              <select
+                value={limit}
+                onChange={(e) => {
+                  setLimit(parseInt(e.target.value, 10) || 10);
+                  setCurrentPage(1);
+                }}
+                className="ml-2 px-2 py-1 border border-gray-300 rounded text-sm"
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         {/* Empty State */}

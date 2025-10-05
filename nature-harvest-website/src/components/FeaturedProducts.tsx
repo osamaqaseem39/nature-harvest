@@ -322,13 +322,14 @@ const FeaturedProducts = () => {
 
               
                 {/* Main Product Image */}
-                <div className="relative w-full p-2 sm:p-3 lg:p-4">
+                <div className="relative w-full h-48 p-2 sm:p-3 lg:p-4 flex items-center justify-center">
                   <Image
                     src={getProductImage(product)}
                     alt={product.name}
                     width={200}
-                    height={250}
-                    className="w-full h-auto object-contain transition-all duration-500"
+                    height={200}
+                    className="w-full h-full object-contain transition-all duration-500 max-h-full max-w-full"
+                    style={{ objectFit: 'contain' }}
                   />
                 </div>
 
@@ -346,9 +347,10 @@ const FeaturedProducts = () => {
                     <Image
                       src={getFlavorImage(product)}
                       alt={product.flavorId?.name || 'Flavor'}
-                      width={80}
-                      height={80}
-                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
+                      width={100}
+                      height={100}
+                      className="w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 object-contain cursor-pointer transition-transform duration-300"
+                      style={{ objectFit: 'contain' }}
                     />
                   </div>
                 </div>

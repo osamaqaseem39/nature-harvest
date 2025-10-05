@@ -195,13 +195,14 @@ const ProductDetailContent = () => {
             <div className="space-y-4 lg:space-y-6">
               {/* Main Image */}
               <div className="relative bg-white rounded-2xl shadow-lg p-4 lg:p-8 border border-gray-100">
-                <div className="max-w-md mx-auto">
+                <div className="max-w-md mx-auto h-96 flex items-center justify-center">
                   <Image
                     src={selectedImage || getProductImage(product)}
                     alt={product.name}
                     width={400}
                     height={400}
-                    className="w-full h-auto max-h-96 object-contain transition-all duration-300"
+                    className="w-full h-full max-h-96 object-contain transition-all duration-300"
+                    style={{ objectFit: 'contain' }}
                   />
                 </div>
                 
@@ -229,9 +230,10 @@ const ProductDetailContent = () => {
                       <Image
                         src={getFlavorImage(product)}
                         alt={product.flavorId.name}
-                        width={60}
-                        height={60}
-                        className="w-12 h-12 lg:w-20 lg:h-20 object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
+                        width={80}
+                        height={80}
+                        className="w-16 h-16 lg:w-24 lg:h-24 object-contain cursor-pointer transition-transform duration-300"
+                        style={{ objectFit: 'contain' }}
                       />
                     </Link>
                   </div>

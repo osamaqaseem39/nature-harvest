@@ -487,9 +487,9 @@ const ProductsContent = () => {
                   <Link 
                     key={product._id} 
                     href={`/products/${product._id}`}
-                    className="block"
+                    className="block h-full"
                   >
-                    <div className="relative transition-all duration-500 ease-out cursor-pointer">
+                    <div className="relative transition-all duration-500 ease-out cursor-pointer h-full flex flex-col">
                       {/* Product Image Container */}
                       <div className="relative overflow-hidden">
                         {/* Brand Tag - Top Left */}
@@ -511,13 +511,14 @@ const ProductsContent = () => {
                         </div>
 
                         {/* Main Product Image */}
-                        <div className="relative w-full p-8">
+                        <div className="relative w-full h-80 p-8 flex items-center justify-center">
                           <Image
                             src={getProductImage(product)}
                             alt={product.name}
                             width={300}
-                            height={400}
-                            className="object-contain transition-all duration-500"
+                            height={320}
+                            className="object-contain transition-all duration-500 max-h-full max-w-full"
+                            style={{ objectFit: 'contain' }}
                           />
                         </div>
 
@@ -531,16 +532,17 @@ const ProductsContent = () => {
                             <Image
                               src={getFlavorImage(product)}
                               alt={product.flavorId?.name || 'Flavor'}
-                              width={180}
-                              height={180}
-                              className="object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
+                              width={240}
+                              height={240}
+                              className="object-contain cursor-pointer transition-transform duration-300"
+                              style={{ objectFit: 'contain' }}
                             />
                           </Link>
                         </div>
                       </div>
 
                       {/* Product Info */}
-                      <div className="text-center mt-4">
+                      <div className="text-center mt-4 flex-1 flex flex-col justify-end">
                         <h3 className="font-gazpacho font-bold text-lg text-gray-800 mb-2">
                           {product.name}
                         </h3>
