@@ -37,6 +37,7 @@ interface Product {
 const FeaturedProducts = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [products, setProducts] = useState<Product[]>([])
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -166,7 +167,7 @@ const FeaturedProducts = () => {
         setError(null) // Clear any previous errors
         const response = await apiService.getProducts({
           page: 1,
-          limit: config.pagination.featuredProductsLimit,
+          limit: Math.max(12, config.pagination.featuredProductsLimit || 12),
           status: 'Active'
         })
         
@@ -182,7 +183,10 @@ const FeaturedProducts = () => {
         }
         
         // Use API data if available, otherwise use fallback products
-        setProducts(response.data.length > 0 ? response.data : fallbackProducts)
+        const apiProducts = response.data.length > 0 ? response.data : fallbackProducts
+        // Sort oldest -> newest
+        const sorted = [...apiProducts].sort((a: Product, b: Product) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+        setProducts(sorted)
       } catch (err) {
         console.error('Error fetching featured products:', err)
         // On error, use fallback products instead of showing error
@@ -260,6 +264,25 @@ const FeaturedProducts = () => {
     )
   }
 
+  const visibleProducts = (list: Product[], start: number, count: number) => {
+    if (list.length <= count) return list
+    const result: Product[] = []
+    for (let i = 0; i < count; i++) {
+      result.push(list[(start + i) % list.length])
+    }
+    return result
+  }
+
+  const handlePrev = () => {
+    if (!products.length) return
+    setCurrentIndex((prev) => (prev - 4 + products.length) % products.length)
+  }
+
+  const handleNext = () => {
+    if (!products.length) return
+    setCurrentIndex((prev) => (prev + 4) % products.length)
+  }
+
   return (
           <section ref={sectionRef} className="relative bg-white pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-16 sm:pb-20 overflow-hidden">
       {/* Background decorative elements */}
@@ -284,18 +307,24 @@ const FeaturedProducts = () => {
           </p>
         </div>
 
-        {/* Individual Product Cards */}
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-10 sm:mb-12 transition-all duration-1000 ease-out delay-400 ${
+        {/* Carousel */}
+        <div className={`mb-10 sm:mb-12 transition-all duration-1000 ease-out delay-400 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          {products.slice(0, 8).map((product, index) => (
-            <div 
-              key={product._id} 
-              className={`relative transition-all duration-1000 ease-out delay-${600 + index * 200} ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              } block group hover:shadow-lg hover:-translate-y-2 transition-all duration-300 cursor-pointer`}
-              onClick={() => router.push(`/products/${product._id}`)}
-            >
+          <div className="flex items-center justify-between mb-6">
+            <button onClick={handlePrev} className="px-3 py-2 rounded border border-gray-300 text-sm hover:bg-gray-50">Prev</button>
+            <div className="text-sm text-gray-500">Showing 4 at a time</div>
+            <button onClick={handleNext} className="px-3 py-2 rounded border border-gray-300 text-sm hover:bg-gray-50">Next</button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {visibleProducts(products, currentIndex, 4).map((product) => (
+              <div 
+                key={product._id} 
+                className={`relative transition-all duration-1000 ease-out ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                } block cursor-pointer`}
+                onClick={() => router.push(`/products/${product._id}`)}
+              >
               {/* Product Image Container - No Background Container */}
               <div className="relative overflow-hidden">
                 {/* Brand Tag - Top Left */}
@@ -309,7 +338,7 @@ const FeaturedProducts = () => {
                       }
                     }}
                   >
-                    <div className="bg-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
+                    <div className="bg-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 transition-all duration-300 shadow-lg cursor-pointer">
                       <span className="text-green-600 font-gazpacho font-bold text-xs">
                         {product.brandId?.name || 'Nature Harvest'}
                       </span>
@@ -349,7 +378,7 @@ const FeaturedProducts = () => {
                       alt={product.flavorId?.name || 'Flavor'}
                       width={100}
                       height={100}
-                      className="w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 object-contain cursor-pointer transition-transform duration-300"
+                      className="w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 object-contain cursor-pointer"
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
@@ -357,8 +386,9 @@ const FeaturedProducts = () => {
               </div>
 
               {/* No Product Info Section - Clean Minimal Design */}
-            </div>
-          ))}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Bottom CTA */}
