@@ -1,17 +1,78 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+
 const ContactInfo = () => {
+  const searchParams = useSearchParams()
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+
+  // Check if this is a product quote request
+  const isQuoteRequest = searchParams.get('type') === 'quote'
+  const productName = searchParams.get('product')
+  const brandName = searchParams.get('brand')
+  const flavorName = searchParams.get('flavor')
+  const sizeName = searchParams.get('size')
+
+  useEffect(() => {
+    if (isQuoteRequest && productName) {
+      // Pre-fill form with product information
+      const quoteSubject = `Quote Request for ${productName}`
+      let quoteMessage = `I am interested in getting a quote for the following product:\n\n`
+      quoteMessage += `Product: ${productName}\n`
+      if (brandName) quoteMessage += `Brand: ${brandName}\n`
+      if (flavorName) quoteMessage += `Flavor: ${flavorName}\n`
+      if (sizeName) quoteMessage += `Size: ${sizeName}\n\n`
+      quoteMessage += `Please provide pricing and availability information.\n\n`
+      quoteMessage += `Additional requirements:\n`
+
+      setFormData({
+        name: '',
+        email: '',
+        subject: quoteSubject,
+        message: quoteMessage
+      })
+    }
+  }, [isQuoteRequest, productName, brandName, flavorName, sizeName])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Handle form submission here
+    console.log('Form submitted:', formData)
+    alert('Thank you for your quote request! We will get back to you soon.')
+  }
   return (
     <section className="relative bg-gradient-to-br from-green-400 via-green-300 to-green-400 py-20">
   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h3 className="text-green-500 uppercase tracking-widest font-jost font-semibold text-sm mb-4">
-            CONTACT INFORMATION
+            {isQuoteRequest ? 'QUOTE REQUEST' : 'CONTACT INFORMATION'}
           </h3>
           <h2 className="text-4xl lg:text-5xl font-gazpacho font-bold text-gray-800 leading-tight">
-            Get in Touch with Nature Harvest
+            {isQuoteRequest ? 'Get Your Product Quote' : 'Get in Touch with Nature Harvest'}
           </h2>
+          {isQuoteRequest && productName && (
+            <div className="mt-6 p-4 bg-white rounded-lg shadow-md border border-green-200">
+              <p className="text-green-700 font-jost font-medium">
+                Requesting quote for: <span className="font-bold">{productName}</span>
+                {brandName && ` (${brandName})`}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Two Cards Layout */}
@@ -78,12 +139,15 @@ const ContactInfo = () => {
               </p>
             </div>
             
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <input
                     type="text"
+                    name="name"
                     placeholder="Full Name"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg text-base font-jost focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 bg-gray-50 focus:bg-white placeholder:text-gray-500 placeholder:font-jost"
                     required
                   />
@@ -91,7 +155,10 @@ const ContactInfo = () => {
                 <div>
                   <input
                     type="email"
+                    name="email"
                     placeholder="Email Address"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg text-base font-jost focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 bg-gray-50 focus:bg-white placeholder:text-gray-500 placeholder:font-jost"
                     required
                   />
@@ -101,7 +168,10 @@ const ContactInfo = () => {
               <div>
                 <input
                   type="text"
+                  name="subject"
                   placeholder="Subject"
+                  value={formData.subject}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg text-base font-jost focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 bg-gray-50 focus:bg-white placeholder:text-gray-500 placeholder:font-jost"
                   required
                 />
@@ -109,7 +179,10 @@ const ContactInfo = () => {
               
               <div>
                 <textarea
+                  name="message"
                   placeholder="Your message..."
+                  value={formData.message}
+                  onChange={handleInputChange}
                   rows={4}
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg text-base font-jost focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300 bg-gray-50 focus:bg-white resize-none placeholder:text-gray-500 placeholder:font-jost"
                   required
@@ -121,7 +194,7 @@ const ContactInfo = () => {
                   type="submit"
                   className="bg-green-500 hover:bg-green-600 text-white font-jost font-semibold py-3 px-8 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-105"
                 >
-                  Send Message
+                  {isQuoteRequest ? 'Request Quote' : 'Send Message'}
                 </button>
               </div>
             </form>

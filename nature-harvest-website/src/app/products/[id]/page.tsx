@@ -16,6 +16,7 @@ const ProductDetailContent = () => {
   const [error, setError] = useState<string | null>(null)
   const [selectedImage, setSelectedImage] = useState<string>('')
   const [isFavorite, setIsFavorite] = useState(false)
+  const [isNavigating, setIsNavigating] = useState(false)
 
   const productId = params.id as string
 
@@ -43,6 +44,11 @@ const ProductDetailContent = () => {
       fetchProduct()
     }
   }, [productId])
+
+  // Reset navigation state when product changes
+  useEffect(() => {
+    setIsNavigating(false)
+  }, [product])
 
   const getProductImage = (product: Product) => {
     if (product.imageUrl) {
@@ -86,9 +92,34 @@ const ProductDetailContent = () => {
     return Math.round((value / dailyValue) * 100)
   }
 
-  const handleGetQuote = () => {
-    // Navigate to contact page or open quote form
-    router.push('/contact')
+  const handleGetQuote = async () => {
+    setIsNavigating(true)
+    
+    try {
+      // Navigate to contact page with product information
+      const productInfo = {
+        productName: product?.name || 'Product',
+        productId: product?._id || '',
+        brandName: product?.brandId?.name || '',
+        flavorName: product?.flavorId?.name || '',
+        sizeName: product?.sizeId?.name || ''
+      }
+      
+      // Create query string with product information
+      const queryParams = new URLSearchParams({
+        product: productInfo.productName,
+        productId: productInfo.productId,
+        brand: productInfo.brandName,
+        flavor: productInfo.flavorName,
+        size: productInfo.sizeName,
+        type: 'quote'
+      })
+      
+      await router.push(`/contact?${queryParams.toString()}`)
+    } catch (error) {
+      console.error('Error navigating to quote page:', error)
+      setIsNavigating(false)
+    }
   }
 
   const handleShare = async () => {
@@ -175,7 +206,7 @@ const ProductDetailContent = () => {
               Products
             </Link>
             <ChevronRight className="h-4 w-4 mx-2" />
-            <span className="text-gray-800 font-medium">{product.name}</span>
+            <span className="text-gray-800 font-medium">{product?.name || 'Product'}</span>
           </div>
 
           {/* Back Button */}
@@ -207,18 +238,20 @@ const ProductDetailContent = () => {
                 </div>
                 
                 {/* Brand Badge */}
-                <div className="absolute top-2 lg:top-4 left-2 lg:left-4">
-                  <Link 
-                    href={`/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}`}
-                    className="block"
-                  >
-                    <div className="bg-white rounded-full w-12 h-12 lg:w-16 lg:h-16 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
-                      <span className="text-green-600 font-gazpacho font-bold text-xs text-center leading-tight">
-                        {product.brandId.name}
-                      </span>
-                    </div>
-                  </Link>
-                </div>
+                {product.brandId && (
+                  <div className="absolute top-2 lg:top-4 left-2 lg:left-4">
+                    <Link 
+                      href={`/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}`}
+                      className="block"
+                    >
+                      <div className="bg-white rounded-full w-12 h-12 lg:w-16 lg:h-16 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
+                        <span className="text-green-600 font-gazpacho font-bold text-xs text-center leading-tight">
+                          {product.brandId.name}
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                )}
 
                 {/* Flavor Badge */}
                 {product.flavorId && (
@@ -280,9 +313,11 @@ const ProductDetailContent = () => {
               {/* Product Header */}
               <div>
                 <div className="flex flex-wrap items-center gap-2 mb-3 lg:mb-4">
-                  <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full font-jost">
-                    {product.brandId.name}
-                  </span>
+                  {product.brandId && (
+                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full font-jost">
+                      {product.brandId.name}
+                    </span>
+                  )}
                   {product.sizeId && (
                     <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full font-jost">
                       {product.sizeId.name}
@@ -306,14 +341,30 @@ const ProductDetailContent = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+                {/* Quote Button - Primary Action */}
                 <button 
                   onClick={handleGetQuote}
-                  className="flex items-center justify-center gap-2 px-6 lg:px-8 py-3 lg:py-4 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-200 font-jost font-semibold text-base lg:text-lg"
+                  disabled={isNavigating}
+                  className={`flex items-center justify-center gap-2 px-6 lg:px-8 py-3 lg:py-4 rounded-full transition-all duration-200 font-jost font-semibold text-base lg:text-lg ${
+                    isNavigating 
+                      ? 'bg-green-400 text-white cursor-not-allowed' 
+                      : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg transform hover:scale-105'
+                  }`}
                 >
-                  <MessageCircle className="h-4 w-4 lg:h-5 lg:w-5" />
-                  Get a Quote
+                  {isNavigating ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 lg:h-5 lg:w-5 border-b-2 border-white"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <MessageCircle className="h-4 w-4 lg:h-5 lg:w-5" />
+                      Get a Quote
+                    </>
+                  )}
                 </button>
                 
+                {/* Secondary Action Buttons */}
                 <button
                   onClick={handleFavorite}
                   className={`flex items-center justify-center gap-2 px-4 lg:px-6 py-3 lg:py-4 rounded-full transition-colors duration-200 font-jost font-medium ${
@@ -495,13 +546,15 @@ const ProductDetailContent = () => {
             <p className="text-sm lg:text-base text-gray-600 font-jost mb-6 lg:mb-8">Discover our complete range of premium beverages</p>
             
             <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center">
-              <Link
-                href={`/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}`}
-                className="inline-flex items-center justify-center gap-2 px-4 lg:px-6 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-200 font-jost font-medium text-sm lg:text-base"
-              >
-                🏢 <span className="hidden sm:inline">More from {product.brandId.name}</span>
-                <span className="sm:hidden">{product.brandId.name}</span>
-              </Link>
+              {product.brandId && (
+                <Link
+                  href={`/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}`}
+                  className="inline-flex items-center justify-center gap-2 px-4 lg:px-6 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-200 font-jost font-medium text-sm lg:text-base"
+                >
+                  🏢 <span className="hidden sm:inline">More from {product.brandId.name}</span>
+                  <span className="sm:hidden">{product.brandId.name}</span>
+                </Link>
+              )}
               
               {product.flavorId && (
                 <Link
