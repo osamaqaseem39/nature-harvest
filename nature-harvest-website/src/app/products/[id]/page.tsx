@@ -342,13 +342,13 @@ const ProductDetailContent = () => {
                   disabled={isNavigating}
                   className={`flex items-center justify-center gap-2 px-6 lg:px-8 py-3 lg:py-4 rounded-full transition-all duration-200 font-jost font-semibold text-base lg:text-lg ${
                     isNavigating 
-                      ? 'bg-green-400 text-white cursor-not-allowed' 
-                      : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg transform hover:scale-105'
+                      ? 'bg-green-400 text-black cursor-not-allowed' 
+                      : 'bg-green-600 text-black hover:bg-green-700 hover:shadow-lg transform hover:scale-105'
                   }`}
                 >
                   {isNavigating ? (
                     <>
-                      <div className="animate-spin rounded-full h-4 w-4 lg:h-5 lg:w-5 border-b-2 border-white"></div>
+                      <div className="animate-spin rounded-full h-4 w-4 lg:h-5 lg:w-5 border-b-2 border-black"></div>
                       Processing...
                     </>
                   ) : (
