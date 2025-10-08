@@ -394,6 +394,14 @@ class ApiService {
     const endpoint = `/products${queryString ? `?${queryString}` : ''}`;
     const cacheKey = `products_${queryString || 'default'}`;
     
+    // Check if any filters are applied
+    const hasFilters = params?.brandId || params?.flavorId || params?.sizeId || params?.search;
+    
+    if (hasFilters) {
+      // Don't use cache for filtered requests to ensure fresh data
+      return this.request<ProductsResponse>(endpoint);
+    }
+    
     return apiCache.getOrSet(
       cacheKey,
       () => this.request<ProductsResponse>(endpoint),

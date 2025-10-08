@@ -228,11 +228,7 @@ exports.getAllProducts = async (req, res) => {
       .skip(skip)
       .limit(parseInt(limit));
 
-    console.log('Get All Products - Raw Products:', products);
-
     const total = await Product.countDocuments(filter);
-
-    console.log('Get All Products - Response Data:', products);
 
     res.json({
       success: true,

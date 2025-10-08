@@ -86,7 +86,7 @@ const BrandsPage = () => {
               style={{
                 position: "sticky",
                 top: `${STICKY_HEADER_HEIGHT + (idx * 20)}px`, // Each card is slightly higher than the previous
-                zIndex: brands.length - idx, // First card at the top, next cards below
+                zIndex: idx + 1, // First card at the bottom, last card on top
                 boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
                 transition: 'top 0.5s cubic-bezier(0.4,0,0.2,1)',
                 animationDelay: `${idx * 200}ms`,

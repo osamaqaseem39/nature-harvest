@@ -105,6 +105,9 @@ productSchema.virtual('sizes', {
 
 // Indexes for better performance
 productSchema.index({ brandId: 1, status: 1 });
+productSchema.index({ flavorId: 1, status: 1 });
+productSchema.index({ sizeId: 1, status: 1 });
 productSchema.index({ name: 1 });
+productSchema.index({ status: 1 });
 
 module.exports = mongoose.model('Product', productSchema); 

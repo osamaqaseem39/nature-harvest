@@ -136,6 +136,7 @@ const ProductsContent = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true)
+        
         const response = await apiService.getProducts({
           page: currentPage,
           limit: config.pagination.productsPerPage,

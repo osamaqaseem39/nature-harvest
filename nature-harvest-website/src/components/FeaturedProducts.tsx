@@ -338,8 +338,8 @@ const FeaturedProducts = () => {
                       }
                     }}
                   >
-                    <div className="bg-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 transition-all duration-300 shadow-lg cursor-pointer">
-                      <span className="text-green-600 font-gazpacho font-bold text-xs">
+                    <div className="bg-white rounded-full w-14 h-14 sm:w-16 sm:h-16 lg:w-18 lg:h-18 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 transition-all duration-300 shadow-lg cursor-pointer">
+                      <span className="text-green-600 font-gazpacho font-bold text-xs sm:text-sm">
                         {product.brandId?.name || 'Nature Harvest'}
                       </span>
                       <span className="text-green-600 font-jost font-medium text-xs">
@@ -351,12 +351,12 @@ const FeaturedProducts = () => {
 
               
                 {/* Main Product Image */}
-                <div className="relative w-full h-48 p-2 sm:p-3 lg:p-4 flex items-center justify-center">
+                <div className="relative w-full h-64 sm:h-72 lg:h-80 p-2 sm:p-3 lg:p-4 flex items-center justify-center">
                   <Image
                     src={getProductImage(product)}
                     alt={product.name}
-                    width={200}
-                    height={200}
+                    width={300}
+                    height={300}
                     className="w-full h-full object-contain transition-all duration-500 max-h-full max-w-full"
                     style={{ objectFit: 'contain' }}
                   />
@@ -376,9 +376,9 @@ const FeaturedProducts = () => {
                     <Image
                       src={getFlavorImage(product)}
                       alt={product.flavorId?.name || 'Flavor'}
-                      width={100}
-                      height={100}
-                      className="w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 object-contain cursor-pointer"
+                      width={120}
+                      height={120}
+                      className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 object-contain cursor-pointer"
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
