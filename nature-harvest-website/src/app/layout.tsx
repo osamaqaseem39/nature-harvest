@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Footer from '@/components/Footer'
@@ -12,18 +12,19 @@ export const metadata: Metadata = {
   description: 'Discover premium organic and natural products from Nature Harvest. Fresh, healthy, and sustainable products for your lifestyle.',
   keywords: 'organic, natural, healthy, sustainable, nature harvest, fresh products',
   authors: [{ name: 'Nature Harvest' }],
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-  },
   openGraph: {
     title: 'Nature Harvest - Organic & Natural Products',
     description: 'Discover premium organic and natural products from Nature Harvest.',
     type: 'website',
     locale: 'en_US',
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 }
 
 export default function RootLayout({
