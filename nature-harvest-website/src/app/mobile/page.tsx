@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useMobile } from '@/hooks/useMobile'
 import MobileHero from '@/components/MobileHero'
 import WhoWeAre from '@/components/WhoWeAre'
@@ -126,7 +126,16 @@ export default function MobileHome() {
       <CTA />
       
       {/* Mobile Contact Info */}
-      <ContactInfo />
+      <Suspense fallback={
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600 font-jost">Loading contact info...</p>
+          </div>
+        </div>
+      }>
+        <ContactInfo />
+      </Suspense>
     </div>
   )
 }
