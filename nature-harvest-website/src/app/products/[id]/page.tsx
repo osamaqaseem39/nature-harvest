@@ -5,6 +5,8 @@ import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft, Heart, Share2, Leaf, Zap, Droplets, Scale, Home, ChevronRight, MessageCircle } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { apiService, Product } from '../../../lib/api'
 import { config } from '../../../lib/config'
 
@@ -329,9 +331,31 @@ const ProductDetailContent = () => {
                   {product.name}
                 </h1>
 
-                <p className="text-base lg:text-lg font-jost text-gray-600 leading-relaxed">
-                  {product.description}
-                </p>
+                <div className="product-description text-base lg:text-lg font-jost text-gray-600 leading-relaxed">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      p: ({node, ...props}) => <p className="mb-4 last:mb-0" {...props} />,
+                      h1: ({node, ...props}) => <h1 className="text-2xl font-gazpacho font-bold text-gray-800 mb-3 mt-4" {...props} />,
+                      h2: ({node, ...props}) => <h2 className="text-xl font-gazpacho font-bold text-gray-800 mb-2 mt-4" {...props} />,
+                      h3: ({node, ...props}) => <h3 className="text-lg font-gazpacho font-semibold text-gray-800 mb-2 mt-3" {...props} />,
+                      strong: ({node, ...props}) => <strong className="font-semibold text-gray-800" {...props} />,
+                      a: ({node, ...props}) => <a className="text-green-600 no-underline hover:underline" {...props} />,
+                      ul: ({node, ...props}) => <ul className="list-disc ml-6 mb-4" {...props} />,
+                      ol: ({node, ...props}) => <ol className="list-decimal ml-6 mb-4" {...props} />,
+                      li: ({node, ...props}) => <li className="mb-1" {...props} />,
+                      code: ({node, inline, ...props}: any) => 
+                        inline ? (
+                          <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono" {...props} />
+                        ) : (
+                          <code className="block bg-gray-100 p-2 rounded text-sm font-mono mb-4 overflow-x-auto" {...props} />
+                        ),
+                      blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-green-500 pl-4 italic text-gray-700 mb-4" {...props} />,
+                    }}
+                  >
+                    {product.description || ''}
+                  </ReactMarkdown>
+                </div>
               </div>
 
               {/* Action Buttons */}
