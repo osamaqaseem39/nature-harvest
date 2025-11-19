@@ -6,13 +6,11 @@ import FeaturedProducts from '@/components/FeaturedProducts'
 import Brands from '@/components/Brands'
 import ContactInfo from '@/components/ContactInfo'
 import CTA from '@/components/CTA'
-import ApiHealthCheck from '@/components/ApiHealthCheck'
 import { Suspense } from 'react'
 
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <ApiHealthCheck />
       <Hero />
       <WhoWeAre />
       <FeaturedProducts />
