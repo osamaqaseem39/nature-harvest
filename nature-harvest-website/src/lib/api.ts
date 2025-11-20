@@ -48,6 +48,7 @@ export interface Product {
     protein?: number;
     carbohydrates?: number;
     fat?: number;
+    saturatedFat?: number;
     fiber?: number;
     sugar?: number;
     sodium?: number;

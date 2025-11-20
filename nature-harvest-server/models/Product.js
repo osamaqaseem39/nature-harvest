@@ -49,6 +49,10 @@ const productSchema = new mongoose.Schema({
       type: Number,
       min: 0
     },
+    saturatedFat: {
+      type: Number,
+      min: 0
+    },
     fiber: {
       type: Number,
       min: 0

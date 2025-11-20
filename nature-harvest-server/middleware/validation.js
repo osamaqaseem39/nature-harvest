@@ -90,6 +90,10 @@ const productValidation = {
       .optional()
       .isFloat({ min: 0 })
       .withMessage('Fat must be a positive number'),
+    body('nutrients.saturatedFat')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Saturated Fat must be a positive number'),
     body('nutrients.fiber')
       .optional()
       .isFloat({ min: 0 })
@@ -175,6 +179,10 @@ const productValidation = {
       .optional()
       .isFloat({ min: 0 })
       .withMessage('Fat must be a positive number'),
+    body('nutrients.saturatedFat')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Saturated Fat must be a positive number'),
     body('nutrients.fiber')
       .optional()
       .isFloat({ min: 0 })

@@ -5,6 +5,7 @@ interface Nutrients {
   protein?: number;
   carbohydrates?: number;
   fat?: number;
+  saturatedFat?: number;
   fiber?: number;
   sugar?: number;
   sodium?: number;
@@ -38,8 +39,9 @@ const NutrientsForm: React.FC<NutrientsFormProps> = ({
     { key: 'protein', label: 'Protein', unit: 'g', category: 'Macronutrients' },
     { key: 'carbohydrates', label: 'Carbohydrates', unit: 'g', category: 'Macronutrients' },
     { key: 'fat', label: 'Fat', unit: 'g', category: 'Macronutrients' },
+    { key: 'saturatedFat', label: 'Saturated Fat (of which Saturates)', unit: 'g', category: 'Macronutrients' },
     { key: 'fiber', label: 'Fiber', unit: 'g', category: 'Macronutrients' },
-    { key: 'sugar', label: 'Sugar', unit: 'g', category: 'Macronutrients' },
+    { key: 'sugar', label: 'Sugar (of which Sugars)', unit: 'g', category: 'Macronutrients' },
     { key: 'sodium', label: 'Sodium', unit: 'mg', category: 'Minerals' },
     { key: 'vitaminC', label: 'Vitamin C', unit: 'mg', category: 'Vitamins' },
     { key: 'vitaminA', label: 'Vitamin A', unit: 'IU', category: 'Vitamins' },
