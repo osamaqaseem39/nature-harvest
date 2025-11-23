@@ -1,18 +1,18 @@
 import React from 'react';
 
 interface Nutrients {
-  calories?: number;
-  protein?: number;
-  carbohydrates?: number;
-  fat?: number;
-  saturatedFat?: number;
-  fiber?: number;
-  sugar?: number;
-  sodium?: number;
-  vitaminC?: number;
-  vitaminA?: number;
-  calcium?: number;
-  iron?: number;
+  calories?: number | string;
+  protein?: number | string;
+  carbohydrates?: number | string;
+  fat?: number | string;
+  saturatedFat?: number | string;
+  fiber?: number | string;
+  sugar?: number | string;
+  sodium?: number | string;
+  vitaminC?: number | string;
+  vitaminA?: number | string;
+  calcium?: number | string;
+  iron?: number | string;
 }
 
 interface NutrientsFormProps {
@@ -27,10 +27,14 @@ const NutrientsForm: React.FC<NutrientsFormProps> = ({
   className = ''
 }) => {
   const handleChange = (field: keyof Nutrients, value: string) => {
-    const numValue = value === '' ? undefined : parseFloat(value);
+    // Allow both text and numbers
+    // If empty, set to undefined
+    // If it's a valid number, try to parse it (but keep as string if user wants text)
+    // Otherwise, keep as string
+    const processedValue = value === '' ? undefined : value;
     onChange({
       ...nutrients,
-      [field]: numValue
+      [field]: processedValue
     });
   };
 
@@ -79,13 +83,11 @@ const NutrientsForm: React.FC<NutrientsFormProps> = ({
                   {label} ({unit})
                 </label>
                 <input
-                  type="number"
-                  step="0.1"
-                  min="0"
+                  type="text"
                   value={nutrients[key as keyof Nutrients] || ''}
                   onChange={(e) => handleChange(key as keyof Nutrients, e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-                  placeholder="0.0"
+                  placeholder="Enter value or text"
                 />
               </div>
             ))}
@@ -99,7 +101,7 @@ const NutrientsForm: React.FC<NutrientsFormProps> = ({
           <ul className="space-y-1 text-xs">
             <li>• All values are per serving</li>
             <li>• Leave fields empty if nutritional information is not available</li>
-            <li>• Use decimal values for precise measurements (e.g., 2.5g protein)</li>
+            <li>• You can enter numeric values (e.g., 2.5g) or text descriptions</li>
             <li>• Vitamin A is measured in International Units (IU)</li>
           </ul>
         </div>

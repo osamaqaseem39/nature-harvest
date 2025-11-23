@@ -34,52 +34,40 @@ const productSchema = new mongoose.Schema({
   }],
   nutrients: {
     calories: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     protein: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     carbohydrates: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     fat: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     saturatedFat: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     fiber: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     sugar: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     sodium: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     vitaminC: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     vitaminA: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     calcium: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     },
     iron: {
-      type: Number,
-      min: 0
+      type: mongoose.Schema.Types.Mixed
     }
   },
   status: {

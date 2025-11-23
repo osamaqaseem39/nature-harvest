@@ -84,14 +84,19 @@ const ProductDetailContent = () => {
     return '/images/orange.png'
   }
 
-  const getNutrientValue = (value?: number, unit: string = '') => {
+  const getNutrientValue = (value?: number | string, unit: string = '') => {
     if (value === undefined || value === null) return 'N/A'
+    // If it's a string, just return it (might already include unit or be descriptive text)
+    if (typeof value === 'string') return value
     return `${value}${unit}`
   }
 
-  const getNutrientPercentage = (value?: number, dailyValue: number = 100) => {
+  const getNutrientPercentage = (value?: number | string, dailyValue: number = 100) => {
     if (value === undefined || value === null) return 0
-    return Math.round((value / dailyValue) * 100)
+    // If it's a string, try to parse it as a number
+    const numValue = typeof value === 'string' ? parseFloat(value) : value
+    if (isNaN(numValue)) return 0
+    return Math.round((numValue / dailyValue) * 100)
   }
 
   const hasNutrients = (nutrients?: Product['nutrients']): nutrients is NonNullable<Product['nutrients']> => {
