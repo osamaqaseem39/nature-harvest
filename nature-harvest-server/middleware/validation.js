@@ -76,52 +76,100 @@ const productValidation = {
       .withMessage('Invalid gallery image URL'),
     body('nutrients.calories')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Calories must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Calories must be a positive number or text'),
     body('nutrients.protein')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Protein must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Protein must be a positive number or text'),
     body('nutrients.carbohydrates')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Carbohydrates must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Carbohydrates must be a positive number or text'),
     body('nutrients.fat')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Fat must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Fat must be a positive number or text'),
     body('nutrients.saturatedFat')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Saturated Fat must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Saturated Fat must be a positive number or text'),
     body('nutrients.fiber')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Fiber must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Fiber must be a positive number or text'),
     body('nutrients.sugar')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Sugar must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Sugar must be a positive number or text'),
     body('nutrients.sodium')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Sodium must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Sodium must be a positive number or text'),
     body('nutrients.vitaminC')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Vitamin C must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Vitamin C must be a positive number or text'),
     body('nutrients.vitaminA')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Vitamin A must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Vitamin A must be a positive number or text'),
     body('nutrients.calcium')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Calcium must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Calcium must be a positive number or text'),
     body('nutrients.iron')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Iron must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Iron must be a positive number or text'),
     body('status')
       .optional()
       .isIn(['Active', 'Inactive'])
@@ -165,52 +213,100 @@ const productValidation = {
       .withMessage('Invalid gallery image URL'),
     body('nutrients.calories')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Calories must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Calories must be a positive number or text'),
     body('nutrients.protein')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Protein must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Protein must be a positive number or text'),
     body('nutrients.carbohydrates')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Carbohydrates must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Carbohydrates must be a positive number or text'),
     body('nutrients.fat')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Fat must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Fat must be a positive number or text'),
     body('nutrients.saturatedFat')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Saturated Fat must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Saturated Fat must be a positive number or text'),
     body('nutrients.fiber')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Fiber must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Fiber must be a positive number or text'),
     body('nutrients.sugar')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Sugar must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Sugar must be a positive number or text'),
     body('nutrients.sodium')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Sodium must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Sodium must be a positive number or text'),
     body('nutrients.vitaminC')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Vitamin C must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Vitamin C must be a positive number or text'),
     body('nutrients.vitaminA')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Vitamin A must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Vitamin A must be a positive number or text'),
     body('nutrients.calcium')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Calcium must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Calcium must be a positive number or text'),
     body('nutrients.iron')
       .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Iron must be a positive number'),
+      .custom((value) => {
+        if (typeof value === 'string') return true;
+        if (typeof value === 'number' && value >= 0) return true;
+        return false;
+      })
+      .withMessage('Iron must be a positive number or text'),
     body('status')
       .optional()
       .isIn(['Active', 'Inactive'])
