@@ -28,7 +28,7 @@ const WhoWeAre = () => {
   return (
     <>
       {/* Company Information Section */}
-      <section ref={sectionRef} className="relative bg-gradient-to-br from-green-100 via-green-50 to-green-100 pt-32 sm:pt-40 md:pt-50 lg:pt-60 pb-16 sm:pb-20 -mt-10 sm:-mt-16 lg:-mt-20 overflow-hidden">
+      <section ref={sectionRef} className="relative bg-gradient-to-br from-green-100 via-green-50 to-green-100 pt-16 sm:pt-20 md:pt-24 lg:pt-28 pb-16 sm:pb-20 -mt-10 sm:-mt-16 lg:-mt-20 overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 sm:top-20 left-4 sm:left-10 w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-green-400 rounded-full"></div>

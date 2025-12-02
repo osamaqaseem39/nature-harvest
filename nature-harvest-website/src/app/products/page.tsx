@@ -433,9 +433,26 @@ const ProductsContent = () => {
                       <Link
                         key={brand._id}
                         href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
-                        className="block px-3 py-2 bg-green-50 text-green-800 text-sm font-medium rounded-lg hover:bg-green-100 transition-colors duration-200 font-jost"
+                        className="flex items-center gap-3 px-3 py-2 bg-green-50 text-green-800 text-sm font-medium rounded-lg hover:bg-green-100 transition-colors duration-200 font-jost"
                       >
-                        🏢 {brand.name}
+                        <div className="relative w-8 h-8 flex-shrink-0">
+                          <Image
+                            src={brand.logoUrl || brand.imageUrl || `/images/brands/${brand.name.replace(/\s+/g, '')} Logo PET.jpg`}
+                            alt={`${brand.name} logo`}
+                            fill
+                            className="object-contain"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              const localBrandImage = `/images/brands/${brand.name.replace(/\s+/g, '')} Logo PET.jpg`;
+                              if (target.src !== localBrandImage) {
+                                target.src = localBrandImage;
+                              } else {
+                                target.src = '/images/logo.png';
+                              }
+                            }}
+                          />
+                        </div>
+                        <span className="flex-1">{brand.name}</span>
                       </Link>
                     ))}
                     
@@ -444,9 +461,21 @@ const ProductsContent = () => {
                       <Link
                         key={flavor._id}
                         href={`/products?type=flavor&id=${flavor._id}&name=${encodeURIComponent(flavor.name)}`}
-                        className="block px-3 py-2 bg-orange-50 text-orange-800 text-sm font-medium rounded-lg hover:bg-orange-100 transition-colors duration-200 font-jost"
+                        className="flex items-center gap-3 px-3 py-2 bg-orange-50 text-orange-800 text-sm font-medium rounded-lg hover:bg-orange-100 transition-colors duration-200 font-jost"
                       >
-                        🍊 {flavor.name}
+                        {flavor.imageUrl ? (
+                          <div className="relative w-8 h-8 flex-shrink-0">
+                            <Image
+                              src={flavor.imageUrl}
+                              alt={`${flavor.name} icon`}
+                              fill
+                              className="object-contain"
+                            />
+                          </div>
+                        ) : (
+                          <span className="text-lg">🍊</span>
+                        )}
+                        <span className="flex-1">{flavor.name}</span>
                       </Link>
                     ))}
                   </div>
