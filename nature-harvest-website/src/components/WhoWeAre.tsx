@@ -93,7 +93,7 @@ const WhoWeAre = () => {
                   <h4 className="text-lg sm:text-xl lg:text-2xl font-jost font-bold text-gray-800">Belief</h4>
                 </div>
                 <p className="text-sm sm:text-base lg:text-lg font-jost text-gray-700 leading-relaxed">
-                  We believe that every drink we make should reflect our commitment to excellence, our love of flavor, and our dedication to creating something truly special.
+                  We believe that every drink we make should reflect our commitment to excellence, our love of flavor, and our dedication to create something truly special.
                 </p>
               </div>
             </div>

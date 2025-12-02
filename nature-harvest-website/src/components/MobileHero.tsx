@@ -61,15 +61,15 @@ const MobileHero = () => {
   }, [isMobile, isTablet])
 
   const getHeroImageSize = () => {
-    if (isMobile) return { width: 280, height: 280 }
-    if (isTablet) return { width: 400, height: 400 }
-    return { width: 760, height: 760 }
+    if (isMobile) return { width: 220, height: 220 }
+    if (isTablet) return { width: 320, height: 320 }
+    return { width: 600, height: 600 }
   }
 
   const getLeafSize = () => {
-    if (isMobile) return { width: 60, height: 60 }
-    if (isTablet) return { width: 80, height: 80 }
-    return { width: 120, height: 120 }
+    if (isMobile) return { width: 50, height: 50 }
+    if (isTablet) return { width: 60, height: 60 }
+    return { width: 100, height: 100 }
   }
 
   const getLeafPosition = () => {
@@ -112,8 +112,8 @@ const MobileHero = () => {
       <Header />
       
       {/* Content */}
-  <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-50">
-        <div className="flex flex-col items-center text-center justify-center min-h-[calc(100vh-80px)] sm:min-h-0">
+  <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24">
+        <div className="flex flex-col items-center text-center justify-center min-h-[calc(100vh-80px)] sm:min-h-[calc(100vh-100px)]">
           
           {/* Main Title */}
           <MobileText 
@@ -130,7 +130,7 @@ const MobileHero = () => {
           <MobileText 
             size={isMobile ? 'sm' : isTablet ? 'base' : 'lg'}
             color="default"
-            className={`max-w-3xl text-center leading-relaxed transition-all duration-1500 ease-out delay-400 mt-4 px-4 ${
+            className={`max-w-3xl text-center leading-relaxed transition-all duration-1500 ease-out delay-400 mt-3 sm:mt-4 px-4 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -139,7 +139,7 @@ const MobileHero = () => {
           
           {/* Hero Image Container */}
           <div 
-            className={`relative w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] xl:w-[760px] xl:h-[760px] mb-8 mt-8 sm:mt-16 bg-center bg-no-repeat flex items-center justify-center z-20 transition-all duration-2000 ease-out delay-600 ${
+            className={`relative w-[220px] h-[220px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[480px] lg:h-[480px] xl:w-[600px] xl:h-[600px] mb-6 mt-4 sm:mt-6 bg-center bg-no-repeat flex items-center justify-center z-20 transition-all duration-2000 ease-out delay-600 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-32'
             }`} 
             style={{ backgroundImage: 'url("/images/heroimagebg.png")', backgroundSize: '100%' }}
