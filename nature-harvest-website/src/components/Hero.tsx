@@ -64,7 +64,7 @@ const Hero = () => {
       {/* Content will go here */}
   <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24">
         <div className="flex flex-col items-center text-center justify-center min-h-[calc(100vh-80px)] sm:min-h-[calc(100vh-100px)]">
-          <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[84px] font-gazpacho font-bold text-[#292929] transition-all duration-1500 ease-out px-4 ${
+          <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-gazpacho font-bold text-[#292929] transition-all duration-1500 ease-out px-4 whitespace-nowrap ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
           }`}>
             Welcome to <span className="text-green-600 transition-all duration-300 hover:text-green-700 hover:scale-105 inline-block">Nature</span> Harvest

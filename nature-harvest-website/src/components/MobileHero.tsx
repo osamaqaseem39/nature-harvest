@@ -117,9 +117,9 @@ const MobileHero = () => {
           
           {/* Main Title */}
           <MobileText 
-            size={isMobile ? '4xl' : isTablet ? '5xl' : '5xl'}
+            size={isMobile ? '3xl' : isTablet ? '4xl' : '5xl'}
             weight="bold"
-            className={`font-gazpacho transition-all duration-1500 ease-out px-4 ${
+            className={`font-gazpacho transition-all duration-1500 ease-out px-4 whitespace-nowrap ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
             }`}
           >
