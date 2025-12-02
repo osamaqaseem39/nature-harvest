@@ -2,12 +2,15 @@
 
 import { Calendar, MapPin, Target, Award } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
 // OurStory component for displaying company timeline and history
 const OurStory = () => {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -28,27 +31,27 @@ const OurStory = () => {
 
   const timeline = [
     {
-      year: "2022",
+      year: "2020",
       title: "The Beginning",
-      description: "Nature Harvest was founded in Pakistan with a simple vision: to create healthy, delicious beverages that bring joy to people's lives.",
+      description: "Nature Harvest was founded with a simple vision: to create healthy, delicious beverages that bring joy to people's lives.",
       icon: Calendar
     },
     {
-      year: "2023",
+      year: "2021",
       title: "First Major Success",
-      description: "Our flagship juice line launched successfully across Pakistan, gaining recognition for its exceptional taste and quality standards.",
+      description: "Our flagship juice line launched successfully internationally, gaining recognition for its exceptional taste and quality standards.",
       icon: Target
     },
     {
-      year: "2024",
+      year: "2022",
       title: "Rapid Growth",
-      description: "Expanded operations across major Pakistani cities and established strong partnerships with local retailers and distributors.",
+      description: "Expanded operations across major international cities and established strong partnerships with local retailers and distributors.",
       icon: MapPin
     },
     {
-      year: "2025",
+      year: "2023",
       title: "Innovation Leader",
-      description: "Continuing to innovate with cutting-edge technology while maintaining our commitment to natural, healthy ingredients for Pakistani consumers.",
+      description: "Continuing to innovate with cutting-edge technology while maintaining our commitment to natural, healthy ingredients for international consumers.",
       icon: Award
     }
   ]
@@ -74,7 +77,7 @@ const OurStory = () => {
             The Story of Nature Harvest
           </h2>
           <p className="text-lg font-jost text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            From humble beginnings in Pakistan to becoming a respected beverage company, our journey has been driven by passion, innovation, and an unwavering commitment to quality for Pakistani consumers.
+            From humble beginnings to becoming a respected beverage company, our journey has been driven by passion, innovation, and an unwavering commitment to quality for international consumers.
           </p>
         </div>
 
@@ -90,12 +93,12 @@ const OurStory = () => {
                   A Vision Born from Passion
                 </h4>
                 <p className="text-lg font-jost text-gray-700 leading-relaxed mb-6">
-                  Nature Harvest began as a small family business with a big dream. Our founder, Hafiz Muhammad Abdul Basit, 
-                  envisioned a world where healthy beverages could be both delicious and accessible to everyone in Pakistan.
+                  Nature Harvest began as a small business with a big dream. Our founders, Hafiz Muhammad Abdul Basit and Muhammad Omar Khan, 
+                  envisioned a world where healthy beverages could be both delicious and accessible to everyone internationally.
                 </p>
                 <p className="text-lg font-jost text-gray-700 leading-relaxed">
-                  What started in a small facility in Pakistan has grown into a respected beverage company, but our core values remain unchanged: 
-                  quality, innovation, and a deep respect for nature and our Pakistani customers.
+                  What started in a small facility has grown into a respected beverage company, but our core values remain unchanged: 
+                  quality, innovation, and a deep respect for nature and our international customers.
                 </p>
               </div>
 
@@ -104,9 +107,9 @@ const OurStory = () => {
                   Innovation at Our Core
                 </h4>
                 <p className="text-lg font-jost text-gray-700 leading-relaxed">
-                  We've consistently pushed the boundaries of what's possible in beverage manufacturing in Pakistan, 
+                  We've consistently pushed the boundaries of what's possible in beverage manufacturing internationally, 
                   from developing unique flavor combinations to implementing sustainable production methods. 
-                  Our research and development team works tirelessly to create products that exceed Pakistani consumer expectations.
+                  Our research and development team works tirelessly to create products that exceed international consumer expectations.
                 </p>
               </div>
             </div>
@@ -161,9 +164,12 @@ const OurStory = () => {
               As we continue to grow and innovate, we invite you to be part of our story. 
               Every product we create is a testament to our commitment to excellence and our love for what we do.
             </p>
-            <button className="bg-green-600 hover:bg-green-700 text-white font-jost font-semibold uppercase tracking-wider px-8 py-4 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+            <Link 
+              href="/products"
+              className="inline-block bg-green-600 hover:bg-green-700 text-white font-jost font-semibold uppercase tracking-wider px-8 py-4 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
               Explore Our Products
-            </button>
+            </Link>
           </div>
         </div>
       </div>

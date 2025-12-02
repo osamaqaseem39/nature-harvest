@@ -28,27 +28,27 @@ const CompanyStats = () => {
   const stats = [
     {
       icon: Users,
-      number: "25+",
+      number: "60+",
       label: "Team Members",
-      description: "Dedicated Pakistani professionals committed to excellence"
+      description: "Dedicated international professionals committed to excellence"
     },
     {
       icon: Award,
-      number: "3+",
+      number: "20+",
       label: "Years Experience",
       description: "Rapid growth and expertise in beverage manufacturing"
     },
     {
       icon: Globe,
-      number: "5+",
+      number: "80+",
       label: "Cities Served",
-      description: "Growing presence across major Pakistani cities"
+      description: "Growing presence across major international cities"
     },
     {
       icon: Heart,
-      number: "50K+",
+      number: "Million+",
       label: "Happy Customers",
-      description: "Satisfied customers across Pakistan"
+      description: "Satisfied customers internationally"
     }
   ]
 
@@ -110,11 +110,11 @@ const CompanyStats = () => {
         }`}>
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 max-w-4xl mx-auto">
             <h4 className="text-2xl font-gazpacho font-bold text-white mb-4">
-              Pakistani Quality Standards
+              International Quality Standards
             </h4>
             <p className="text-green-100 font-jost leading-relaxed">
-              Nature Harvest meets and exceeds Pakistani food safety standards including PSQCA certification. 
-              Our facilities follow international best practices while maintaining the authentic taste and quality that Pakistani consumers love.
+              Nature Harvest meets and exceeds International food safety standards. 
+              Our facilities follow international best practices while maintaining the authentic taste and quality that consumers love.
             </p>
           </div>
         </div>

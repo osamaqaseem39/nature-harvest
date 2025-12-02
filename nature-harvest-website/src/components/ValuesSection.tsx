@@ -58,7 +58,7 @@ const ValuesSection = () => {
     {
       icon: Globe,
       title: "Local Impact",
-      description: "Our focus is on serving Pakistani communities with quality products while supporting local farmers and suppliers, contributing to Pakistan's beverage industry growth.",
+      description: "Our focus is on serving international communities with quality products while supporting local farmers and suppliers, contributing to the global beverage industry growth.",
       color: "from-indigo-500 to-indigo-600"
     }
   ]
