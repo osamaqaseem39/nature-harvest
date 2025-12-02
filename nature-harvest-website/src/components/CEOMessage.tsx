@@ -79,7 +79,7 @@ const CEOMessage = () => {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           <p className="text-lg font-gazpacho font-bold text-gray-800">Hafiz Muhammad Abdul Basit</p>
-          <p className="text-green-600 font-jost">CEO & Founder, Nature Harvest</p>
+          <p className="text-green-600 font-jost">CEO & Founder, Nature Harvest (Pvt) Ltd.</p>
         </div>
       </div>
     </section>
