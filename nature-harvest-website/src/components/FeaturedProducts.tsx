@@ -1,9 +1,10 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Star, ShoppingCart, Heart, Eye } from 'lucide-react'
+import { Star, ShoppingCart, Heart, Eye, ChevronLeft, ChevronRight } from 'lucide-react'
 import { apiService } from '../lib/api'
 import { config } from '../lib/config'
 
@@ -36,14 +37,11 @@ interface Product {
 const FeaturedProducts = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [products, setProducts] = useState<Product[]>([])
-  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([])
-  const [showAll, setShowAll] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-  
-  const INITIAL_PRODUCTS_COUNT = 6
 
   // Fallback hardcoded products when API has no data
   const fallbackProducts: Product[] = [
@@ -177,6 +175,22 @@ const FeaturedProducts = () => {
     return brandGroups
   }
 
+  // Convert brand groups to slides (each slide contains up to 6 products from the same brand in 2 rows of 3)
+  const createBrandSlides = (productList: Product[]): Product[][] => {
+    const brandGroups = groupProductsByBrand(productList)
+    const slides: Product[][] = []
+    
+    Object.keys(brandGroups).forEach(brandName => {
+      const brandProducts = brandGroups[brandName]
+      // Split brand products into slides of 6 (2 rows x 3 columns)
+      for (let i = 0; i < brandProducts.length; i += 6) {
+        slides.push(brandProducts.slice(i, i + 6))
+      }
+    })
+    
+    return slides
+  }
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -218,29 +232,13 @@ const FeaturedProducts = () => {
         
         // Use API data if available, otherwise use fallback products
         const apiProducts = response.data.length > 0 ? response.data : fallbackProducts
-        
-        // Group products by brand and sort by size
-        const brandGroups = groupProductsByBrand(apiProducts)
-        // Flatten and sort: prioritize showing products from the same brand first
-        const sortedProducts: Product[] = []
-        Object.keys(brandGroups).forEach(brandName => {
-          sortedProducts.push(...brandGroups[brandName])
-        })
-        
-        setProducts(sortedProducts)
-        setDisplayedProducts(sortedProducts.slice(0, INITIAL_PRODUCTS_COUNT))
-        setShowAll(false)
+        setProducts(apiProducts)
+        setCurrentIndex(0) // Reset to first slide when products change
       } catch (err) {
         console.error('Error fetching featured products:', err)
         // On error, use fallback products instead of showing error
-        const brandGroups = groupProductsByBrand(fallbackProducts)
-        const sortedProducts: Product[] = []
-        Object.keys(brandGroups).forEach(brandName => {
-          sortedProducts.push(...brandGroups[brandName])
-        })
-        setProducts(sortedProducts)
-        setDisplayedProducts(sortedProducts.slice(0, INITIAL_PRODUCTS_COUNT))
-        setShowAll(false)
+        setProducts(fallbackProducts)
+        setCurrentIndex(0) // Reset to first slide when using fallback
         setError(null) // Don't show error to users, just use fallback
         
         // Optional: Set a non-blocking error state for debugging
@@ -301,20 +299,19 @@ const FeaturedProducts = () => {
     return 'Beverage'
   }
 
-  // Handle view more button click
-  const handleViewMore = () => {
-    if (!showAll && products.length > INITIAL_PRODUCTS_COUNT) {
-      // Show all products
-      setDisplayedProducts(products)
-      setShowAll(true)
-    } else {
-      // Navigate to products page
-      router.push('/products')
-    }
+  const brandSlides = createBrandSlides(products)
+  const currentSlide = brandSlides[currentIndex] || []
+  const currentBrandName = currentSlide[0]?.brandId?.name || ''
+
+  const handlePrev = () => {
+    if (brandSlides.length === 0) return
+    setCurrentIndex((prev) => (prev - 1 + brandSlides.length) % brandSlides.length)
   }
-  
-  const shouldShowButton = products.length > 0
-  const buttonText = showAll || products.length <= INITIAL_PRODUCTS_COUNT ? 'Explore More' : 'View More'
+
+  const handleNext = () => {
+    if (brandSlides.length === 0) return
+    setCurrentIndex((prev) => (prev + 1) % brandSlides.length)
+  }
 
   if (loading) {
     return (
@@ -353,14 +350,47 @@ const FeaturedProducts = () => {
           </p>
         </div>
 
-        {/* Products Grid */}
+        {/* Carousel */}
         <div className={`mb-10 sm:mb-12 transition-all duration-1000 ease-out delay-400 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
+            <button 
+              onClick={handlePrev} 
+              disabled={brandSlides.length === 0}
+              className="group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white border-2 border-green-400 text-green-600 hover:bg-green-500 hover:text-white hover:border-green-500 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-green-600 disabled:hover:border-green-400 transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-110 disabled:hover:scale-100"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={2.5} />
+            </button>
+            
+            <div className="flex flex-col items-center text-center px-4">
+              {currentBrandName && (
+                <span className="text-base sm:text-lg font-gazpacho font-bold text-green-600 mb-1">
+                  {currentBrandName}
+                </span>
+              )}
+              {brandSlides.length > 0 && (
+                <span className="text-xs sm:text-sm font-jost text-gray-500">
+                  Slide {currentIndex + 1} of {brandSlides.length}
+                </span>
+              )}
+            </div>
+            
+            <button 
+              onClick={handleNext} 
+              disabled={brandSlides.length === 0}
+              className="group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white border-2 border-green-400 text-green-600 hover:bg-green-500 hover:text-white hover:border-green-500 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-green-600 disabled:hover:border-green-400 transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-110 disabled:hover:scale-100"
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={2.5} />
+            </button>
+          </div>
+          
           {/* Three-column grid layout (2 rows of 3 products) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {displayedProducts.length > 0 ? (
-              displayedProducts.map((product) => (
+            {currentSlide.length > 0 ? (
+              currentSlide.map((product) => (
                 <div 
                   key={product._id} 
                   className={`relative transition-all duration-1000 ease-out ${
@@ -440,18 +470,16 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Bottom CTA */}
-        {shouldShowButton && (
-          <div className={`text-center transition-all duration-1000 ease-out delay-1200 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}>
-            <button
-              onClick={handleViewMore}
-              className="inline-flex bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-3 sm:py-4 px-6 sm:px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-base sm:text-lg uppercase tracking-wide"
-            >
-              {buttonText}
-            </button>
-          </div>
-        )}
+        <div className={`text-center transition-all duration-1000 ease-out delay-1200 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
+          <Link 
+            href="/products" 
+            className="inline-flex bg-green-400 hover:bg-green-500 text-white font-jost font-semibold py-3 sm:py-4 px-6 sm:px-10 rounded-full transition-all duration-300 hover:shadow-xl transform hover:scale-105 text-base sm:text-lg uppercase tracking-wide"
+          >
+            View All Products
+          </Link>
+        </div>
       </div>
     </section>
   )
