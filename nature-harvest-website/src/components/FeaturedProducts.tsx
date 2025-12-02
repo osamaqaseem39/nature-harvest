@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Star, ShoppingCart, Heart, Eye } from 'lucide-react'
+import { Star, ShoppingCart, Heart, Eye, ChevronLeft, ChevronRight } from 'lucide-react'
 import { apiService } from '../lib/api'
 import { config } from '../lib/config'
 
@@ -184,13 +184,14 @@ const FeaturedProducts = () => {
         
         // Use API data if available, otherwise use fallback products
         const apiProducts = response.data.length > 0 ? response.data : fallbackProducts
-        // Sort oldest -> newest
-        const sorted = [...apiProducts].sort((a: Product, b: Product) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-        setProducts(sorted)
+        // Products will be grouped by brand and sorted by size in the component
+        setProducts(apiProducts)
+        setCurrentIndex(0) // Reset to first slide when products change
       } catch (err) {
         console.error('Error fetching featured products:', err)
         // On error, use fallback products instead of showing error
         setProducts(fallbackProducts)
+        setCurrentIndex(0) // Reset to first slide when using fallback
         setError(null) // Don't show error to users, just use fallback
         
         // Optional: Set a non-blocking error state for debugging
@@ -251,6 +252,54 @@ const FeaturedProducts = () => {
     return 'Beverage'
   }
 
+  // Extract numeric value from size name (e.g., "125ml" -> 125, "500ml" -> 500)
+  const getSizeValue = (sizeName?: string): number => {
+    if (!sizeName) return 0
+    const match = sizeName.match(/(\d+)/)
+    return match ? parseInt(match[1], 10) : 0
+  }
+
+  // Group products by brand and sort by size
+  const groupProductsByBrand = (productList: Product[]) => {
+    const brandGroups: { [key: string]: Product[] } = {}
+    
+    // Group products by brand
+    productList.forEach(product => {
+      const brandName = product.brandId?.name || 'Unknown'
+      if (!brandGroups[brandName]) {
+        brandGroups[brandName] = []
+      }
+      brandGroups[brandName].push(product)
+    })
+    
+    // Sort products within each brand by size (ascending)
+    Object.keys(brandGroups).forEach(brandName => {
+      brandGroups[brandName].sort((a, b) => {
+        const sizeA = getSizeValue(a.sizeId?.name)
+        const sizeB = getSizeValue(b.sizeId?.name)
+        return sizeA - sizeB
+      })
+    })
+    
+    return brandGroups
+  }
+
+  // Convert brand groups to slides (each slide contains up to 4 products from the same brand)
+  const createBrandSlides = (productList: Product[]): Product[][] => {
+    const brandGroups = groupProductsByBrand(productList)
+    const slides: Product[][] = []
+    
+    Object.keys(brandGroups).forEach(brandName => {
+      const brandProducts = brandGroups[brandName]
+      // Split brand products into slides of 4
+      for (let i = 0; i < brandProducts.length; i += 4) {
+        slides.push(brandProducts.slice(i, i + 4))
+      }
+    })
+    
+    return slides
+  }
+
   if (loading) {
     return (
       <section ref={sectionRef} className="relative bg-white pt-32 pb-20 overflow-hidden">
@@ -264,23 +313,18 @@ const FeaturedProducts = () => {
     )
   }
 
-  const visibleProducts = (list: Product[], start: number, count: number) => {
-    if (list.length <= count) return list
-    const result: Product[] = []
-    for (let i = 0; i < count; i++) {
-      result.push(list[(start + i) % list.length])
-    }
-    return result
-  }
+  const brandSlides = createBrandSlides(products)
+  const currentSlide = brandSlides[currentIndex] || []
+  const currentBrandName = currentSlide[0]?.brandId?.name || ''
 
   const handlePrev = () => {
-    if (!products.length) return
-    setCurrentIndex((prev) => (prev - 4 + products.length) % products.length)
+    if (brandSlides.length === 0) return
+    setCurrentIndex((prev) => (prev - 1 + brandSlides.length) % brandSlides.length)
   }
 
   const handleNext = () => {
-    if (!products.length) return
-    setCurrentIndex((prev) => (prev + 4) % products.length)
+    if (brandSlides.length === 0) return
+    setCurrentIndex((prev) => (prev + 1) % brandSlides.length)
   }
 
   return (
@@ -311,83 +355,118 @@ const FeaturedProducts = () => {
         <div className={`mb-10 sm:mb-12 transition-all duration-1000 ease-out delay-400 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          <div className="flex items-center justify-between mb-6">
-            <button onClick={handlePrev} className="px-3 py-2 rounded border border-gray-300 text-sm hover:bg-gray-50">Prev</button>
-            <div className="text-sm text-gray-500">Showing 4 at a time</div>
-            <button onClick={handleNext} className="px-3 py-2 rounded border border-gray-300 text-sm hover:bg-gray-50">Next</button>
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
+            <button 
+              onClick={handlePrev} 
+              disabled={brandSlides.length === 0}
+              className="group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white border-2 border-green-400 text-green-600 hover:bg-green-500 hover:text-white hover:border-green-500 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-green-600 disabled:hover:border-green-400 transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-110 disabled:hover:scale-100"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={2.5} />
+            </button>
+            
+            <div className="flex flex-col items-center text-center px-4">
+              {currentBrandName && (
+                <span className="text-base sm:text-lg font-gazpacho font-bold text-green-600 mb-1">
+                  {currentBrandName}
+                </span>
+              )}
+              {brandSlides.length > 0 && (
+                <span className="text-xs sm:text-sm font-jost text-gray-500">
+                  Slide {currentIndex + 1} of {brandSlides.length}
+                </span>
+              )}
+            </div>
+            
+            <button 
+              onClick={handleNext} 
+              disabled={brandSlides.length === 0}
+              className="group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white border-2 border-green-400 text-green-600 hover:bg-green-500 hover:text-white hover:border-green-500 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-green-600 disabled:hover:border-green-400 transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-110 disabled:hover:scale-100"
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={2.5} />
+            </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {visibleProducts(products, currentIndex, 4).map((product) => (
-              <div 
-                key={product._id} 
-                className={`relative transition-all duration-1000 ease-out ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                } block cursor-pointer`}
-                onClick={() => router.push(`/products/${product._id}`)}
-              >
-              {/* Product Image Container - No Background Container */}
-              <div className="relative overflow-hidden">
-                {/* Brand Tag - Top Left */}
-                <div className="absolute top-1 sm:top-2 left-1 z-10">
-                  <div 
-                    className="block"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (product.brandId?._id) {
-                        router.push(`/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}`);
-                      }
-                    }}
-                  >
-                    <div className="bg-white rounded-full w-14 h-14 sm:w-16 sm:h-16 lg:w-18 lg:h-18 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 transition-all duration-300 shadow-lg cursor-pointer">
-                      <span className="text-green-600 font-gazpacho font-bold text-xs sm:text-sm">
-                        {product.brandId?.name || 'Nature Harvest'}
-                      </span>
-                      <span className="text-green-600 font-jost font-medium text-xs">
-                        {product.sizeId?.name || '125 ML'}
-                      </span>
+          
+          {/* Two-row grid layout */}
+          <div className="grid grid-cols-2 gap-6 sm:gap-8">
+            {currentSlide.length > 0 ? (
+              currentSlide.map((product) => (
+                <div 
+                  key={product._id} 
+                  className={`relative transition-all duration-1000 ease-out ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  } block cursor-pointer`}
+                  onClick={() => router.push(`/products/${product._id}`)}
+                >
+                  {/* Product Image Container - No Background Container */}
+                  <div className="relative overflow-hidden">
+                    {/* Brand Tag - Top Left */}
+                    <div className="absolute top-1 sm:top-2 left-1 z-10">
+                      <div 
+                        className="block"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (product.brandId?._id) {
+                            router.push(`/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}`);
+                          }
+                        }}
+                      >
+                        <div className="bg-white rounded-full w-14 h-14 sm:w-16 sm:h-16 lg:w-18 lg:h-18 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 transition-all duration-300 shadow-lg cursor-pointer">
+                          <span className="text-green-600 font-gazpacho font-bold text-xs sm:text-sm">
+                            {product.brandId?.name || 'Nature Harvest'}
+                          </span>
+                          <span className="text-green-600 font-jost font-medium text-xs">
+                            {product.sizeId?.name || '125 ML'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  
+                    {/* Main Product Image */}
+                    <div className="relative w-full h-64 sm:h-72 lg:h-80 p-2 sm:p-3 lg:p-4 flex items-center justify-center">
+                      <Image
+                        src={getProductImage(product)}
+                        alt={product.name}
+                        width={300}
+                        height={300}
+                        className="w-full h-full object-contain transition-all duration-500 max-h-full max-w-full"
+                        style={{ objectFit: 'contain' }}
+                      />
+                    </div>
+
+                    {/* Flavor Image - Bottom Left */}
+                    <div className="absolute bottom-0 left-16 sm:left-24 lg:left-28">
+                      <div 
+                        className="block"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (product.flavorId?._id) {
+                            router.push(`/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}`);
+                          }
+                        }}
+                      >
+                        <Image
+                          src={getFlavorImage(product)}
+                          alt={product.flavorId?.name || 'Flavor'}
+                          width={120}
+                          height={120}
+                          className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 object-contain cursor-pointer"
+                          style={{ objectFit: 'contain' }}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-              
-                {/* Main Product Image */}
-                <div className="relative w-full h-64 sm:h-72 lg:h-80 p-2 sm:p-3 lg:p-4 flex items-center justify-center">
-                  <Image
-                    src={getProductImage(product)}
-                    alt={product.name}
-                    width={300}
-                    height={300}
-                    className="w-full h-full object-contain transition-all duration-500 max-h-full max-w-full"
-                    style={{ objectFit: 'contain' }}
-                  />
+                  {/* No Product Info Section - Clean Minimal Design */}
                 </div>
-
-                {/* Flavor Image - Bottom Left */}
-                <div className="absolute bottom-0 left-16 sm:left-24 lg:left-28">
-                  <div 
-                    className="block"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (product.flavorId?._id) {
-                        router.push(`/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}`);
-                      }
-                    }}
-                  >
-                    <Image
-                      src={getFlavorImage(product)}
-                      alt={product.flavorId?.name || 'Flavor'}
-                      width={120}
-                      height={120}
-                      className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 object-contain cursor-pointer"
-                      style={{ objectFit: 'contain' }}
-                    />
-                  </div>
-                </div>
+              ))
+            ) : (
+              <div className="col-span-2 text-center py-12 text-gray-500">
+                No products available
               </div>
-
-              {/* No Product Info Section - Clean Minimal Design */}
-              </div>
-            ))}
+            )}
           </div>
         </div>
 

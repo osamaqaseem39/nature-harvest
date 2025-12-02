@@ -157,25 +157,25 @@ const Brands = () => {
 
         {/* Brands Grid */}
         {!loading && !error && brands.length > 0 && (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center justify-center w-full">
             {/* Brands Container */}
             {/* First Row */}
-            <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-8 mb-6 sm:mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-400 justify-items-center ${
+            <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-8 mb-6 sm:mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-400 justify-items-center items-center mx-auto w-full max-w-full ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               {brands.slice(0, Math.ceil(brands.length / 2)).map((brand, index) => (
-                <div key={brand._id} className="flex justify-center">
+                <div key={brand._id} className="flex justify-center items-center w-full">
                   <Link 
                     href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
-                    className="flex items-center justify-center p-2 sm:p-3 lg:p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer"
+                    className="flex items-center justify-center p-2 sm:p-3 lg:p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer w-full"
                   >
-                    <div className="relative">
+                    <div className="relative flex items-center justify-center">
                       <Image
                         src={brand.logoUrl || brand.imageUrl || `/images/brands/${brand.name.replace(/\s+/g, '')} Logo PET.jpg`}
                         alt={`${brand.name} logo`}
                         width={160}
                         height={120}
-                        className="w-16 h-12 sm:w-20 sm:h-16 lg:w-40 lg:h-30 object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
+                        className="w-16 h-12 sm:w-20 sm:h-16 lg:w-40 lg:h-30 object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110 mx-auto"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           console.log(`Image failed for ${brand.name}:`, target.src) // Debug log
@@ -198,22 +198,22 @@ const Brands = () => {
 
             {/* Second Row */}
             {brands.length > Math.ceil(brands.length / 2) && (
-              <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-8 mb-6 sm:mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-600 justify-items-center ${
+              <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-8 mb-6 sm:mb-8 lg:mb-12 transition-all duration-1000 ease-out delay-600 justify-items-center items-center mx-auto w-full max-w-full ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}>
                 {brands.slice(Math.ceil(brands.length / 2)).map((brand, index) => (
-                  <div key={brand._id} className="flex justify-center">
+                  <div key={brand._id} className="flex justify-center items-center w-full">
                     <Link 
                       href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
-                      className="flex items-center justify-center p-2 sm:p-3 lg:p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer"
+                      className="flex items-center justify-center p-2 sm:p-3 lg:p-4 transition-all duration-500 transform hover:scale-110 group cursor-pointer w-full"
                     >
-                      <div className="relative">
+                      <div className="relative flex items-center justify-center">
                         <Image
                           src={brand.logoUrl || brand.imageUrl || `/images/brands/${brand.name.replace(/\s+/g, '')} Logo PET.jpg`}
                           alt={`${brand.name} logo`}
                           width={160}
                           height={120}
-                          className="w-16 h-12 sm:w-20 sm:h-16 lg:w-40 lg:h-30 object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
+                          className="w-16 h-12 sm:w-20 sm:h-16 lg:w-40 lg:h-30 object-contain transition-all duration-500 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110 mx-auto"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             console.log(`Image failed for ${brand.name}:`, target.src) // Debug log
