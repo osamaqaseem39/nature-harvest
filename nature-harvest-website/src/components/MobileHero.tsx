@@ -134,7 +134,7 @@ const MobileHero = () => {
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            Experience the authentic taste of nature&apos;s finest fruits. Every bottle is crafted with care, bringing you the purest flavors without compromise.
+            Experience the authentic taste of nature&apos;s finest fruits. Every product is crafted with care, bringing you the purest flavors without compromise.
           </MobileText>
           
           {/* Hero Image Container */}

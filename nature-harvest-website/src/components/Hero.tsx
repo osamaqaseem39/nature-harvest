@@ -74,7 +74,7 @@ const Hero = () => {
           <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl xl:text-[24px] font-jost font-normal text-black max-w-3xl text-center leading-relaxed transition-all duration-1500 ease-out delay-400 px-4 mt-4 ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
-          Experience the authentic taste of nature&apos;s finest fruits. Every bottle is crafted with care, bringing you the purest flavors without compromise.
+          Experience the authentic taste of nature&apos;s finest fruits. Every product is crafted with care, bringing you the purest flavors without compromise.
           </h2>
           
           {/* Div with background image - Smooth animated from top */}

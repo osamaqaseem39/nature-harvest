@@ -44,6 +44,7 @@ const ProductsContent = () => {
 
     if (type && id && name) {
       // Set initial filter based on URL parameters
+      setCurrentPage(1)
       switch (type) {
         case 'brand':
           setSelectedBrand(id)
@@ -55,6 +56,13 @@ const ProductsContent = () => {
           setSelectedSize(id)
           break
       }
+    } else {
+      // Clear filters if no URL parameters
+      setSelectedBrand('')
+      setSelectedFlavor('')
+      setSelectedSize('')
+      setFilterData(null)
+      setCurrentPage(1)
     }
   }, [searchParams])
 
@@ -130,6 +138,7 @@ const ProductsContent = () => {
 
     fetchData()
   }, [searchParams])
+
 
   // Fetch products when filters change
   useEffect(() => {
@@ -221,7 +230,7 @@ const ProductsContent = () => {
   }
 
   const getFilterDescription = () => {
-    if (!filterData) return 'Discover our carefully curated selection of organic and natural products designed to support your health and wellness journey.'
+    if (!filterData) return 'Browse through our complete range of premium beverages. Filter by brand, flavor, or size to find exactly what you\'re looking for.'
     
     switch (filterData.type) {
       case 'brand':
@@ -231,7 +240,7 @@ const ProductsContent = () => {
       case 'size':
         return `Browse our selection of ${filterData.name} sized products, perfect for your needs.`
       default:
-        return 'Discover our carefully curated selection of organic and natural products.'
+        return 'Browse through our complete range of premium beverages.'
     }
   }
 
@@ -288,14 +297,12 @@ const ProductsContent = () => {
                   </div>
                 </div>
               </div>
-            ) : (
-              <div className="text-6xl mb-6">{getFilterIcon()}</div>
-            )}
+            ) : null}
             <h3 className="text-green-600 uppercase tracking-widest font-jost font-semibold text-sm mb-4">
-              {filterData ? `${filterData.type.toUpperCase()} PRODUCTS` : 'OUR PRODUCTS'}
+              {filterData ? `${filterData.type.toUpperCase()} PRODUCTS` : 'PRODUCT CATALOG'}
             </h3>
             <h1 className="text-5xl lg:text-6xl font-gazpacho font-bold text-gray-800 mb-6 leading-tight">
-              {filterData ? filterData.name : 'Our Products'}
+              {filterData ? filterData.name : 'Explore Our Products'}
             </h1>
             <p className="text-lg font-jost text-gray-600 max-w-3xl mx-auto">
               {getFilterDescription()}
@@ -331,7 +338,15 @@ const ProductsContent = () => {
                     <label className="block text-sm font-medium text-gray-700 font-jost">Brand</label>
                     <select
                       value={selectedBrand}
-                      onChange={(e) => setSelectedBrand(e.target.value)}
+                      onChange={(e) => {
+                        setSelectedBrand(e.target.value)
+                        setCurrentPage(1)
+                        // Clear filterData if manually changing filters
+                        const type = searchParams.get('type')
+                        if (!type) {
+                          setFilterData(null)
+                        }
+                      }}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-jost bg-white hover:border-green-300 transition-colors duration-200"
                     >
                       <option value="">All Brands</option>
@@ -348,7 +363,15 @@ const ProductsContent = () => {
                     <label className="block text-sm font-medium text-gray-700 font-jost">Flavor</label>
                     <select
                       value={selectedFlavor}
-                      onChange={(e) => setSelectedFlavor(e.target.value)}
+                      onChange={(e) => {
+                        setSelectedFlavor(e.target.value)
+                        setCurrentPage(1)
+                        // Clear filterData if manually changing filters
+                        const type = searchParams.get('type')
+                        if (!type) {
+                          setFilterData(null)
+                        }
+                      }}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-jost bg-white hover:border-green-300 transition-colors duration-200"
                     >
                       <option value="">All Flavors</option>
@@ -365,7 +388,15 @@ const ProductsContent = () => {
                     <label className="block text-sm font-medium text-gray-700 font-jost">Size</label>
                     <select
                       value={selectedSize}
-                      onChange={(e) => setSelectedSize(e.target.value)}
+                      onChange={(e) => {
+                        setSelectedSize(e.target.value)
+                        setCurrentPage(1)
+                        // Clear filterData if manually changing filters
+                        const type = searchParams.get('type')
+                        if (!type) {
+                          setFilterData(null)
+                        }
+                      }}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-jost bg-white hover:border-gray-300 transition-colors duration-200"
                     >
                       <option value="">All Sizes</option>
