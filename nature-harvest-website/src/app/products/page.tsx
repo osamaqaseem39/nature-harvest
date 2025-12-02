@@ -5,6 +5,8 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { apiService, Product, Brand, Flavor, Size } from '../../lib/api'
 import { config, isFeatureEnabled } from '../../lib/config'
 
@@ -578,9 +580,27 @@ const ProductsContent = () => {
                         <h3 className="font-gazpacho font-bold text-lg text-gray-800 mb-2">
                           {product.name}
                         </h3>
-                        <p className="text-gray-600 font-jost text-sm line-clamp-2 mb-3">
-                          {product.description}
-                        </p>
+                        <div className="text-gray-600 font-jost text-sm mb-3 line-clamp-2 overflow-hidden">
+                          <div className="prose prose-sm max-w-none prose-p:my-0 prose-p:text-sm prose-p:text-gray-600 prose-strong:text-gray-800 prose-strong:font-semibold prose-em:italic">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={{
+                                p: ({node, ...props}) => <p className="mb-0" {...props} />,
+                                h1: ({node, ...props}) => <p className="mb-0 font-bold text-sm" {...props} />,
+                                h2: ({node, ...props}) => <p className="mb-0 font-bold text-sm" {...props} />,
+                                h3: ({node, ...props}) => <p className="mb-0 font-semibold text-sm" {...props} />,
+                                strong: ({node, ...props}) => <strong className="font-semibold" {...props} />,
+                                em: ({node, ...props}) => <em className="italic" {...props} />,
+                                ul: ({node, ...props}) => <ul className="list-disc list-inside mb-0 text-left" {...props} />,
+                                ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-0 text-left" {...props} />,
+                                li: ({node, ...props}) => <li className="mb-0" {...props} />,
+                                br: () => null,
+                              }}
+                            >
+                              {product.description || ''}
+                            </ReactMarkdown>
+                          </div>
+                        </div>
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200">
                           View Details
                           <ChevronRight className="h-4 w-4" />
