@@ -8,13 +8,13 @@ import { AuthProvider } from '@/contexts/AuthContext'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Nature Harvest - Organic & Natural Products',
-  description: 'Discover premium organic and natural products from Nature Harvest. Fresh, healthy, and sustainable products for your lifestyle.',
-  keywords: 'organic, natural, healthy, sustainable, nature harvest, fresh products',
+  title: 'Nature Harvest - Natural Products',
+  description: 'Discover premium natural products from Nature Harvest. Fresh, healthy, and sustainable products for your lifestyle.',
+  keywords: 'natural, healthy, sustainable, nature harvest, fresh products',
   authors: [{ name: 'Nature Harvest' }],
   openGraph: {
-    title: 'Nature Harvest - Organic & Natural Products',
-    description: 'Discover premium organic and natural products from Nature Harvest.',
+    title: 'Nature Harvest - Natural Products',
+    description: 'Discover premium natural products from Nature Harvest.',
     type: 'website',
     locale: 'en_US',
   },

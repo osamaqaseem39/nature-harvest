@@ -71,7 +71,7 @@ const Hero = () => {
           </h1>
           
           {/* Subheading */}
-          <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl xl:text-[24px] font-jost font-normal text-black max-w-3xl text-center leading-relaxed transition-all duration-1500 ease-out delay-400 px-4 mt-3 sm:mt-4 ${
+          <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl xl:text-[24px] font-jost font-normal text-black max-w-3xl text-center leading-relaxed transition-all duration-1500 ease-out delay-400 px-4 mt-2 sm:mt-2 ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
           Experience the authentic taste of nature&apos;s finest fruits. Every product is crafted with care, bringing you the purest flavors without compromise.
@@ -79,7 +79,7 @@ const Hero = () => {
           
           {/* Div with background image - Smooth animated from top */}
           <div 
-            className={`relative w-[220px] h-[220px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[480px] lg:h-[480px] xl:w-[600px] xl:h-[600px] mb-6 mt-4 sm:mt-6 bg-center bg-no-repeat flex items-center justify-center z-20 transition-all duration-2000 ease-out delay-600 ${
+            className={`relative w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] md:w-[360px] md:h-[360px] lg:w-[420px] lg:h-[420px] xl:w-[520px] xl:h-[520px] mb-6 mt-2 sm:mt-3 bg-center bg-no-repeat flex items-center justify-center z-20 transition-all duration-2000 ease-out delay-600 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-32'
             }`} 
             style={{ backgroundImage: 'url("/images/heroimagebg.png")', backgroundSize: '100%' }}

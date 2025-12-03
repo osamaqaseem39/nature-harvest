@@ -93,16 +93,16 @@ const ContactInfo = () => {
                 <div>
                   <h5 className="text-lg font-jost font-semibold text-black mb-3">Manufacturing Facility</h5>
                   <p className="font-jost text-gray-700 text-base">
-                    Plot No. T-28 A New Industrial Area, Mirpur<br />
-                    Azad Jammu and Kashmir
+                    Plot No. T-28 A, New Industrial Area,<br />
+                    Mirpur, Azad Jammu and Kashmir
                   </p>
                 </div>
                 
                 <div>
                   <h5 className="text-lg font-jost font-semibold text-black mb-3">Head Office</h5>
                   <p className="font-jost text-gray-700 text-base">
-                    9/E Block G, Main Boulevard Gulberg II<br />
-                    Lahore - Pakistan
+                    9/E Block G, Main Boulevard Gulberg II,<br />
+                    Lahore, Pakistan
                   </p>
                 </div>
               </div>

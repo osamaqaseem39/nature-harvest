@@ -28,7 +28,7 @@ const Brands = () => {
     {
       _id: 'brand-2',
       name: 'Nature Harvest',
-      description: 'Natural and organic products',
+      description: 'Natural products',
       imageUrl: '/images/brands/nature-harvest-logo.png',
       logoUrl: '/images/brands/nature-harvest-logo.png',
       status: 'Active',

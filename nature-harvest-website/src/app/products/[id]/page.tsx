@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, Heart, Share2, Leaf, Zap, Droplets, Scale, Home, ChevronRight, MessageCircle } from 'lucide-react'
+import { ArrowLeft, Heart, Share2, Leaf, Zap, Droplets, Scale, Home, ChevronRight, MessageCircle, X } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { apiService, Product } from '../../../lib/api'
@@ -19,6 +19,7 @@ const ProductDetailContent = () => {
   const [selectedImage, setSelectedImage] = useState<string>('')
   const [isFavorite, setIsFavorite] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
+  const [showShareMenu, setShowShareMenu] = useState(false)
 
   const productId = params.id as string
 
@@ -142,17 +143,31 @@ const ProductDetailContent = () => {
           text: product?.description || 'Check out this amazing product!',
           url: window.location.href,
         })
+        setShowShareMenu(false)
       } catch (error) {
         console.log('Error sharing:', error)
       }
     } else {
-      // Fallback: copy to clipboard
-      try {
-        await navigator.clipboard.writeText(window.location.href)
-        alert('Link copied to clipboard!')
-      } catch (error) {
-        console.log('Error copying to clipboard:', error)
-      }
+      // Show share menu if Web Share API is not available
+      setShowShareMenu(!showShareMenu)
+    }
+  }
+
+  const handleWhatsAppShare = () => {
+    const url = window.location.href
+    const text = `${product?.name || 'Product'}\n\n${product?.description || 'Check out this amazing product!'}\n\n${url}`
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`
+    window.open(whatsappUrl, '_blank')
+    setShowShareMenu(false)
+  }
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      alert('Link copied to clipboard!')
+      setShowShareMenu(false)
+    } catch (error) {
+      console.log('Error copying to clipboard:', error)
     }
   }
 
@@ -407,14 +422,48 @@ const ProductDetailContent = () => {
                   <span className="sm:hidden">{isFavorite ? '✓' : '♥'}</span>
                 </button>
 
-                <button 
-                  onClick={handleShare}
-                  className="flex items-center justify-center gap-2 px-4 lg:px-6 py-3 lg:py-4 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors duration-200 font-jost font-medium"
-                >
-                  <Share2 className="h-4 w-4 lg:h-5 lg:w-5" />
-                  <span className="hidden sm:inline">Share</span>
-                  <span className="sm:hidden">↗</span>
-                </button>
+                <div className="relative">
+                  <button 
+                    onClick={handleShare}
+                    className="flex items-center justify-center gap-2 px-4 lg:px-6 py-3 lg:py-4 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors duration-200 font-jost font-medium"
+                  >
+                    <Share2 className="h-4 w-4 lg:h-5 lg:w-5" />
+                    <span className="hidden sm:inline">Share</span>
+                    <span className="sm:hidden">↗</span>
+                  </button>
+                  
+                  {/* Share Menu Dropdown */}
+                  {showShareMenu && (
+                    <>
+                      <div 
+                        className="fixed inset-0 z-40" 
+                        onClick={() => setShowShareMenu(false)}
+                      ></div>
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
+                        <div className="py-1">
+                          <button
+                            onClick={handleWhatsAppShare}
+                            className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-green-50 transition-colors duration-200"
+                          >
+                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                              <MessageCircle className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="font-jost text-gray-700">Share on WhatsApp</span>
+                          </button>
+                          <button
+                            onClick={handleCopyLink}
+                            className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-200"
+                          >
+                            <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+                              <Share2 className="w-5 h-5 text-gray-600" />
+                            </div>
+                            <span className="font-jost text-gray-700">Copy Link</span>
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
 
               {/* Product Features */}
