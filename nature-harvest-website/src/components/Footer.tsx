@@ -2,6 +2,7 @@
 
 import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Music2 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 const Footer = () => {
   const pathname = usePathname()
@@ -31,24 +32,24 @@ const Footer = () => {
               <h3 className="text-lg sm:text-xl font-jost font-bold text-white mb-3 sm:mb-4">Quick Links</h3>
               <ul className="space-y-1 sm:space-y-2">
                 <li>
-                  <a href="/products" className="text-sm sm:text-base font-jost text-white hover:text-green-100 transition-colors duration-300">
+                  <Link href="/products" className="text-sm sm:text-base font-jost text-white hover:text-green-100 transition-colors duration-300">
                     Our Products
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/about" className="text-sm sm:text-base font-jost text-white hover:text-green-100 transition-colors duration-300">
+                  <Link href="/about" className="text-sm sm:text-base font-jost text-white hover:text-green-100 transition-colors duration-300">
                     About Nature Harvest
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/contact" className="text-sm sm:text-base font-jost text-white hover:text-green-100 transition-colors duration-300">
+                  <Link href="/contact" className="text-sm sm:text-base font-jost text-white hover:text-green-100 transition-colors duration-300">
                     Contact Us
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/brands" className="text-sm sm:text-base font-jost text-white hover:text-green-100 transition-colors duration-300">
+                  <Link href="/brands" className="text-sm sm:text-base font-jost text-white hover:text-green-100 transition-colors duration-300">
                     Our Brands
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -95,37 +96,37 @@ const Footer = () => {
         <div className="text-center mb-6 sm:mb-8">
           <h3 className="text-lg sm:text-xl font-jost font-bold text-white mb-4 sm:mb-6">Connect With Us</h3>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-            <a href="https://www.facebook.com/natureharvest.pk" className="group">
+            <a href="https://www.facebook.com/natureharvest.pk" target="_blank" rel="noopener noreferrer" className="group">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center hover:bg-green-100 transition-all duration-300 shadow-lg group-hover:shadow-xl">
                 <Facebook className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 group-hover:text-green-600" />
               </div>
               <p className="text-xs font-jost text-white mt-1 sm:mt-2">Facebook</p>
             </a>
-            <a href="https://www.instagram.com/natureharvest.pk/" className="group">
+            <a href="https://www.instagram.com/natureharvest.pk/" target="_blank" rel="noopener noreferrer" className="group">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center hover:bg-green-100 transition-all duration-300 shadow-lg group-hover:shadow-xl">
                 <Instagram className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 group-hover:text-green-600" />
               </div>
               <p className="text-xs font-jost text-white mt-1 sm:mt-2">Instagram</p>
             </a>
-            <a href="https://www.tiktok.com/@nature.harvest" className="group">
+            <a href="https://www.tiktok.com/@nature.harvest" target="_blank" rel="noopener noreferrer" className="group">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center hover:bg-green-100 transition-all duration-300 shadow-lg group-hover:shadow-xl">
                 <Music2 className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 group-hover:text-green-600" />
               </div>
               <p className="text-xs font-jost text-white mt-1 sm:mt-2">TikTok</p>
             </a>
-            <a href="https://twitter.com/NatureHarvest" className="group">
+            <a href="https://twitter.com/NatureHarvest" target="_blank" rel="noopener noreferrer" className="group">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center hover:bg-green-100 transition-all duration-300 shadow-lg group-hover:shadow-xl">
                 <Twitter className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 group-hover:text-green-600" />
               </div>
               <p className="text-xs font-jost text-white mt-1 sm:mt-2">X</p>
             </a>
-            <a href="https://www.linkedin.com/company/natureharvest/" className="group">
+            <a href="https://www.linkedin.com/company/natureharvest/" target="_blank" rel="noopener noreferrer" className="group">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center hover:bg-green-100 transition-all duration-300 shadow-lg group-hover:shadow-xl">
                 <div className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 group-hover:text-green-600 font-bold text-xs sm:text-sm flex items-center justify-center">in</div>
               </div>
               <p className="text-xs font-jost text-white mt-1 sm:mt-2">LinkedIn</p>
             </a>
-            <a href="https://www.youtube.com/channel/natureharvest/" className="group">
+            <a href="https://www.youtube.com/channel/natureharvest/" target="_blank" rel="noopener noreferrer" className="group">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center hover:bg-green-100 transition-all duration-300 shadow-lg group-hover:shadow-xl">
                 <Youtube className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 group-hover:text-green-600" />
               </div>
