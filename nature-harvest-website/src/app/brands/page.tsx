@@ -49,6 +49,9 @@ const BrandsPage = () => {
   ]
 
   useEffect(() => {
+    // Set visible immediately for hero section
+    setIsVisible(true)
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -72,13 +75,31 @@ const BrandsPage = () => {
         setError(null)
         const response = await apiService.getBrands()
         
+        console.log('Brands API Response:', response)
+        console.log('Brands Data:', response?.data)
+        
+        // Check if response has data
+        if (!response || !response.data) {
+          console.warn('No brands data in response, using fallback')
+          setBrands(fallbackBrands)
+          setLoading(false)
+          return
+        }
+        
         // Filter only active brands
-        const activeBrands = response.data?.filter(brand => brand.status === 'Active') || []
+        const activeBrands = Array.isArray(response.data) 
+          ? response.data.filter(brand => brand.status === 'Active') 
+          : []
+        
+        console.log('Active brands:', activeBrands)
+        console.log('Active brands count:', activeBrands.length)
         
         // Use API data if available, otherwise use fallback brands
         if (activeBrands.length > 0) {
+          console.log('Setting brands from API:', activeBrands)
           setBrands(activeBrands)
         } else {
+          console.log('No active brands found, using fallback')
           setBrands(fallbackBrands)
         }
       } catch (err) {
@@ -122,21 +143,18 @@ const BrandsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-green-100 to-green-50">
       {/* Hero Header Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
+      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-green-50 via-green-100 to-green-50">
         {/* Background decorative elements */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 right-20 w-64 h-64 bg-green-400 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 left-20 w-48 h-48 bg-green-300 rounded-full blur-3xl"></div>
         </div>
 
         <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className={`transition-all duration-1000 ease-out ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}>
-            <div className="inline-flex items-center justify-center mb-6">
-              <Sparkles className="w-8 h-8 text-green-600 mr-3" />
+          <div className="opacity-100 translate-y-0">
+            <div className="mb-6">
               <h3 className="text-green-600 uppercase tracking-widest font-jost font-semibold text-sm">
                 OUR BRANDS
               </h3>
@@ -153,7 +171,7 @@ const BrandsPage = () => {
       </section>
 
       {/* Brands Grid Section */}
-      <section ref={sectionRef} className="relative pb-24">
+      <section ref={sectionRef} className="relative pb-24 bg-gradient-to-br from-green-50 via-green-100 to-green-50">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           {brands.length === 0 && !loading ? (
             <div className="text-center py-20">
@@ -163,16 +181,14 @@ const BrandsPage = () => {
               <h3 className="text-2xl font-gazpacho font-bold text-gray-800 mb-4">No Brands Available</h3>
               <p className="text-gray-600 font-jost">Check back soon for our exciting brand collection!</p>
             </div>
-          ) : (
+          ) : brands.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-              {brands.map((brand, index) => (
+                {brands.map((brand, index) => (
               <div
                 key={brand._id}
-                className={`group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
+                className="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 opacity-100 translate-y-0"
                 style={{
-                  transitionDelay: `${index * 100}ms`
+                  transitionDelay: `${index * 50}ms`
                 }}
               >
                 {/* Gradient Overlay on Hover */}
@@ -186,13 +202,14 @@ const BrandsPage = () => {
                   </div>
                   <div className="relative z-20 w-full h-full flex items-center justify-center">
                     <Image
-                      src={brand.logoUrl || brand.imageUrl || config.images.defaultBrandImage}
+                      src={brand.imageUrl || brand.logoUrl || config.images.defaultBrandImage}
                       alt={`${brand.name} logo`}
                       width={300}
                       height={200}
                       className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
+                        console.log('Image error for brand:', brand.name, 'trying fallback')
                         target.src = config.images.defaultBrandImage;
                       }}
                     />
@@ -226,7 +243,7 @@ const BrandsPage = () => {
               </div>
               ))}
             </div>
-          )}
+          ) : null}
         </div>
       </section>
 
