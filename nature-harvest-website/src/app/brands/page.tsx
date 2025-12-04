@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronRight, Sparkles } from 'lucide-react'
+import { ChevronRight, Sparkles, Milk, Coffee, Heart, Droplet } from 'lucide-react'
 import { apiService, Brand } from '../../lib/api'
 import { config } from '../../lib/config'
 
@@ -29,7 +29,7 @@ const BrandsPage = () => {
     {
       _id: 'fallback-2',
       name: 'Funtastic',
-      description: 'Fun and flavorful beverages that bring joy to every moment. Funtastic offers exciting taste experiences for the whole family.',
+      description: 'Fun and flavorful juices that bring joy to every moment. Funtastic offers exciting taste experiences for the whole family.',
       logoUrl: '/images/brands/Funtastic Logo PET.jpg',
       imageUrl: '/images/brands/Funtastic Logo PET.jpg',
       status: 'Active',
@@ -247,6 +247,161 @@ const BrandsPage = () => {
         </div>
       </section>
 
+      {/* Dairy Products Showcase Section */}
+      <section className="relative py-20 bg-gradient-to-br from-green-100 via-green-50 to-white overflow-hidden">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-gazpacho font-bold text-gray-800 mb-4">
+              Our Complete <span className="text-green-600">Product Range</span>
+            </h2>
+            <p className="text-lg font-jost text-gray-600 max-w-3xl mx-auto">
+              Nature Harvest offers a complete range of premium juices. From refreshing <span className="text-green-600 font-semibold">premium juices</span> to delicious <span className="text-green-600 font-semibold">flavored milk</span> and quality <span className="text-green-600 font-semibold">tea whiteners</span>, all crafted with the same commitment to quality and natural goodness.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mb-12">
+            {/* Premium Juices Card */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-green-100">
+              <div className="flex items-start mb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mr-6 shadow-lg">
+                  <Droplet className="w-10 h-10 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl lg:text-3xl font-gazpacho font-bold text-gray-800 mb-2">
+                    Premium <span className="text-green-600">Juices</span>
+                  </h3>
+                  <div className="w-16 h-1 bg-green-600 rounded-full"></div>
+                </div>
+              </div>
+              <p className="text-gray-600 font-jost leading-relaxed mb-6 text-lg">
+                Experience the authentic taste of nature's finest fruits in every sip. Our premium juices are made from fresh, hand-picked fruits, bringing you pure flavors and essential nutrients. Refreshing, natural, and delicious.
+              </p>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-green-50 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-gazpacho font-bold text-green-600 mb-1">Fresh</div>
+                  <div className="text-sm font-jost text-gray-600">Fruits</div>
+                </div>
+                <div className="bg-green-50 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-gazpacho font-bold text-green-600 mb-1">100%</div>
+                  <div className="text-sm font-jost text-gray-600">Natural</div>
+                </div>
+              </div>
+              <div className="flex items-center text-green-600 font-jost font-semibold">
+                <Heart className="w-5 h-5 mr-2 fill-green-600" />
+                <span>Nature's finest flavors</span>
+              </div>
+            </div>
+            {/* Flavored Milk Card */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-green-100">
+              <div className="flex items-start mb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mr-6 shadow-lg">
+                  <Milk className="w-10 h-10 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl lg:text-3xl font-gazpacho font-bold text-gray-800 mb-2">
+                    Premium <span className="text-green-600">Flavored Milk</span>
+                  </h3>
+                  <div className="w-16 h-1 bg-green-600 rounded-full"></div>
+                </div>
+              </div>
+              <p className="text-gray-600 font-jost leading-relaxed mb-6 text-lg">
+                Indulge in our rich and creamy flavored milk varieties. Made with premium dairy and natural flavors, our flavored milk brings you the perfect balance of nutrition and taste. Perfect for all ages, from kids to adults.
+              </p>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-green-50 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-gazpacho font-bold text-green-600 mb-1">100%</div>
+                  <div className="text-sm font-jost text-gray-600">Natural</div>
+                </div>
+                <div className="bg-green-50 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-gazpacho font-bold text-green-600 mb-1">Rich</div>
+                  <div className="text-sm font-jost text-gray-600">Creamy</div>
+                </div>
+              </div>
+              <div className="flex items-center text-green-600 font-jost font-semibold">
+                <Heart className="w-5 h-5 mr-2 fill-green-600" />
+                <span>Loved by families worldwide</span>
+              </div>
+            </div>
+
+            {/* Tea Whitener Card */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-green-100">
+              <div className="flex items-start mb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mr-6 shadow-lg">
+                  <Coffee className="w-10 h-10 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl lg:text-3xl font-gazpacho font-bold text-gray-800 mb-2">
+                    Quality <span className="text-green-600">Tea Whiteners</span>
+                  </h3>
+                  <div className="w-16 h-1 bg-green-600 rounded-full"></div>
+                </div>
+              </div>
+              <p className="text-gray-600 font-jost leading-relaxed mb-6 text-lg">
+                Enhance your tea experience with our premium tea whiteners. Specially formulated to create the perfect cup of tea, our tea whiteners blend seamlessly while maintaining the authentic taste you love. Quality you can trust in every sip.
+              </p>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-green-50 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-gazpacho font-bold text-green-600 mb-1">Premium</div>
+                  <div className="text-sm font-jost text-gray-600">Quality</div>
+                </div>
+                <div className="bg-green-50 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-gazpacho font-bold text-green-600 mb-1">Perfect</div>
+                  <div className="text-sm font-jost text-gray-600">Blend</div>
+                </div>
+              </div>
+              <div className="flex items-center text-green-600 font-jost font-semibold">
+                <Heart className="w-5 h-5 mr-2 fill-green-600" />
+                <span>Trusted by tea lovers</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Benefits Section */}
+          <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-3xl p-8 lg:p-12 text-white">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl lg:text-3xl font-gazpacho font-bold mb-4">
+                Why Choose Our Products?
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-gazpacho font-bold mb-2">Premium Ingredients</h4>
+                <p className="text-green-100 font-jost text-sm">
+                  Made with the finest fruits, dairy, and natural flavors
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-gazpacho font-bold mb-2">Fresh Daily</h4>
+                <p className="text-green-100 font-jost text-sm">
+                  Produced with care to ensure maximum freshness
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-gazpacho font-bold mb-2">Family Favorite</h4>
+                <p className="text-green-100 font-jost text-sm">
+                  Loved by families for quality and taste
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Brand Features Section */}
       {brands.length > 0 && (
         <section className="relative py-20 bg-gradient-to-br from-green-50 to-white overflow-hidden">
@@ -318,7 +473,7 @@ const BrandsPage = () => {
               Ready to Explore Our Complete Collection?
             </h2>
             <p className="text-lg sm:text-xl font-jost text-green-100 mb-8 max-w-2xl mx-auto">
-              Browse through our entire range of premium beverages and <span className="text-white font-semibold">dairy products</span>—including <span className="text-white font-semibold">flavored milk</span> and <span className="text-white font-semibold">tea whiteners</span>—and discover the perfect taste for every moment.
+              Browse through our entire range of premium juices and <span className="text-white font-semibold">dairy products</span>—including <span className="text-white font-semibold">flavored milk</span> and <span className="text-white font-semibold">tea whiteners</span>—and discover the perfect taste for every moment.
             </p>
             <Link 
               href="/products" 

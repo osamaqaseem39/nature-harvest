@@ -1,10 +1,9 @@
 import { Suspense } from 'react'
 import ContactInfo from '@/components/ContactInfo'
-import CTA from '@/components/CTA'
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-20 bg-[#f2eecc]">
       <Suspense fallback={
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
@@ -15,7 +14,7 @@ export default function ContactPage() {
       }>
         <ContactInfo />
       </Suspense>
-      <CTA />
+  
     </div>
   )
 }

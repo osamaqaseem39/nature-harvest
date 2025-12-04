@@ -8,8 +8,10 @@ const Hero = () => {
   const leaf1Ref = useRef<HTMLDivElement>(null)
   const leaf2Ref = useRef<HTMLDivElement>(null)
   const leaf3Ref = useRef<HTMLDivElement>(null)
+  const heroImageRef = useRef<HTMLDivElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
   
   // Hero images array
   const heroImages = [
@@ -69,6 +71,39 @@ const Hero = () => {
     return () => document.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
+  // 3D tilt effect for hero image on hover
+  useEffect(() => {
+    const heroContainer = heroImageRef.current
+    if (!heroContainer) return
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = heroContainer.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      
+      const mouseX = e.clientX - centerX
+      const mouseY = e.clientY - centerY
+      
+      // Calculate tilt values (max 15 degrees)
+      const tiltX = (mouseY / (rect.height / 2)) * -15
+      const tiltY = (mouseX / (rect.width / 2)) * 15
+      
+      setTilt({ x: tiltX, y: tiltY })
+    }
+
+    const handleMouseLeave = () => {
+      setTilt({ x: 0, y: 0 })
+    }
+
+    heroContainer.addEventListener('mousemove', handleMouseMove)
+    heroContainer.addEventListener('mouseleave', handleMouseLeave)
+
+    return () => {
+      heroContainer.removeEventListener('mousemove', handleMouseMove)
+      heroContainer.removeEventListener('mouseleave', handleMouseLeave)
+    }
+  }, [])
+
   return (
     <section className="relative min-h-screen sm:h-[1080px] bg-contain bg-no-repeat bg-center" style={{ backgroundImage: 'url("/images/herobg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       {/* Background overlay for text prominence */}
@@ -95,10 +130,16 @@ const Hero = () => {
           
           {/* Div with background image - Smooth animated from top */}
           <div 
-            className={`relative w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] md:w-[360px] md:h-[360px] lg:w-[420px] lg:h-[420px] xl:w-[520px] xl:h-[520px] mb-6 mt-2 sm:mt-3 bg-center bg-no-repeat flex items-center justify-center z-20 transition-all duration-2000 ease-out delay-600 ${
+            ref={heroImageRef}
+            className={`relative w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] md:w-[360px] md:h-[360px] lg:w-[420px] lg:h-[420px] xl:w-[520px] xl:h-[520px] mb-6 mt-2 sm:mt-3 bg-center bg-no-repeat flex items-center justify-center z-20 transition-all duration-2000 ease-out delay-600 group cursor-pointer overflow-visible ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-32'
             }`} 
-            style={{ backgroundImage: 'url("/images/heroimagebg.png")', backgroundSize: '100%' }}
+            style={{ 
+              backgroundImage: 'url("/images/heroimagebg.png")', 
+              backgroundSize: '100%',
+              transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transition: 'transform 0.1s ease-out'
+            }}
           >
             {/* Decorative Leaf Images positioned around this div - Only cursor reactive */}
             {/* Leaf 1 - Top Left of image div */}
@@ -135,7 +176,7 @@ const Hero = () => {
             </div>
             
             {/* Hero images slider inside the div */}
-            <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-0 flex items-center justify-center overflow-visible">
               {heroImages.map((imageSrc, index) => (
                 <div
                   key={index}
@@ -152,7 +193,7 @@ const Hero = () => {
                     alt={`Nature Harvest Hero ${index + 1}`}
                     width={600}
                     height={600}
-                    className="w-full h-full object-contain drop-shadow-2xl"
+                    className="w-full h-full object-contain drop-shadow-2xl transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
                     priority={index === 0}
                   />
                 </div>

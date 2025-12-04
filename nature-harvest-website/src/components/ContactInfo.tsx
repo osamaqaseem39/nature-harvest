@@ -55,7 +55,7 @@ const ContactInfo = () => {
     alert('Thank you for your quote request! We will get back to you soon.')
   }
   return (
-    <section className="relative bg-gradient-to-br from-green-400 via-green-300 to-green-400 py-20">
+    <section className="relative py-20" style={{ backgroundColor: '#f2eecc' }}>
   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -94,7 +94,7 @@ const ContactInfo = () => {
                   <h5 className="text-lg font-jost font-semibold text-black mb-3">Manufacturing Facility</h5>
                   <p className="font-jost text-gray-700 text-base">
                     Plot No. T-28 A, New Industrial Area,<br />
-                    Mirpur, Azad Jammu and Kashmir
+                    Mirpur, Azad Jammu and Kashmir, Pakistan
                   </p>
                 </div>
                 

@@ -7,6 +7,7 @@ import Link from 'next/link'
 const Footer = () => {
   const pathname = usePathname()
   const isHomePage = pathname === '/'
+  const isContactPage = pathname === '/contact'
 
   return (
     <footer className="relative bg-green-500 py-8 sm:py-10 lg:py-12 overflow-hidden">
@@ -24,8 +25,8 @@ const Footer = () => {
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6">
      
-        {/* Content Grid - Only show on non-homepage */}
-        {!isHomePage && (
+        {/* Content Grid - Only show on non-homepage and non-contact page */}
+        {!isHomePage && !isContactPage && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-10">
             {/* Quick Links */}
             <div className="text-center sm:text-left">
@@ -54,41 +55,45 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Manufacturing Facility Address */}
-            <div className="text-center sm:text-left">
-              <h3 className="text-lg sm:text-xl font-jost font-bold text-white mb-3 sm:mb-4">Manufacturing Facility</h3>
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-start justify-center sm:justify-start text-white">
-                  <MapPin className="h-4 w-4 mr-2 text-white flex-shrink-0 mt-1" />
-                  <div className="text-sm sm:text-base font-jost">
-                    <p>Plot No. T-28 A, New Industrial Area,</p>
-                    <p>Mirpur, Azad Jammu and Kashmir</p>
+            {/* Manufacturing Facility Address - Hide on contact page */}
+            {!isContactPage && (
+              <div className="text-center sm:text-left">
+                <h3 className="text-lg sm:text-xl font-jost font-bold text-white mb-3 sm:mb-4">Manufacturing Facility</h3>
+                <div className="space-y-2 sm:space-y-3">
+                  <div className="flex items-start justify-center sm:justify-start text-white">
+                    <MapPin className="h-4 w-4 mr-2 text-white flex-shrink-0 mt-1" />
+                    <div className="text-sm sm:text-base font-jost">
+                      <p>Plot No. T-28 A, New Industrial Area,</p>
+                      <p>Mirpur, Azad Jammu and Kashmir</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Head Office Address & Contact Info */}
-            <div className="text-center sm:text-left">
-              <h3 className="text-lg sm:text-xl font-jost font-bold text-white mb-3 sm:mb-4">Head Office</h3>
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-start justify-center sm:justify-start text-white">
-                  <MapPin className="h-4 w-4 mr-2 text-white flex-shrink-0 mt-1" />
-                  <div className="text-sm sm:text-base font-jost">
-                    <p>9/E Block G, Main Boulevard Gulberg II,</p>
-                    <p>Lahore, Pakistan</p>
+            {/* Head Office Address & Contact Info - Hide on contact page */}
+            {!isContactPage && (
+              <div className="text-center sm:text-left">
+                <h3 className="text-lg sm:text-xl font-jost font-bold text-white mb-3 sm:mb-4">Head Office</h3>
+                <div className="space-y-2 sm:space-y-3">
+                  <div className="flex items-start justify-center sm:justify-start text-white">
+                    <MapPin className="h-4 w-4 mr-2 text-white flex-shrink-0 mt-1" />
+                    <div className="text-sm sm:text-base font-jost">
+                      <p>9/E Block G, Main Boulevard Gulberg II,</p>
+                      <p>Lahore, Pakistan</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center sm:justify-start text-white mt-4">
+                    <Phone className="h-4 w-4 mr-2 text-white flex-shrink-0" />
+                    <span className="text-sm sm:text-base font-jost">+92 325 413 1111</span>
+                  </div>
+                  <div className="flex items-center justify-center sm:justify-start text-white">
+                    <Mail className="h-4 w-4 mr-2 text-white flex-shrink-0" />
+                    <span className="text-sm sm:text-base font-jost break-all">info@natureharvest.com.pk</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-center sm:justify-start text-white mt-4">
-                  <Phone className="h-4 w-4 mr-2 text-white flex-shrink-0" />
-                  <span className="text-sm sm:text-base font-jost">+92 325 413 1111</span>
-                </div>
-                <div className="flex items-center justify-center sm:justify-start text-white">
-                  <Mail className="h-4 w-4 mr-2 text-white flex-shrink-0" />
-                  <span className="text-sm sm:text-base font-jost break-all">info@natureharvest.com.pk</span>
-                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
 
