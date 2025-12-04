@@ -2,7 +2,7 @@
 
 import { ChevronDown, X, Home, ChevronRight, Filter, Sliders } from 'lucide-react'
 import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
@@ -20,6 +20,7 @@ interface FilterData {
 
 const ProductsContent = () => {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
   const [brands, setBrands] = useState<Brand[]>([])
   const [flavors, setFlavors] = useState<Flavor[]>([])
@@ -557,10 +558,14 @@ const ProductsContent = () => {
                       <div className="relative overflow-hidden">
                         {/* Brand Tag - Top Left */}
                         <div className="absolute top-2 left-1 z-10">
-                          <Link 
-                            href={product.brandId?._id ? `/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}` : '#'}
+                          <div 
                             className="block"
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (product.brandId?._id) {
+                                router.push(`/products?type=brand&id=${product.brandId._id}&name=${encodeURIComponent(product.brandId.name)}`)
+                              }
+                            }}
                           >
                             <div className="bg-white rounded-full w-20 h-20 flex flex-col items-center justify-center border border-gray-200 transform -rotate-12 hover:rotate-0 hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer">
                               <span className="text-green-600 font-gazpacho font-bold text-sm">
@@ -570,7 +575,7 @@ const ProductsContent = () => {
                                 {product.sizeId?.name || '125 ML'}
                               </span>
                             </div>
-                          </Link>
+                          </div>
                         </div>
 
                         {/* Main Product Image */}
@@ -587,10 +592,14 @@ const ProductsContent = () => {
 
                         {/* Flavor Image - Bottom Left */}
                         <div className="absolute bottom-0 left-40">
-                          <Link 
-                            href={product.flavorId?._id ? `/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}` : '#'}
+                          <div 
                             className="block"
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (product.flavorId?._id) {
+                                router.push(`/products?type=flavor&id=${product.flavorId._id}&name=${encodeURIComponent(product.flavorId.name)}`)
+                              }
+                            }}
                           >
                             <Image
                               src={getFlavorImage(product)}
@@ -600,7 +609,7 @@ const ProductsContent = () => {
                               className="object-contain cursor-pointer transition-transform duration-300"
                               style={{ objectFit: 'contain' }}
                             />
-                          </Link>
+                          </div>
                         </div>
                       </div>
 

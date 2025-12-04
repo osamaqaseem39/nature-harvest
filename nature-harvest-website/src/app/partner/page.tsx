@@ -232,7 +232,7 @@ const BecomePartner = () => {
               Become a Partner
             </h1>
             <p className="text-xl text-gray-600 font-jost max-w-3xl mx-auto leading-relaxed">
-              Join Nature Harvest in our mission to bring healthy, natural beverages to consumers worldwide. 
+              Join Nature Harvest in our mission to bring healthy, natural beverages and <span className="text-green-600 font-semibold">dairy products</span>—including <span className="text-green-600 font-semibold">flavored milk</span> and <span className="text-green-600 font-semibold">tea whiteners</span>—to consumers worldwide. 
               We're looking for passionate partners who share our values and vision.
             </p>
           </div>
@@ -244,7 +244,7 @@ const BecomePartner = () => {
                 <Building2 className="h-8 w-8 text-green-600" />
               </div>
               <h3 className="text-lg font-gazpacho font-bold text-gray-800 mb-2">Business Growth</h3>
-              <p className="text-gray-600 font-jost">Expand your product portfolio with premium natural beverages</p>
+              <p className="text-gray-600 font-jost">Expand your product portfolio with premium natural beverages and <span className="text-green-600 font-semibold">dairy products</span></p>
             </div>
             
             <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 text-center">

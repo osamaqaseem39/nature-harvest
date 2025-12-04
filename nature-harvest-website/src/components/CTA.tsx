@@ -20,7 +20,7 @@ const CTA = () => {
                 <span className="block text-green-100">Nature&apos;s Finest?</span>
               </h2>
               <p className="text-lg lg:text-xl font-jost text-white/90 mb-6 max-w-2xl mx-auto leading-relaxed">
-                Join thousands of customers who have already discovered the pure, refreshing taste of Nature Harvest&apos;s premium natural juices.
+                Join thousands of customers who have already discovered the pure, refreshing taste of Nature Harvest&apos;s premium natural juices, <span className="text-green-100 font-semibold">flavored milk</span>, and <span className="text-green-100 font-semibold">tea whiteners</span>.
               </p>
             </div>
 
@@ -42,7 +42,7 @@ const CTA = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-jost font-bold text-white mb-2">100% Natural</h3>
+                <h3 className="text-lg font-jost font-bold text-white mb-2">Natural Ingredients</h3>
                 <p className="text-white/80 font-jost text-sm">Pure ingredients from nature&apos;s finest sources</p>
               </div>
               

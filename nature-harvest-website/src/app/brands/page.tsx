@@ -14,6 +14,40 @@ const BrandsPage = () => {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
 
+  // Fallback brands to display when API has no data
+  const fallbackBrands: Brand[] = [
+    {
+      _id: 'fallback-1',
+      name: 'FreshLay',
+      description: 'Premium juice brand offering a wide range of natural fruit juices. FreshLay brings you the authentic taste of fresh fruits in every sip.',
+      logoUrl: '/images/brands/FreshLay Logo PET.jpg',
+      imageUrl: '/images/brands/FreshLay Logo PET.jpg',
+      status: 'Active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: 'fallback-2',
+      name: 'Funtastic',
+      description: 'Fun and flavorful beverages that bring joy to every moment. Funtastic offers exciting taste experiences for the whole family.',
+      logoUrl: '/images/brands/Funtastic Logo PET.jpg',
+      imageUrl: '/images/brands/Funtastic Logo PET.jpg',
+      status: 'Active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: 'fallback-3',
+      name: 'AquaLife',
+      description: 'Pure, refreshing water sourced from natural springs. AquaLife ensures you stay hydrated with the finest quality water.',
+      logoUrl: '/images/brands/AquaLife Water Logo PET.jpg',
+      imageUrl: '/images/brands/AquaLife Water Logo PET.jpg',
+      status: 'Active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ]
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -35,13 +69,23 @@ const BrandsPage = () => {
     const fetchBrands = async () => {
       try {
         setLoading(true)
+        setError(null)
         const response = await apiService.getBrands()
+        
         // Filter only active brands
-        const activeBrands = response.data.filter(brand => brand.status === 'Active')
-        setBrands(activeBrands)
+        const activeBrands = response.data?.filter(brand => brand.status === 'Active') || []
+        
+        // Use API data if available, otherwise use fallback brands
+        if (activeBrands.length > 0) {
+          setBrands(activeBrands)
+        } else {
+          setBrands(fallbackBrands)
+        }
       } catch (err) {
         console.error('Error fetching brands:', err)
-        setError('Failed to load brands')
+        // On error, use fallback brands instead of showing error
+        setBrands(fallbackBrands)
+        setError(null) // Don't show error to users, just use fallback
       } finally {
         setLoading(false)
       }
@@ -102,7 +146,7 @@ const BrandsPage = () => {
             </h1>
             <p className="text-lg sm:text-xl font-jost text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Each brand represents our commitment to excellence, quality, and innovation. 
-              Explore the unique stories and exceptional products that define Nature Harvest.
+              Explore the unique stories and exceptional products—from premium juices to <span className="text-green-600 font-semibold">flavored milk</span> and <span className="text-green-600 font-semibold">tea whiteners</span>—that define Nature Harvest.
             </p>
           </div>
         </div>
@@ -111,8 +155,17 @@ const BrandsPage = () => {
       {/* Brands Grid Section */}
       <section ref={sectionRef} className="relative pb-24">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-            {brands.map((brand, index) => (
+          {brands.length === 0 && !loading ? (
+            <div className="text-center py-20">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
+                <Sparkles className="w-10 h-10 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-gazpacho font-bold text-gray-800 mb-4">No Brands Available</h3>
+              <p className="text-gray-600 font-jost">Check back soon for our exciting brand collection!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+              {brands.map((brand, index) => (
               <div
                 key={brand._id}
                 className={`group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
@@ -171,10 +224,65 @@ const BrandsPage = () => {
                 {/* Decorative Corner Element */}
                 <div className="absolute top-0 right-0 w-20 h-20 bg-green-600/5 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
+
+      {/* Brand Features Section */}
+      {brands.length > 0 && (
+        <section className="relative py-20 bg-gradient-to-br from-green-50 to-white overflow-hidden">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-gazpacho font-bold text-gray-800 mb-4">
+                Why Choose Our Brands?
+              </h2>
+              <p className="text-lg font-jost text-gray-600 max-w-3xl mx-auto">
+                Each brand in our portfolio is carefully crafted to deliver exceptional quality and taste
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-gazpacho font-bold text-gray-800 mb-3">Premium Quality</h3>
+                <p className="text-gray-600 font-jost leading-relaxed">
+                  Every brand meets our strict quality standards, ensuring the best taste and nutrition in every product.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-gazpacho font-bold text-gray-800 mb-3">Natural Ingredients</h3>
+                <p className="text-gray-600 font-jost leading-relaxed">
+                  We use only the finest natural ingredients, from fresh fruits to premium <span className="text-green-600 font-semibold">dairy products</span>.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-gazpacho font-bold text-gray-800 mb-3">Customer Trust</h3>
+                <p className="text-gray-600 font-jost leading-relaxed">
+                  Trusted by millions of customers worldwide who love our juices, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Call to Action Section */}
       <section className="relative py-20 bg-gradient-to-r from-green-600 to-green-700 overflow-hidden">
@@ -193,7 +301,7 @@ const BrandsPage = () => {
               Ready to Explore Our Complete Collection?
             </h2>
             <p className="text-lg sm:text-xl font-jost text-green-100 mb-8 max-w-2xl mx-auto">
-              Browse through our entire range of premium beverages and discover the perfect taste for every moment.
+              Browse through our entire range of premium beverages and <span className="text-white font-semibold">dairy products</span>—including <span className="text-white font-semibold">flavored milk</span> and <span className="text-white font-semibold">tea whiteners</span>—and discover the perfect taste for every moment.
             </p>
             <Link 
               href="/products" 

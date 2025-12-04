@@ -28,7 +28,7 @@ const WhoWeAre = () => {
   return (
     <>
       {/* Company Information Section */}
-      <section ref={sectionRef} className="relative bg-gradient-to-br from-green-100 via-green-50 to-green-100 pt-16 sm:pt-20 md:pt-24 lg:pt-28 pb-16 sm:pb-20 -mt-10 sm:-mt-16 lg:-mt-20 overflow-hidden">
+      <section ref={sectionRef} className="relative pt-16 sm:pt-20 md:pt-24 lg:pt-28 pb-16 sm:pb-20 -mt-10 sm:-mt-16 lg:-mt-20 overflow-hidden bg-gradient-to-br from-green-50 via-green-100 to-green-50">
         {/* Background decorative elements */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 sm:top-20 left-4 sm:left-10 w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-green-400 rounded-full"></div>
@@ -63,7 +63,7 @@ const WhoWeAre = () => {
                   <h4 className="text-lg sm:text-xl lg:text-2xl font-jost font-bold text-gray-800">Mission</h4>
                 </div>
                 <p className="text-sm sm:text-base lg:text-lg font-jost text-gray-700 leading-relaxed">
-                  Our mission is to bring joy, health, and well-being into the lives of people. We aim to create beverages that are not only nutritious and refreshing but also have a special place in the hearts of our customers.
+                  Our mission is to bring joy, health, and well-being into the lives of people. We aim to create beverages and <span className="text-green-600 font-semibold">dairy products</span>—including premium juices, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span>—that are not only nutritious and refreshing but also have a special place in the hearts of our customers.
                 </p>
               </div>
 
@@ -78,7 +78,7 @@ const WhoWeAre = () => {
                   <h4 className="text-lg sm:text-xl lg:text-2xl font-jost font-bold text-gray-800">Vision</h4>
                 </div>
                 <p className="text-sm sm:text-base lg:text-lg font-jost text-gray-700 leading-relaxed">
-                  Our vision is a world where our brand represents more than just a beverage. We envision our drinks being enjoyed around the globe, bringing people together and creating unforgettable memories.
+                  Our vision is a world where our brand represents more than just beverages. We envision our juices, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span> being enjoyed around the globe, bringing people together and creating unforgettable memories.
                 </p>
               </div>
 

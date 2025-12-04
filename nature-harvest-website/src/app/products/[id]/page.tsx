@@ -473,7 +473,7 @@ const ProductDetailContent = () => {
                     <Leaf className="h-4 w-4 lg:h-5 lg:w-5 text-green-600" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-jost font-semibold text-gray-800 text-sm lg:text-base">100% Natural</p>
+                    <p className="font-jost font-semibold text-gray-800 text-sm lg:text-base">Natural Ingredients</p>
                     <p className="text-xs lg:text-sm text-gray-600">No artificial ingredients</p>
                   </div>
                 </div>

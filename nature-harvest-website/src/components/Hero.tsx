@@ -9,6 +9,13 @@ const Hero = () => {
   const leaf2Ref = useRef<HTMLDivElement>(null)
   const leaf3Ref = useRef<HTMLDivElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  
+  // Hero images array
+  const heroImages = [
+    '/images/heroimage.png',
+    '/images/heroimage2.png'
+  ]
 
   useEffect(() => {
     // Trigger animation after component mounts with a slight delay for smoothness
@@ -18,6 +25,15 @@ const Hero = () => {
 
     return () => clearTimeout(timer)
   }, [])
+
+  // Auto-slide hero images
+  useEffect(() => {
+    const slideInterval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length)
+    }, 4000) // Change image every 4 seconds
+
+    return () => clearInterval(slideInterval)
+  }, [heroImages.length])
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -74,7 +90,7 @@ const Hero = () => {
           <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl xl:text-[24px] font-jost font-normal text-black max-w-3xl text-center leading-relaxed transition-all duration-1500 ease-out delay-400 px-4 mt-2 sm:mt-2 ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
-          Experience the authentic taste of nature&apos;s finest fruits. Every product is crafted with care, bringing you the purest flavors without compromise.
+          Experience the authentic taste of nature&apos;s finest fruits, <span className="text-green-600 font-semibold transition-all duration-300 hover:text-green-700">premium flavored milk</span>, and <span className="text-green-600 font-semibold transition-all duration-300 hover:text-green-700">quality tea whiteners</span>. Every product is crafted with care, bringing you the purest flavors without compromise.
           </h2>
           
           {/* Div with background image - Smooth animated from top */}
@@ -118,18 +134,29 @@ const Hero = () => {
               />
             </div>
             
-            {/* Hero image inside the div - No hover effects */}
-            <div className={`absolute inset-0 flex items-center justify-center transition-all duration-1500 ease-out delay-800 ${
-              isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-            }`}>
-              <Image
-                src="/images/heroimage.png"
-                alt="Nature Harvest Hero"
-                width={600}
-                height={600}
-                className="w-full h-full object-contain drop-shadow-2xl"
-                priority
-              />
+            {/* Hero images slider inside the div */}
+            <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+              {heroImages.map((imageSrc, index) => (
+                <div
+                  key={index}
+                  className={`absolute inset-0 flex items-center justify-center transition-all duration-1000 ease-in-out ${
+                    index === currentImageIndex
+                      ? 'opacity-100 scale-100 z-10'
+                      : 'opacity-0 scale-95 z-0'
+                  } ${
+                    isLoaded ? '' : 'opacity-0 scale-90'
+                  }`}
+                >
+                  <Image
+                    src={imageSrc}
+                    alt={`Nature Harvest Hero ${index + 1}`}
+                    width={600}
+                    height={600}
+                    className="w-full h-full object-contain drop-shadow-2xl"
+                    priority={index === 0}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>

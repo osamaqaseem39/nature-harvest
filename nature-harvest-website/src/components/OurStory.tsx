@@ -1,6 +1,6 @@
 'use client'
 
-import { Calendar, MapPin, Target, Award } from 'lucide-react'
+import { Calendar, MapPin, Target, Award, Globe, TrendingUp } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -39,7 +39,7 @@ const OurStory = () => {
     {
       year: "2021",
       title: "First Major Success",
-      description: "Our flagship juice line launched successfully internationally, gaining recognition for its exceptional taste and quality standards.",
+      description: "Our flagship juice line and <span class=\"text-green-600 font-semibold\">dairy products</span> launched successfully internationally, gaining recognition for their exceptional taste and quality standards.",
       icon: Target
     },
     {
@@ -51,13 +51,25 @@ const OurStory = () => {
     {
       year: "2023",
       title: "Innovation Leader",
-      description: "Continuing to innovate with cutting-edge technology while maintaining our commitment to natural, healthy ingredients for international consumers.",
+      description: "Expanding our product range to include premium <span class=\"text-green-600 font-semibold\">flavored milk</span> and <span class=\"text-green-600 font-semibold\">tea whiteners</span>, continuing to innovate with cutting-edge technology while maintaining our commitment to natural, healthy ingredients for international consumers.",
       icon: Award
+    },
+    {
+      year: "2024",
+      title: "Global Expansion",
+      description: "Reached new markets worldwide, strengthening our global presence while maintaining sustainable practices and building stronger connections with communities internationally.",
+      icon: Globe
+    },
+    {
+      year: "2025",
+      title: "Sustainable Future",
+      description: "Leading the industry in sustainable practices and innovative product development, setting new standards for healthy beverages and <span class=\"text-green-600 font-semibold\">dairy products</span> that benefit people and the planet worldwide.",
+      icon: TrendingUp
     }
   ]
 
   return (
-    <section ref={sectionRef} className="relative bg-gradient-to-br from-white via-green-50 to-white pt-32 pb-24 overflow-hidden">
+    <section ref={sectionRef} className="relative pt-32 pb-24 overflow-hidden" style={{ backgroundColor: '#f2eecc' }}>
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 right-20 w-40 h-40 bg-green-300 rounded-full"></div>
@@ -77,7 +89,7 @@ const OurStory = () => {
             The Story of Nature Harvest
           </h2>
           <p className="text-lg font-jost text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            From humble beginnings to becoming a respected beverage company, our journey has been driven by passion, innovation, and an unwavering commitment to quality for international consumers.
+            From humble beginnings to becoming a respected beverage and <span className="text-green-600 font-semibold">dairy company</span>, our journey has been driven by passion, innovation, and an unwavering commitment to quality for international consumers. We proudly offer premium juices, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span>.
           </p>
         </div>
 
@@ -94,10 +106,10 @@ const OurStory = () => {
                 </h4>
                 <p className="text-lg font-jost text-gray-700 leading-relaxed mb-6">
                   Nature Harvest began as a small business with a big dream. Our founders, Hafiz Muhammad Abdul Basit and Muhammad Omar Khan, 
-                  envisioned a world where healthy beverages could be both delicious and accessible to everyone internationally.
+                  envisioned a world where healthy beverages and <span className="text-green-600 font-semibold">dairy products</span> could be both delicious and accessible to everyone internationally.
                 </p>
                 <p className="text-lg font-jost text-gray-700 leading-relaxed">
-                  What started in a small facility has grown into a respected beverage company, but our core values remain unchanged: 
+                  What started in a small facility has grown into a respected beverage and <span className="text-green-600 font-semibold">dairy company</span>, offering premium juices, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span>. Our core values remain unchanged: 
                   quality, innovation, and a deep respect for nature and our international customers.
                 </p>
               </div>
@@ -107,8 +119,8 @@ const OurStory = () => {
                   Innovation at Our Core
                 </h4>
                 <p className="text-lg font-jost text-gray-700 leading-relaxed">
-                  We've consistently pushed the boundaries of what's possible in beverage manufacturing internationally, 
-                  from developing unique flavor combinations to implementing sustainable production methods. 
+                  We've consistently pushed the boundaries of what's possible in beverage and <span className="text-green-600 font-semibold">dairy manufacturing</span> internationally, 
+                  from developing unique flavor combinations in our juices and <span className="text-green-600 font-semibold">flavored milk</span> to creating premium <span className="text-green-600 font-semibold">tea whiteners</span> and implementing sustainable production methods. 
                   Our research and development team works tirelessly to create products that exceed international consumer expectations.
                 </p>
               </div>
@@ -141,9 +153,7 @@ const OurStory = () => {
                           <h5 className="text-lg font-gazpacho font-bold text-gray-800">{item.title}</h5>
                         </div>
                       </div>
-                      <p className="text-gray-600 font-jost leading-relaxed">
-                        {item.description}
-                      </p>
+                      <p className="text-gray-600 font-jost leading-relaxed" dangerouslySetInnerHTML={{ __html: item.description }} />
                     </div>
                   </div>
                 ))}

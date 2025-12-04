@@ -15,7 +15,7 @@ export default function Home() {
       <CEOMessage />
       
       {/* Products and Brands CTAs */}
-      <section className="relative py-20 bg-gradient-to-br from-white via-green-50 to-white overflow-hidden">
+      <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#f2eecc' }}>
         {/* Background decorative elements */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 right-10 w-40 h-40 bg-green-300 rounded-full"></div>
@@ -41,7 +41,7 @@ export default function Home() {
                 </h3>
                 
                 <p className="text-gray-600 font-jost leading-relaxed mb-6">
-                  Discover our complete range of premium beverages. From refreshing juices to pure waters, find the perfect taste for every moment.
+                  Discover our complete range of premium beverages and <span className="text-green-600 font-semibold">dairy products</span>. From refreshing juices and pure waters to delicious <span className="text-green-600 font-semibold">flavored milk</span> and quality <span className="text-green-600 font-semibold">tea whiteners</span>, find the perfect taste for every moment.
                 </p>
                 
                 <div className="inline-flex items-center text-green-600 font-jost font-semibold group-hover:text-green-700 transition-colors duration-300">

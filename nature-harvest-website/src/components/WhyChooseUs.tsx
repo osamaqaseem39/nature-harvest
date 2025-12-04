@@ -26,7 +26,7 @@ const WhyChooseUs = () => {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative bg-gradient-to-br from-green-50 via-emerald-50 to-green-50 pt-32 pb-20 overflow-hidden">
+    <section ref={sectionRef} className="relative pt-32 pb-20 overflow-hidden" style={{ backgroundColor: '#f2eecc' }}>
               {/* Background decorative elements */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 right-20 w-40 h-40 bg-green-300 rounded-full"></div>
@@ -46,7 +46,7 @@ const WhyChooseUs = () => {
             Why Choose Nature Harvest?
           </h2>
           <p className="text-lg font-jost text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            When you choose Nature Harvest, you choose a company committed to your health and well-being. We craft every drink with care to ensure great taste and the nourishment your body needs.
+            When you choose Nature Harvest, you choose a company committed to your health and well-being. We craft every beverage and <span className="text-green-600 font-semibold">dairy product</span> with care to ensure great taste and the nourishment your body needs.
           </p>
         </div>
 
@@ -100,7 +100,7 @@ const WhyChooseUs = () => {
                 Ingredients
               </h4>
               <p className="font-jost text-gray-600 leading-relaxed text-sm group-hover:text-gray-700 transition-colors duration-300">
-                At Nature Harvest, we believe that fresh is always best! That&apos;s why we source only the finest, high-quality ingredients for our delicious beverages.
+                At Nature Harvest, we believe that fresh is always best! That&apos;s why we source only the finest, high-quality ingredients for our delicious beverages and <span className="text-green-600 font-semibold">dairy products</span>.
               </p>
             </div>
           </div>
