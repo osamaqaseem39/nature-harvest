@@ -33,7 +33,7 @@ const OurStory = () => {
     {
       year: "2020",
       title: "The Beginning",
-      description: "Nature Harvest was founded with a simple vision: to create healthy, delicious beverages that bring joy to people's lives.",
+      description: "Nature Harvest was founded with a simple vision: to create healthy, delicious premium juice, flavored milk, and tea whiteners that bring joy to people's lives.",
       icon: Calendar
     },
     {
@@ -63,7 +63,7 @@ const OurStory = () => {
     {
       year: "2025",
       title: "Sustainable Future",
-      description: "Leading the industry in sustainable practices and innovative product development, setting new standards for healthy beverages and <span class=\"text-green-600 font-semibold\">dairy products</span> that benefit people and the planet worldwide.",
+      description: "Leading the industry in sustainable practices and innovative product development, setting new standards for healthy premium juice, <span class=\"text-green-600 font-semibold\">flavored milk</span>, and <span class=\"text-green-600 font-semibold\">tea whiteners</span> that benefit people and the planet worldwide.",
       icon: TrendingUp
     }
   ]
@@ -106,7 +106,7 @@ const OurStory = () => {
                 </h4>
                 <p className="text-lg font-jost text-gray-700 leading-relaxed mb-6">
                   Nature Harvest began as a small business with a big dream. Our founders, Hafiz Muhammad Abdul Basit and Muhammad Omar Khan, 
-                  envisioned a world where healthy beverages and <span className="text-green-600 font-semibold">dairy products</span> could be both delicious and accessible to everyone internationally.
+                  envisioned a world where healthy premium juice, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span> could be both delicious and accessible to everyone internationally.
                 </p>
                 <p className="text-lg font-jost text-gray-700 leading-relaxed">
                   What started in a small facility has grown into a respected beverage and <span className="text-green-600 font-semibold">dairy company</span>, offering premium juices, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span>. Our core values remain unchanged: 

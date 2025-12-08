@@ -63,7 +63,7 @@ const WhoWeAre = () => {
                   <h4 className="text-lg sm:text-xl lg:text-2xl font-jost font-bold text-gray-800">Mission</h4>
                 </div>
                 <p className="text-sm sm:text-base lg:text-lg font-jost text-gray-700 leading-relaxed">
-                  Our mission is to bring joy, health, and well-being into the lives of people. We aim to create beverages and <span className="text-green-600 font-semibold">dairy products</span>—including premium juices, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span>—that are not only nutritious and refreshing but also have a special place in the hearts of our customers.
+                  Our mission is to bring joy, health, and well-being into the lives of people. We aim to create <span className="text-green-600 font-semibold">premium juice</span>, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span> that are not only nutritious and refreshing but also have a special place in the hearts of our customers.
                 </p>
               </div>
 
@@ -78,7 +78,7 @@ const WhoWeAre = () => {
                   <h4 className="text-lg sm:text-xl lg:text-2xl font-jost font-bold text-gray-800">Vision</h4>
                 </div>
                 <p className="text-sm sm:text-base lg:text-lg font-jost text-gray-700 leading-relaxed">
-                  Our vision is a world where our brand represents more than just beverages. We envision our juices, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span> being enjoyed around the globe, bringing people together and creating unforgettable memories.
+                  Our vision is a world where our brand represents more than just <span className="text-green-600 font-semibold">premium juice</span>. We envision our <span className="text-green-600 font-semibold">juice</span>, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span> being enjoyed around the globe, bringing people together and creating unforgettable memories.
                 </p>
               </div>
 

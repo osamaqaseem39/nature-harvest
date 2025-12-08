@@ -18,7 +18,7 @@ const Brands = () => {
     {
       _id: 'brand-1',
       name: 'FreshLay',
-      description: 'Premium fresh beverages',
+      description: 'Premium fresh juice',
       imageUrl: '/images/brands/freshlay-logo.png',
       logoUrl: '/images/brands/freshlay-logo.png',
       status: 'Active',
@@ -38,7 +38,7 @@ const Brands = () => {
     {
       _id: 'brand-3',
       name: 'Pure Life',
-      description: 'Pure and healthy beverages',
+      description: 'Pure and healthy juice',
       imageUrl: '/images/brands/pure-life-logo.png',
       logoUrl: '/images/brands/pure-life-logo.png',
       status: 'Active',
@@ -132,7 +132,7 @@ const Brands = () => {
             Our Brand Portfolio
           </h2>
           <p className="text-sm sm:text-base lg:text-lg font-jost text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
-            Discover our trusted brand partners and the diverse range of premium beverages we offer. Each brand represents our commitment to quality, innovation, and customer satisfaction.
+            Discover our trusted brand partners and the diverse range of premium juice, flavored milk, and tea whiteners we offer. Each brand represents our commitment to quality, innovation, and customer satisfaction.
           </p>
         </div>
 

@@ -20,7 +20,7 @@ export const config = {
   // Website Configuration
   site: {
     name: process.env.NEXT_PUBLIC_SITE_NAME || 'Nature Harvest',
-    description: process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'Premium natural beverages and products',
+    description: process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'Premium natural juice, flavored milk, and tea whiteners',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://nature-harvest-sooty.vercel.app',
     dashboardUrl: 'https://nature-harvest-dashboard.vercel.app',
     serverUrl: 'https://nature-harvest-q2ra.vercel.app',

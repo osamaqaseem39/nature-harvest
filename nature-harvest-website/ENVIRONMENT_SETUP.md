@@ -42,7 +42,7 @@ Basic website information:
 
 ```env
 NEXT_PUBLIC_SITE_NAME=Nature Harvest
-NEXT_PUBLIC_SITE_DESCRIPTION=Premium organic beverages and natural products
+NEXT_PUBLIC_SITE_DESCRIPTION=Premium organic juice, flavored milk, and tea whiteners
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 

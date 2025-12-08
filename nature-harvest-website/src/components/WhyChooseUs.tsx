@@ -100,7 +100,7 @@ const WhyChooseUs = () => {
                 Ingredients
               </h4>
               <p className="font-jost text-gray-600 leading-relaxed text-sm group-hover:text-gray-700 transition-colors duration-300">
-                At Nature Harvest, we believe that fresh is always best! That&apos;s why we source only the finest, high-quality ingredients for our delicious beverages and <span className="text-green-600 font-semibold">dairy products</span>.
+                At Nature Harvest, we believe that fresh is always best! That&apos;s why we source only the finest, high-quality ingredients for our delicious <span className="text-green-600 font-semibold">premium juice</span>, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span>.
               </p>
             </div>
           </div>

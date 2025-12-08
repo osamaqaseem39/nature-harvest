@@ -58,7 +58,7 @@ const CEOMessage = () => {
         }`}>
           <div className="absolute -left-4 top-0 w-1 h-full bg-green-600 rounded-full"></div>
           <blockquote className="text-xl lg:text-2xl font-jost text-gray-700 leading-relaxed italic pl-8">
-            &ldquo;As the CEO of Nature Harvest, I&apos;m excited to share our vision for the future of our organization. Our goal is to create beverages and <span className="text-green-600 font-semibold">dairy products</span>—from premium juices to <span className="text-green-600 font-semibold">flavored milk</span> and <span className="text-green-600 font-semibold">tea whiteners</span>—that are both healthy and delicious, while also being affordable and accessible to everyone.&rdquo;
+            &ldquo;As the CEO of Nature Harvest, I&apos;m excited to share our vision for the future of our organization. Our goal is to create <span className="text-green-600 font-semibold">premium juice</span>, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span> that are both healthy and delicious, while also being affordable and accessible to everyone.&rdquo;
           </blockquote>
         </div>
 
@@ -67,7 +67,7 @@ const CEOMessage = () => {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
           <p className="text-lg font-jost text-gray-700 leading-relaxed">
-            We use only the freshest ingredients and the most innovative techniques to craft our beverages and <span className="text-green-600 font-semibold">dairy products</span>. Our commitment to quality and excellence sets us apart from our competitors. We believe that everyone should have access to delicious, healthy drinks and <span className="text-green-600 font-semibold">dairy products</span>, and we are proud to provide them.
+            We use only the freshest ingredients and the most innovative techniques to craft our <span className="text-green-600 font-semibold">premium juice</span>, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span>. Our commitment to quality and excellence sets us apart from our competitors. We believe that everyone should have access to delicious, healthy products, and we are proud to provide them.
           </p>
           <p className="text-lg font-jost text-gray-700 leading-relaxed">
             Thank you for choosing Nature Harvest, and we look forward to serving you for many years to come.

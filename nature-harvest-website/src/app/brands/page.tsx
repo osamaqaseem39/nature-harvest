@@ -248,7 +248,7 @@ const BrandsPage = () => {
       </section>
 
       {/* Dairy Products Showcase Section */}
-      <section className="relative py-20 bg-gradient-to-br from-green-100 via-green-50 to-white overflow-hidden">
+      <section className="relative py-20 bg-gradient-to-br from-green-50 via-green-100 to-green-50 overflow-hidden">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-gazpacho font-bold text-gray-800 mb-4">
@@ -404,7 +404,7 @@ const BrandsPage = () => {
 
       {/* Brand Features Section */}
       {brands.length > 0 && (
-        <section className="relative py-20 bg-gradient-to-br from-green-50 to-white overflow-hidden">
+        <section className="relative py-20 bg-gradient-to-br from-green-50 via-green-100 to-green-50 overflow-hidden">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-gazpacho font-bold text-gray-800 mb-4">

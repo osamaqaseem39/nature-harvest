@@ -32,7 +32,7 @@ const Hero = () => {
   useEffect(() => {
     const slideInterval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length)
-    }, 4000) // Change image every 4 seconds
+    }, 6000) // Change image every 6 seconds
 
     return () => clearInterval(slideInterval)
   }, [heroImages.length])
@@ -105,7 +105,7 @@ const Hero = () => {
   }, [])
 
   return (
-    <section className="relative min-h-screen sm:h-[1080px] bg-contain bg-no-repeat bg-center" style={{ backgroundImage: 'url("/images/herobg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <section className="relative min-h-screen sm:h-[1080px] bg-contain bg-no-repeat bg-center isolate" style={{ backgroundImage: 'url("/images/herobg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       {/* Background overlay for text prominence */}
       <div className="absolute inset-0 bg-white/30 z-0"></div>
 
@@ -125,13 +125,13 @@ const Hero = () => {
           <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl xl:text-[24px] font-jost font-normal text-black max-w-3xl text-center leading-relaxed transition-all duration-1500 ease-out delay-400 px-4 mt-2 sm:mt-2 ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
-          Experience the authentic taste of nature&apos;s finest fruits, <span className="text-green-600 font-semibold transition-all duration-300 hover:text-green-700">premium flavored milk</span>, and <span className="text-green-600 font-semibold transition-all duration-300 hover:text-green-700">quality tea whiteners</span>. Every product is crafted with care, bringing you the purest flavors without compromise.
+          Experience the authentic taste of nature&apos;s finest <span className="text-green-600 font-semibold transition-all duration-300 hover:text-green-700">juice</span>, <span className="text-green-600 font-semibold transition-all duration-300 hover:text-green-700">premium flavored milk</span>, and <span className="text-green-600 font-semibold transition-all duration-300 hover:text-green-700">quality tea whiteners</span>. Every product is crafted with care, bringing you the purest flavors without compromise.
           </h2>
           
           {/* Div with background image - Smooth animated from top */}
           <div 
             ref={heroImageRef}
-            className={`relative w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] md:w-[360px] md:h-[360px] lg:w-[420px] lg:h-[420px] xl:w-[520px] xl:h-[520px] mb-6 mt-2 sm:mt-3 bg-center bg-no-repeat flex items-center justify-center z-20 transition-all duration-2000 ease-out delay-600 group cursor-pointer overflow-visible ${
+            className={`relative w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] md:w-[360px] md:h-[360px] lg:w-[420px] lg:h-[420px] xl:w-[520px] xl:h-[520px] mb-6 mt-2 sm:mt-3 bg-center bg-no-repeat flex items-center justify-center z-10 transition-all duration-2000 ease-out delay-600 group cursor-pointer overflow-visible ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-32'
             }`} 
             style={{ 
@@ -180,7 +180,7 @@ const Hero = () => {
               {heroImages.map((imageSrc, index) => (
                 <div
                   key={index}
-                  className={`absolute inset-0 flex items-center justify-center transition-all duration-1000 ease-in-out ${
+                  className={`absolute inset-0 flex items-center justify-center transition-all duration-[2000ms] ease-in-out ${
                     index === currentImageIndex
                       ? 'opacity-100 scale-100 z-10'
                       : 'opacity-0 scale-95 z-0'
@@ -193,7 +193,7 @@ const Hero = () => {
                     alt={`Nature Harvest Hero ${index + 1}`}
                     width={600}
                     height={600}
-                    className="w-full h-full object-contain drop-shadow-2xl transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
+                    className="w-full h-full object-contain drop-shadow-2xl transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-110 group-hover:drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
                     priority={index === 0}
                   />
                 </div>

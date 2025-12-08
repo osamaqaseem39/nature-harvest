@@ -38,6 +38,9 @@ const ProductsContent = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [totalProducts, setTotalProducts] = useState(0)
+  
+  // Sorting
+  const [sortBy, setSortBy] = useState<'size-asc' | 'size-desc' | 'none'>('size-asc')
 
   // Check URL parameters for initial filter
   useEffect(() => {
@@ -184,6 +187,50 @@ const ProductsContent = () => {
   // Check if any filters are active
   const hasActiveFilters = selectedBrand || selectedFlavor || selectedSize
 
+  // Sort products by size
+  const sortProductsBySize = (productsToSort: Product[]): Product[] => {
+    if (sortBy === 'none') {
+      // Default to size-asc when none is selected
+      const defaultSort = 'size-asc'
+      return sortProducts(productsToSort, defaultSort)
+    }
+    return sortProducts(productsToSort, sortBy)
+  }
+
+  const sortProducts = (productsToSort: Product[], sortOption: 'size-asc' | 'size-desc'): Product[] => {
+
+    const sorted = [...productsToSort].sort((a, b) => {
+      const sizeA = a.sizeId?.name || ''
+      const sizeB = b.sizeId?.name || ''
+      
+      // Extract numeric values from size names (e.g., "125 ML" -> 125)
+      const extractNumeric = (sizeName: string): number => {
+        const match = sizeName.match(/(\d+)/)
+        return match ? parseInt(match[1], 10) : 0
+      }
+      
+      const numA = extractNumeric(sizeA)
+      const numB = extractNumeric(sizeB)
+      
+      // If both have numeric values, sort by number
+      if (numA > 0 && numB > 0) {
+        return sortOption === 'size-asc' ? numA - numB : numB - numA
+      }
+      
+      // Otherwise, sort alphabetically
+      if (sortOption === 'size-asc') {
+        return sizeA.localeCompare(sizeB)
+      } else {
+        return sizeB.localeCompare(sizeA)
+      }
+    })
+
+    return sorted
+  }
+
+  // Apply sorting to products
+  const sortedProducts = sortProductsBySize(products)
+
   // Helper functions for product display
   const getProductImage = (product: Product) => {
     if (product.imageUrl) {
@@ -233,17 +280,17 @@ const ProductsContent = () => {
   }
 
   const getFilterDescription = () => {
-    if (!filterData) return 'Browse through our complete range of premium beverages. Filter by brand, flavor, or size to find exactly what you\'re looking for.'
+    if (!filterData) return 'Browse through our complete range of premium juice, flavored milk, and tea whiteners. Filter by brand, flavor, or size to find exactly what you\'re looking for.'
     
     switch (filterData.type) {
       case 'brand':
-        return `Discover all products from ${filterData.name} - a trusted name in premium beverages.`
+        return `Discover all products from ${filterData.name} - a trusted name in premium juice, flavored milk, and tea whiteners.`
       case 'flavor':
-        return `Explore our collection of ${filterData.name} flavored beverages, crafted with natural ingredients.`
+        return `Explore our collection of ${filterData.name} flavored products, crafted with natural ingredients.`
       case 'size':
         return `Browse our selection of ${filterData.name} sized products, perfect for your needs.`
       default:
-        return 'Browse through our complete range of premium beverages.'
+        return 'Browse through our complete range of premium juice, flavored milk, and tea whiteners.'
     }
   }
 
@@ -512,12 +559,28 @@ const ProductsContent = () => {
                   )}
                 </div>
                 
-                {/* Mobile Filter Toggle */}
-                <div className="lg:hidden">
-                  <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 font-jost font-medium">
-                    <Filter className="h-4 w-4" />
-                    Filters
-                  </button>
+                <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+                  {/* Sort Dropdown */}
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium text-gray-700 font-jost whitespace-nowrap">Sort by:</label>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as 'size-asc' | 'size-desc' | 'none')}
+                      className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-jost bg-white hover:border-green-300 transition-colors duration-200 text-sm"
+                    >
+                      <option value="none">Default</option>
+                      <option value="size-asc">Size: Small to Large</option>
+                      <option value="size-desc">Size: Large to Small</option>
+                    </select>
+                  </div>
+                  
+                  {/* Mobile Filter Toggle */}
+                  <div className="lg:hidden">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 font-jost font-medium">
+                      <Filter className="h-4 w-4" />
+                      Filters
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -545,9 +608,9 @@ const ProductsContent = () => {
             )}
 
             {/* Products Grid */}
-            {!loading && !error && products.length > 0 && (
+            {!loading && !error && sortedProducts.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
-                {products.map((product, index) => (
+                {sortedProducts.map((product, index) => (
                   <Link 
                     key={product._id} 
                     href={`/products/${product._id}`}
@@ -651,7 +714,7 @@ const ProductsContent = () => {
             )}
 
             {/* No Products State */}
-            {!loading && !error && products.length === 0 && (
+            {!loading && !error && sortedProducts.length === 0 && (
               <div className="text-center py-16">
                 <div className="text-6xl mb-4">🥤</div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-2 font-gazpacho">No products found</h3>

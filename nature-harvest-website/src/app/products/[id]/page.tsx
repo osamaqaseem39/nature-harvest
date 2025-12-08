@@ -626,7 +626,7 @@ const ProductDetailContent = () => {
           {/* Related Products Section */}
           <div className="text-center">
             <h2 className="text-2xl lg:text-3xl font-gazpacho font-bold text-gray-800 mb-3 lg:mb-4">Explore More Products</h2>
-            <p className="text-sm lg:text-base text-gray-600 font-jost mb-6 lg:mb-8">Discover our complete range of premium beverages</p>
+            <p className="text-sm lg:text-base text-gray-600 font-jost mb-6 lg:mb-8">Discover our complete range of premium juice, flavored milk, and tea whiteners</p>
             
             <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center">
               {product.brandId && (

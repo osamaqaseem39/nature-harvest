@@ -187,9 +187,9 @@ const FilterPageContent = () => {
     
     switch (filterData.type) {
       case 'brand':
-        return `Discover all products from ${filterData.name} - a trusted name in premium beverages.`
+        return `Discover all products from ${filterData.name} - a trusted name in premium juice, flavored milk, and tea whiteners.`
       case 'flavor':
-        return `Explore our collection of ${filterData.name} flavored beverages, crafted with natural ingredients.`
+        return `Explore our collection of ${filterData.name} flavored products, crafted with natural ingredients.`
       case 'size':
         return `Browse our selection of ${filterData.name} sized products, perfect for your needs.`
       default:

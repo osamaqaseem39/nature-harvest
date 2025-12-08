@@ -41,7 +41,7 @@ export default function Home() {
                 </h3>
                 
                 <p className="text-gray-600 font-jost leading-relaxed mb-6">
-                  Discover our complete range of premium beverages and <span className="text-green-600 font-semibold">dairy products</span>. From refreshing juices and pure waters to delicious <span className="text-green-600 font-semibold">flavored milk</span> and quality <span className="text-green-600 font-semibold">tea whiteners</span>, find the perfect taste for every moment.
+                  Discover our complete range of <span className="text-green-600 font-semibold">premium juice</span>, <span className="text-green-600 font-semibold">flavored milk</span>, and <span className="text-green-600 font-semibold">tea whiteners</span>. From refreshing juices and pure waters to delicious flavored milk and quality tea whiteners, find the perfect taste for every moment.
                 </p>
                 
                 <div className="inline-flex items-center text-green-600 font-jost font-semibold group-hover:text-green-700 transition-colors duration-300">

@@ -59,7 +59,7 @@ export default function MobileHome() {
                   </MobileText>
                 </div>
                 <MobileText size={isMobile ? 'sm' : 'base'} color="muted">
-                  Our mission is to bring joy, health, and well-being into the lives of people. We aim to create beverages that are not only nutritious and refreshing but also have a special place in the hearts of our customers.
+                  Our mission is to bring joy, health, and well-being into the lives of people. We aim to create premium juice, flavored milk, and tea whiteners that are not only nutritious and refreshing but also have a special place in the hearts of our customers.
                 </MobileText>
               </div>
 

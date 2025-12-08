@@ -194,7 +194,7 @@ const Careers = () => {
               Join Our Team
             </h1>
             <p className="text-xl text-gray-600 font-jost max-w-3xl mx-auto leading-relaxed">
-              Be part of our mission to bring healthy, natural beverages to consumers worldwide. 
+              Be part of our mission to bring healthy, natural premium juice, flavored milk, and tea whiteners to consumers worldwide. 
               We're looking for passionate individuals who share our values and drive for excellence.
             </p>
           </div>
