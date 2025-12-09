@@ -190,6 +190,7 @@ const Hero = () => {
                   style={{
                     transition: 'opacity 3s ease-in-out'
                   }}
+                  
                 >
                   <Image
                     src={imageSrc}
