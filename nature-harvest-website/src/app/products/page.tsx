@@ -198,61 +198,72 @@ const ProductsContent = () => {
   }
 
   const sortProducts = (productsToSort: Product[], sortOption: 'size-asc' | 'size-desc'): Product[] => {
+    // Define the exact order of sizes
+    const sizeOrder = [
+      { pattern: /125\s*(ML|ml|Ml)/i, order: 1 },  // 125ml
+      { pattern: /200\s*(ML|ml|Ml)/i, order: 2 },  // 200ml
+      { pattern: /250\s*(ML|ml|Ml)/i, order: 3 },  // 250ml
+      { pattern: /500\s*(ML|ml|Ml)/i, order: 4 },  // 500ml
+      { pattern: /600\s*(ML|ml|Ml)/i, order: 5 },  // 600ml
+      { pattern: /1\s*(L|l|LTR|ltr|Ltr|Liter|liter)/i, order: 6 },  // 1ltr
+      { pattern: /2\s*(L|l|LTR|ltr|Ltr|Liter|liter)/i, order: 7 },  // 2ltr
+    ]
+
+    // Function to get the order index for a size
+    const getSizeOrder = (sizeName: string): number => {
+      if (!sizeName) return 999 // Products without sizes go to the end
+      
+      const cleanName = sizeName.trim()
+      
+      // Check against predefined patterns
+      for (const { pattern, order } of sizeOrder) {
+        if (pattern.test(cleanName)) {
+          return order
+        }
+      }
+      
+      // Try to extract numeric value for sizes not in the predefined list
+      const numericMatch = cleanName.match(/(\d+(?:\.\d+)?)/)
+      if (numericMatch) {
+        const num = parseFloat(numericMatch[1])
+        // Handle liter sizes (1L, 2L, etc.)
+        if (/L/i.test(cleanName) && !/ML/i.test(cleanName)) {
+          const literValue = num * 1000
+          // Map to closest predefined size
+          if (literValue <= 125) return 1
+          if (literValue <= 200) return 2
+          if (literValue <= 250) return 3
+          if (literValue <= 500) return 4
+          if (literValue <= 600) return 5
+          if (literValue <= 1000) return 6
+          if (literValue <= 2000) return 7
+        } else {
+          // Map milliliter values
+          if (num <= 125) return 1
+          if (num <= 200) return 2
+          if (num <= 250) return 3
+          if (num <= 500) return 4
+          if (num <= 600) return 5
+          if (num <= 1000) return 6
+          if (num <= 2000) return 7
+        }
+      }
+      
+      return 999 // Unknown sizes go to the end
+    }
+
     const sorted = [...productsToSort].sort((a, b) => {
-      // Get size names, handling null/undefined cases
       const sizeA = a.sizeId?.name || ''
       const sizeB = b.sizeId?.name || ''
       
-      // If both are empty, keep original order
-      if (!sizeA && !sizeB) return 0
+      const orderA = getSizeOrder(sizeA)
+      const orderB = getSizeOrder(sizeB)
       
-      // Products without sizes go to the end
-      if (!sizeA) return 1
-      if (!sizeB) return -1
-      
-      // Extract numeric values from size names (e.g., "125 ML" -> 125, "1L" -> 1000)
-      const extractNumeric = (sizeName: string): number => {
-        // Remove spaces and convert to uppercase for consistent parsing
-        const cleanName = sizeName.trim().toUpperCase()
-        
-        // Handle liter (L) - convert to milliliters
-        if (cleanName.includes('L') && !cleanName.includes('ML')) {
-          const literMatch = cleanName.match(/(\d+(?:\.\d+)?)\s*L/)
-          if (literMatch) {
-            return parseFloat(literMatch[1]) * 1000
-          }
-        }
-        
-        // Extract any number (handles "125 ML", "250ML", "500 ML", etc.)
-        const match = cleanName.match(/(\d+(?:\.\d+)?)/)
-        if (match) {
-          return parseFloat(match[1])
-        }
-        
-        return 0
-      }
-      
-      const numA = extractNumeric(sizeA)
-      const numB = extractNumeric(sizeB)
-      
-      // If both have numeric values, sort by number
-      if (numA > 0 && numB > 0) {
-        return sortOption === 'size-asc' ? numA - numB : numB - numA
-      }
-      
-      // If only one has a numeric value, prioritize it
-      if (numA > 0 && numB === 0) {
-        return sortOption === 'size-asc' ? -1 : 1
-      }
-      if (numA === 0 && numB > 0) {
-        return sortOption === 'size-asc' ? 1 : -1
-      }
-      
-      // Otherwise, sort alphabetically
+      // Sort by order index
       if (sortOption === 'size-asc') {
-        return sizeA.localeCompare(sizeB)
+        return orderA - orderB
       } else {
-        return sizeB.localeCompare(sizeA)
+        return orderB - orderA
       }
     })
 
@@ -261,21 +272,6 @@ const ProductsContent = () => {
 
   // Apply sorting to products
   const sortedProducts = sortProductsBySize(products)
-  
-  // Debug: Log sorting info (remove in production)
-  useEffect(() => {
-    if (products.length > 0) {
-      console.log('Sorting products by:', sortBy)
-      console.log('Sample product sizes:', products.slice(0, 3).map(p => ({
-        name: p.name,
-        size: p.sizeId?.name || 'No size'
-      })))
-      console.log('Sorted product sizes:', sortedProducts.slice(0, 3).map(p => ({
-        name: p.name,
-        size: p.sizeId?.name || 'No size'
-      })))
-    }
-  }, [products, sortBy, sortedProducts])
 
   // Helper functions for product display
   const getProductImage = (product: Product) => {
