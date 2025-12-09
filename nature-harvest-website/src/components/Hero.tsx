@@ -180,13 +180,16 @@ const Hero = () => {
               {heroImages.map((imageSrc, index) => (
                 <div
                   key={index}
-                  className={`absolute inset-0 flex items-center justify-center transition-all duration-[2000ms] ease-in-out ${
+                  className={`absolute inset-0 flex items-center justify-center transition-opacity duration-[3000ms] ease-in-out ${
                     index === currentImageIndex
-                      ? 'opacity-100 scale-100 z-10'
-                      : 'opacity-0 scale-95 z-0'
+                      ? 'opacity-100 z-10'
+                      : 'opacity-0 z-0'
                   } ${
-                    isLoaded ? '' : 'opacity-0 scale-90'
+                    isLoaded ? '' : 'opacity-0'
                   }`}
+                  style={{
+                    transition: 'opacity 3s ease-in-out'
+                  }}
                 >
                   <Image
                     src={imageSrc}

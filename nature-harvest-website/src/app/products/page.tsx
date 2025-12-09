@@ -198,15 +198,38 @@ const ProductsContent = () => {
   }
 
   const sortProducts = (productsToSort: Product[], sortOption: 'size-asc' | 'size-desc'): Product[] => {
-
     const sorted = [...productsToSort].sort((a, b) => {
+      // Get size names, handling null/undefined cases
       const sizeA = a.sizeId?.name || ''
       const sizeB = b.sizeId?.name || ''
       
-      // Extract numeric values from size names (e.g., "125 ML" -> 125)
+      // If both are empty, keep original order
+      if (!sizeA && !sizeB) return 0
+      
+      // Products without sizes go to the end
+      if (!sizeA) return 1
+      if (!sizeB) return -1
+      
+      // Extract numeric values from size names (e.g., "125 ML" -> 125, "1L" -> 1000)
       const extractNumeric = (sizeName: string): number => {
-        const match = sizeName.match(/(\d+)/)
-        return match ? parseInt(match[1], 10) : 0
+        // Remove spaces and convert to uppercase for consistent parsing
+        const cleanName = sizeName.trim().toUpperCase()
+        
+        // Handle liter (L) - convert to milliliters
+        if (cleanName.includes('L') && !cleanName.includes('ML')) {
+          const literMatch = cleanName.match(/(\d+(?:\.\d+)?)\s*L/)
+          if (literMatch) {
+            return parseFloat(literMatch[1]) * 1000
+          }
+        }
+        
+        // Extract any number (handles "125 ML", "250ML", "500 ML", etc.)
+        const match = cleanName.match(/(\d+(?:\.\d+)?)/)
+        if (match) {
+          return parseFloat(match[1])
+        }
+        
+        return 0
       }
       
       const numA = extractNumeric(sizeA)
@@ -215,6 +238,14 @@ const ProductsContent = () => {
       // If both have numeric values, sort by number
       if (numA > 0 && numB > 0) {
         return sortOption === 'size-asc' ? numA - numB : numB - numA
+      }
+      
+      // If only one has a numeric value, prioritize it
+      if (numA > 0 && numB === 0) {
+        return sortOption === 'size-asc' ? -1 : 1
+      }
+      if (numA === 0 && numB > 0) {
+        return sortOption === 'size-asc' ? 1 : -1
       }
       
       // Otherwise, sort alphabetically
@@ -230,6 +261,21 @@ const ProductsContent = () => {
 
   // Apply sorting to products
   const sortedProducts = sortProductsBySize(products)
+  
+  // Debug: Log sorting info (remove in production)
+  useEffect(() => {
+    if (products.length > 0) {
+      console.log('Sorting products by:', sortBy)
+      console.log('Sample product sizes:', products.slice(0, 3).map(p => ({
+        name: p.name,
+        size: p.sizeId?.name || 'No size'
+      })))
+      console.log('Sorted product sizes:', sortedProducts.slice(0, 3).map(p => ({
+        name: p.name,
+        size: p.sizeId?.name || 'No size'
+      })))
+    }
+  }, [products, sortBy, sortedProducts])
 
   // Helper functions for product display
   const getProductImage = (product: Product) => {
