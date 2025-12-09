@@ -198,63 +198,70 @@ const ProductsContent = () => {
   }
 
   const sortProducts = (productsToSort: Product[], sortOption: 'size-asc' | 'size-desc'): Product[] => {
-    // Define the exact order of sizes
-    const sizeOrder = [
-      { pattern: /125\s*(ML|ml|Ml)/i, order: 1 },  // 125ml
-      { pattern: /200\s*(ML|ml|Ml)/i, order: 2 },  // 200ml
-      { pattern: /250\s*(ML|ml|Ml)/i, order: 3 },  // 250ml
-      { pattern: /500\s*(ML|ml|Ml)/i, order: 4 },  // 500ml
-      { pattern: /600\s*(ML|ml|Ml)/i, order: 5 },  // 600ml
-      { pattern: /1\s*(L|l|LTR|ltr|Ltr|Liter|liter)/i, order: 6 },  // 1ltr
-      { pattern: /2\s*(L|l|LTR|ltr|Ltr|Liter|liter)/i, order: 7 },  // 2ltr
-    ]
+    // Function to normalize size name
+    const normalizeSizeName = (size: string | undefined | { name?: string }): string => {
+      if (!size) return ''
+      if (typeof size === 'string') return size.trim()
+      if (typeof size === 'object' && size.name) return size.name.trim()
+      return ''
+    }
 
     // Function to get the order index for a size
     const getSizeOrder = (sizeName: string): number => {
       if (!sizeName) return 999 // Products without sizes go to the end
       
-      const cleanName = sizeName.trim()
+      const cleanName = sizeName.trim().toUpperCase()
       
-      // Check against predefined patterns
-      for (const { pattern, order } of sizeOrder) {
-        if (pattern.test(cleanName)) {
-          return order
-        }
-      }
-      
-      // Try to extract numeric value for sizes not in the predefined list
+      // Extract numeric value
       const numericMatch = cleanName.match(/(\d+(?:\.\d+)?)/)
-      if (numericMatch) {
-        const num = parseFloat(numericMatch[1])
-        // Handle liter sizes (1L, 2L, etc.)
-        if (/L/i.test(cleanName) && !/ML/i.test(cleanName)) {
-          const literValue = num * 1000
-          // Map to closest predefined size
-          if (literValue <= 125) return 1
-          if (literValue <= 200) return 2
-          if (literValue <= 250) return 3
-          if (literValue <= 500) return 4
-          if (literValue <= 600) return 5
-          if (literValue <= 1000) return 6
-          if (literValue <= 2000) return 7
-        } else {
-          // Map milliliter values
-          if (num <= 125) return 1
-          if (num <= 200) return 2
-          if (num <= 250) return 3
-          if (num <= 500) return 4
-          if (num <= 600) return 5
-          if (num <= 1000) return 6
-          if (num <= 2000) return 7
-        }
+      if (!numericMatch) return 999
+      
+      const num = parseFloat(numericMatch[1])
+      
+      // Check if it's a liter size (contains L but not ML)
+      const isLiter = /L/i.test(cleanName) && !/ML/i.test(cleanName)
+      
+      if (isLiter) {
+        // Convert liters to milliliters for comparison
+        const mlValue = num * 1000
+        // Map to exact predefined sizes
+        if (Math.abs(mlValue - 1000) < 50) return 6  // 1L = 1000ml
+        if (Math.abs(mlValue - 2000) < 50) return 8  // 2L = 2000ml
+        // For other liter values, map to closest
+        if (mlValue <= 125) return 1
+        if (mlValue <= 200) return 2
+        if (mlValue <= 250) return 3
+        if (mlValue <= 500) return 4
+        if (mlValue <= 600) return 5
+        if (mlValue <= 1500) return 7
+        return 999
+      } else {
+        // Handle milliliter sizes - check for exact matches first
+        if (Math.abs(num - 125) < 1) return 1   // 125ml
+        if (Math.abs(num - 200) < 1) return 2   // 200ml
+        if (Math.abs(num - 250) < 1) return 3   // 250ml
+        if (Math.abs(num - 500) < 1) return 4   // 500ml
+        if (Math.abs(num - 600) < 1) return 5   // 600ml
+        if (Math.abs(num - 1500) < 1) return 7  // 1500ml
+        
+        // Map to closest predefined size for other values
+        if (num <= 125) return 1
+        if (num <= 200) return 2
+        if (num <= 250) return 3
+        if (num <= 500) return 4
+        if (num <= 600) return 5
+        if (num <= 1000) return 6
+        if (num <= 1500) return 7
+        if (num <= 2000) return 8
       }
       
       return 999 // Unknown sizes go to the end
     }
 
     const sorted = [...productsToSort].sort((a, b) => {
-      const sizeA = a.sizeId?.name || ''
-      const sizeB = b.sizeId?.name || ''
+      // Handle both string and object sizeId
+      const sizeA = normalizeSizeName(a.sizeId)
+      const sizeB = normalizeSizeName(b.sizeId)
       
       const orderA = getSizeOrder(sizeA)
       const orderB = getSizeOrder(sizeB)
@@ -272,6 +279,25 @@ const ProductsContent = () => {
 
   // Apply sorting to products
   const sortedProducts = sortProductsBySize(products)
+  
+  // Debug logging (can be removed after verification)
+  useEffect(() => {
+    if (products.length > 0 && sortedProducts.length > 0) {
+      console.log('Sorting Debug:', {
+        sortBy,
+        totalProducts: products.length,
+        sampleSizes: products.slice(0, 5).map(p => ({
+          name: p.name,
+          size: p.sizeId?.name || 'No size',
+          sizeIdType: typeof p.sizeId
+        })),
+        sortedSizes: sortedProducts.slice(0, 5).map(p => ({
+          name: p.name,
+          size: p.sizeId?.name || 'No size'
+        }))
+      })
+    }
+  }, [products, sortedProducts, sortBy])
 
   // Helper functions for product display
   const getProductImage = (product: Product) => {
