@@ -145,7 +145,7 @@ const BrandsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-green-100 to-green-50">
       {/* Hero Header Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-green-50 via-green-100 to-green-50">
+      <section className="relative pt-32 pb-8 overflow-hidden bg-gradient-to-br from-green-50 via-green-100 to-green-50">
         {/* Background decorative elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 right-20 w-64 h-64 bg-green-400 rounded-full blur-3xl"></div>
@@ -159,10 +159,10 @@ const BrandsPage = () => {
                 OUR BRANDS
               </h3>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-gazpacho font-bold text-gray-800 mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-gazpacho font-bold text-gray-800 mb-0 leading-tight">
               Discover Our Premium Collection
             </h1>
-            <p className="text-lg sm:text-xl font-jost text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl font-jost text-gray-600 max-w-3xl mx-auto leading-relaxed mt-4">
               Each brand represents our commitment to excellence, quality, and innovation. 
               Explore the unique stories and exceptional products—from premium juices to <span className="text-green-600 font-semibold">flavored milk</span> and <span className="text-green-600 font-semibold">tea whiteners</span>—that define Nature Harvest.
             </p>

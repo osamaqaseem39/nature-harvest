@@ -365,7 +365,7 @@ const ProductsContent = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white">
       {/* Header Section */}
-      <div className="relative py-20 overflow-hidden">
+      <div className="relative py-8 overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 right-20 w-40 h-40 bg-green-300 rounded-full"></div>
@@ -390,7 +390,7 @@ const ProductsContent = () => {
           </div>
 
           {/* Page Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-8">
             {filterData && filterData.imageUrl ? (
               <div className="mb-6 flex justify-center">
                 <div className="relative w-32 h-32 rounded-full overflow-hidden bg-white shadow-lg border-4 border-green-100">
@@ -416,10 +416,10 @@ const ProductsContent = () => {
                 </div>
               </div>
             ) : null}
-            <h3 className="text-green-600 uppercase tracking-widest font-jost font-semibold text-sm mb-4">
+            <h3 className="text-green-600 uppercase tracking-widest font-jost font-semibold text-sm mb-0">
               {filterData ? `${filterData.type.toUpperCase()} PRODUCTS` : 'PRODUCT CATALOG'}
             </h3>
-            <h1 className="text-5xl lg:text-6xl font-gazpacho font-bold text-gray-800 mb-6 leading-tight">
+            <h1 className="text-5xl lg:text-6xl font-gazpacho font-bold text-gray-800 mb-0 leading-tight mt-4">
               {filterData ? filterData.name : 'Explore Our Products'}
             </h1>
             <p className="text-lg font-jost text-gray-600 max-w-3xl mx-auto">

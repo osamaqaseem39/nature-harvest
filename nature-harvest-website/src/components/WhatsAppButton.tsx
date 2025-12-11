@@ -4,7 +4,7 @@ import { MessageCircle } from 'lucide-react'
 
 const WhatsAppButton = () => {
   // Format phone number: remove leading 0 and add country code 92 for Pakistan
-  const phoneNumber = '92300070853'
+  const phoneNumber = '923000770853'
   const whatsappUrl = `https://wa.me/${phoneNumber}`
 
   return (
