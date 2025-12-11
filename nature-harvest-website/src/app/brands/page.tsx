@@ -184,9 +184,10 @@ const BrandsPage = () => {
           ) : brands.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
                 {brands.map((brand, index) => (
-              <div
+              <Link
                 key={brand._id}
-                className="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 opacity-100 translate-y-0"
+                href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
+                className="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 opacity-100 translate-y-0 cursor-pointer block"
                 style={{
                   transitionDelay: `${index * 50}ms`
                 }}
@@ -229,18 +230,15 @@ const BrandsPage = () => {
                     {brand.description || `Experience the premium quality and exceptional taste of ${brand.name}. Our commitment to excellence ensures every product meets the highest standards.`}
                   </p>
 
-                  <Link 
-                    href={`/products?type=brand&id=${brand._id}&name=${encodeURIComponent(brand.name)}`}
-                    className="inline-flex items-center group/link text-green-600 font-jost font-semibold hover:text-green-700 transition-colors duration-300"
-                  >
+                  <div className="inline-flex items-center group/link text-green-600 font-jost font-semibold transition-colors duration-300">
                     <span>Explore Products</span>
-                    <ChevronRight className="ml-2 w-5 h-5 transform group-hover/link:translate-x-1 transition-transform duration-300" />
-                  </Link>
+                    <ChevronRight className="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
+                  </div>
                 </div>
 
                 {/* Decorative Corner Element */}
                 <div className="absolute top-0 right-0 w-20 h-20 bg-green-600/5 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
+              </Link>
               ))}
             </div>
           ) : null}
