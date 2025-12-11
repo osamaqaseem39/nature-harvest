@@ -159,7 +159,7 @@ const BrandsPage = () => {
                 OUR BRANDS
               </h3>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-gazpacho font-bold text-gray-800 mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-gazpacho font-bold text-gray-800 mb-6 leading-tight">
               Discover Our Premium Collection
             </h1>
             <p className="text-lg sm:text-xl font-jost text-gray-600 max-w-3xl mx-auto leading-relaxed">
