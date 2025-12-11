@@ -182,7 +182,7 @@ const BrandsPage = () => {
               <p className="text-gray-600 font-jost">Check back soon for our exciting brand collection!</p>
             </div>
           ) : brands.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
                 {brands.map((brand, index) => (
               <Link
                 key={brand._id}
@@ -192,8 +192,8 @@ const BrandsPage = () => {
                   transitionDelay: `${index * 50}ms`
                 }}
               >
-                {/* Gradient Overlay on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 to-green-600/0 group-hover:from-green-500/10 group-hover:to-green-600/10 transition-all duration-500 z-10"></div>
+                {/* Gradient Overlay from Bottom on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
                 
                 {/* Brand Logo Section */}
                 <div className="relative h-64 bg-gradient-to-br from-green-50 to-white flex items-center justify-center p-8 overflow-hidden">
@@ -217,23 +217,11 @@ const BrandsPage = () => {
                   </div>
                 </div>
 
-                {/* Brand Content Section */}
-                <div className="relative z-20 p-8 bg-white">
-                  <div className="mb-4">
-                    <h2 className="text-2xl lg:text-3xl font-gazpacho font-bold text-gray-800 mb-3 group-hover:text-green-600 transition-colors duration-300">
-                      {brand.name}
-                    </h2>
-                    <div className="w-16 h-1 bg-green-600 rounded-full transform group-hover:w-24 transition-all duration-300"></div>
-                  </div>
-                  
-                  <p className="text-gray-600 font-jost leading-relaxed mb-6 line-clamp-3">
+                {/* Tagline Section - Show on Hover */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <p className="text-white font-jost leading-relaxed text-sm line-clamp-3">
                     {brand.description || `Experience the premium quality and exceptional taste of ${brand.name}. Our commitment to excellence ensures every product meets the highest standards.`}
                   </p>
-
-                  <div className="inline-flex items-center group/link text-green-600 font-jost font-semibold transition-colors duration-300">
-                    <span>Explore Products</span>
-                    <ChevronRight className="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
-                  </div>
                 </div>
 
                 {/* Decorative Corner Element */}
