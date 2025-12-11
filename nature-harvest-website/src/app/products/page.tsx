@@ -224,16 +224,24 @@ const ProductsContent = () => {
       if (isLiter) {
         // Convert liters to milliliters for comparison
         const mlValue = num * 1000
-        // Map to exact predefined sizes
+        // Map to exact predefined sizes first
+        if (Math.abs(mlValue - 125) < 50) return 1   // 0.125L = 125ml
+        if (Math.abs(mlValue - 200) < 50) return 2   // 0.2L = 200ml
+        if (Math.abs(mlValue - 250) < 50) return 3   // 0.25L = 250ml
+        if (Math.abs(mlValue - 500) < 50) return 4   // 0.5L = 500ml
+        if (Math.abs(mlValue - 600) < 50) return 5   // 0.6L = 600ml
         if (Math.abs(mlValue - 1000) < 50) return 6  // 1L = 1000ml
+        if (Math.abs(mlValue - 1500) < 50) return 7  // 1.5L = 1500ml
         if (Math.abs(mlValue - 2000) < 50) return 8  // 2L = 2000ml
-        // For other liter values, map to closest
-        if (mlValue <= 125) return 1
-        if (mlValue <= 200) return 2
-        if (mlValue <= 250) return 3
-        if (mlValue <= 500) return 4
-        if (mlValue <= 600) return 5
-        if (mlValue <= 1500) return 7
+        // For other liter values, map to closest range
+        if (mlValue < 200) return 1      // Less than 200 -> 125
+        if (mlValue < 250) return 2      // 200-249 -> 200
+        if (mlValue < 500) return 3      // 250-499 -> 250
+        if (mlValue < 600) return 4      // 500-599 -> 500
+        if (mlValue < 1000) return 5     // 600-999 -> 600
+        if (mlValue < 1500) return 6     // 1000-1499 -> 1000
+        if (mlValue < 2000) return 7     // 1500-1999 -> 1500
+        if (mlValue >= 2000) return 8    // 2000+ -> 2000
         return 999
       } else {
         // Handle milliliter sizes - check for exact matches first
@@ -242,17 +250,19 @@ const ProductsContent = () => {
         if (Math.abs(num - 250) < 1) return 3   // 250ml
         if (Math.abs(num - 500) < 1) return 4   // 500ml
         if (Math.abs(num - 600) < 1) return 5   // 600ml
+        if (Math.abs(num - 1000) < 1) return 6  // 1000ml
         if (Math.abs(num - 1500) < 1) return 7  // 1500ml
+        if (Math.abs(num - 2000) < 1) return 8  // 2000ml
         
-        // Map to closest predefined size for other values
-        if (num <= 125) return 1
-        if (num <= 200) return 2
-        if (num <= 250) return 3
-        if (num <= 500) return 4
-        if (num <= 600) return 5
-        if (num <= 1000) return 6
-        if (num <= 1500) return 7
-        if (num <= 2000) return 8
+        // Map to closest predefined size for other values (ranges)
+        if (num < 200) return 1      // Less than 200 -> 125
+        if (num < 250) return 2      // 200-249 -> 200
+        if (num < 500) return 3      // 250-499 -> 250
+        if (num < 600) return 4      // 500-599 -> 500
+        if (num < 1000) return 5     // 600-999 -> 600
+        if (num < 1500) return 6     // 1000-1499 -> 1000
+        if (num < 2000) return 7     // 1500-1999 -> 1500
+        if (num >= 2000) return 8    // 2000+ -> 2000
       }
       
       return 999 // Unknown sizes go to the end
