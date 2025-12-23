@@ -62,7 +62,7 @@ export function generateMetadata({
       },
     },
     openGraph: {
-      type,
+      type: type === 'product' ? 'website' : (type as 'website' | 'article' | undefined),
       locale: 'en_US',
       url: canonicalUrl,
       siteName: 'Nature Harvest',
