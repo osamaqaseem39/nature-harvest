@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /gallery-demo
+Disallow: /gallery-test
+Disallow: /upload-test
+Disallow: /filter
+Disallow: /mobile
+
+# Sitemap
+Sitemap: https://nature-harvest-sooty.vercel.app/sitemap.xml
+

@@ -9,6 +9,11 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { apiService, Product } from '../../../lib/api'
 import { config } from '../../../lib/config'
+import StructuredData from '@/components/StructuredData'
+import {
+  generateProductSchema,
+  generateBreadcrumbSchema,
+} from '@/lib/seo'
 
 const ProductDetailContent = () => {
   const params = useParams()
@@ -211,8 +216,26 @@ const ProductDetailContent = () => {
     )
   }
 
+  // Generate structured data
+  const structuredData = product ? [
+    generateProductSchema({
+      name: product.name,
+      description: product.description || `${product.name} from Nature Harvest`,
+      image: product.imageUrl || product.brandId?.logoUrl || `${config.site.url}/images/logo.png`,
+      brand: product.brandId?.name || 'Nature Harvest',
+      category: 'Beverages',
+      url: `${config.site.url}/products/${product._id}`,
+    }),
+    generateBreadcrumbSchema([
+      { name: 'Home', url: config.site.url },
+      { name: 'Products', url: `${config.site.url}/products` },
+      { name: product.name, url: `${config.site.url}/products/${product._id}` },
+    ]),
+  ] : []
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white pt-20">
+      {product && <StructuredData data={structuredData} />}
       {/* Header Section */}
       <div className="relative py-20 overflow-hidden">
 

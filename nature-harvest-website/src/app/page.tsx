@@ -6,6 +6,16 @@ import CTA from '@/components/CTA'
 import Link from 'next/link'
 import { ShoppingBag, Sparkles, ChevronRight } from 'lucide-react'
 import { Suspense } from 'react'
+import { generateMetadata as generateSEOMetadata } from '@/lib/seo'
+import { config } from '@/lib/config'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = generateSEOMetadata({
+  title: 'Nature Harvest - Premium Natural Products',
+  description: 'Discover premium natural products from Nature Harvest. Fresh, healthy, and sustainable premium juice, flavored milk, and tea whiteners for your lifestyle. Made with natural ingredients and commitment to quality.',
+  keywords: ['premium juice', 'flavored milk', 'tea whiteners', 'natural beverages', 'organic drinks', 'healthy beverages', 'fresh juice', 'dairy products'],
+  url: config.site.url,
+})
 
 export default function Home() {
   return (

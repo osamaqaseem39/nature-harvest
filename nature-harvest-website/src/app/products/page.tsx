@@ -9,6 +9,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { apiService, Product, Brand, Flavor, Size } from '../../lib/api'
 import { config, isFeatureEnabled } from '../../lib/config'
+import StructuredData from '@/components/StructuredData'
+import { generateBreadcrumbSchema } from '@/lib/seo'
 
 interface FilterData {
   type: 'brand' | 'flavor' | 'size'
@@ -372,8 +374,21 @@ const ProductsContent = () => {
     }
   }
 
+  // Generate breadcrumb structured data
+  const breadcrumbItems = [
+    { name: 'Home', url: config.site.url },
+    { name: 'Products', url: `${config.site.url}/products` },
+  ]
+  if (filterData) {
+    breadcrumbItems.push({
+      name: filterData.name,
+      url: `${config.site.url}/products?type=${filterData.type}&id=${filterData.id}&name=${encodeURIComponent(filterData.name)}`,
+    })
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white">
+      <StructuredData data={generateBreadcrumbSchema(breadcrumbItems)} />
       {/* Header Section */}
       <div className="relative py-8 overflow-hidden">
         {/* Background decorative elements */}

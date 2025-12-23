@@ -1,5 +1,15 @@
 import { Suspense } from 'react'
 import ContactInfo from '@/components/ContactInfo'
+import { generateMetadata as generateSEOMetadata } from '@/lib/seo'
+import { config } from '@/lib/config'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = generateSEOMetadata({
+  title: 'Contact Us - Nature Harvest',
+  description: 'Get in touch with Nature Harvest. Contact us for inquiries about our premium juice, flavored milk, tea whiteners, partnerships, or customer support. We\'re here to help!',
+  keywords: ['contact nature harvest', 'customer support', 'inquiry', 'get quote', 'partnership inquiry', 'customer service'],
+  url: `${config.site.url}/contact`,
+})
 
 export default function ContactPage() {
   return (
