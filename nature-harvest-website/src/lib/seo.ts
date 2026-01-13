@@ -32,15 +32,19 @@ export function generateMetadata({
   const canonicalUrl = url || siteUrl
   const defaultKeywords = [
     'Nature Harvest',
-    'natural products',
+    'Nature Harvest Pakistan',
     'premium juice',
     'flavored milk',
     'tea whiteners',
-    'organic beverages',
-    'healthy drinks',
     'natural beverages',
-    'fresh juice',
-    'dairy products',
+    'fresh juice Pakistan',
+    'premium beverages',
+    'healthy drinks',
+    'organic juice',
+    'beverage manufacturing',
+    'quality tea whiteners',
+    'authentic juice',
+    'natural flavors',
   ]
 
   return {
@@ -53,12 +57,15 @@ export function generateMetadata({
     robots: {
       index: !noindex,
       follow: !noindex,
+      nocache: false,
       googleBot: {
         index: !noindex,
         follow: !noindex,
         'max-video-preview': -1,
         'max-image-preview': 'large',
         'max-snippet': -1,
+        'noimageindex': false,
+        'notranslate': false,
       },
     },
     openGraph: {
@@ -96,20 +103,26 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Nature Harvest',
+    name: 'Nature Harvest (Pvt) Ltd.',
+    legalName: 'Nature Harvest Private Limited',
     url: siteUrl,
     logo: `${siteUrl}/images/logo.png`,
-    description: 'Premium natural juice, flavored milk, and tea whiteners',
+    description: 'Experience the authentic taste of nature\'s finest juice, premium flavored milk, and quality tea whiteners. Every product is crafted with care, bringing you the purest flavors without compromise.',
+    foundingDate: '2020',
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: config.contact.phone,
       contactType: 'Customer Service',
       email: config.contact.email,
-      areaServed: 'Worldwide',
+      areaServed: ['PK', 'Worldwide'],
+      availableLanguage: ['en', 'ur'],
     },
     address: {
       '@type': 'PostalAddress',
       streetAddress: config.contact.address,
+      addressLocality: 'Lahore',
+      addressRegion: 'Punjab',
+      postalCode: '54600',
       addressCountry: 'PK',
     },
     sameAs: [
@@ -117,7 +130,14 @@ export function generateOrganizationSchema() {
       config.social.twitter,
       config.social.instagram,
       config.social.linkedin,
+      config.social.tiktok,
+      config.social.youtube,
     ],
+    founder: {
+      '@type': 'Person',
+      name: 'Hafiz Muhammad Abdul Basit',
+      jobTitle: 'CEO & Co-Founder',
+    },
   }
 }
 
@@ -125,8 +145,11 @@ export function generateWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Nature Harvest',
+    name: 'Nature Harvest - Premium Juice, Flavored Milk & Tea Whiteners',
+    alternateName: 'Nature Harvest Pakistan',
     url: siteUrl,
+    description: 'Experience the authentic taste of nature\'s finest juice, premium flavored milk, and quality tea whiteners. Every product is crafted with care, bringing you the purest flavors without compromise.',
+    inLanguage: ['en', 'ur'],
     potentialAction: {
       '@type': 'SearchAction',
       target: {

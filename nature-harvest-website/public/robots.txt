@@ -7,5 +7,5 @@ Disallow: /filter
 Disallow: /mobile
 
 # Sitemap
-Sitemap: https://nature-harvest-sooty.vercel.app/sitemap.xml
+Sitemap: https://www.natureharvest.com.pk/sitemap.xml
 

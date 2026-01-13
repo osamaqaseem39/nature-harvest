@@ -11,6 +11,7 @@ import { apiService, Product, Brand, Flavor, Size } from '../../lib/api'
 import { config, isFeatureEnabled } from '../../lib/config'
 import StructuredData from '@/components/StructuredData'
 import { generateBreadcrumbSchema } from '@/lib/seo'
+import { generateProductSlug } from '../../lib/slug'
 
 interface FilterData {
   type: 'brand' | 'flavor' | 'size'
@@ -703,10 +704,12 @@ const ProductsContent = () => {
             {/* Products Grid */}
             {!loading && !error && sortedProducts.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
-                {sortedProducts.map((product, index) => (
+                {sortedProducts.map((product, index) => {
+                  const productSlug = generateProductSlug(product.name, product._id)
+                  return (
                   <Link 
                     key={product._id} 
-                    href={`/products/${product._id}`}
+                    href={`/products/${productSlug}`}
                     className="block h-full"
                   >
                     <div className="relative transition-all duration-500 ease-out cursor-pointer h-full flex flex-col">
@@ -802,7 +805,8 @@ const ProductsContent = () => {
                       </div>
                     </div>
                   </Link>
-                ))}
+                  )
+                })}
               </div>
             )}
 

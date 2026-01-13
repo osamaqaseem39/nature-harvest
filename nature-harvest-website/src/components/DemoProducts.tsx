@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Star, ShoppingCart, Heart, Eye } from 'lucide-react'
 import { apiService, Product } from '../lib/api'
 import { config } from '../lib/config'
+import { generateProductSlug } from '../lib/slug'
 
 interface DemoProduct {
   _id: string
@@ -243,10 +244,12 @@ const DemoProducts = () => {
         <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12 transition-all duration-1000 ease-out delay-400 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}>
-          {products.map((product, index) => (
+          {products.map((product, index) => {
+            const productSlug = generateProductSlug(product.name, product._id)
+            return (
             <Link 
               key={product._id} 
-              href={`/products/${product._id}`}
+              href={`/products/${productSlug}`}
               className={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 transition-all duration-1000 ease-out delay-${600 + index * 200} ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               } block cursor-pointer`}
@@ -341,7 +344,8 @@ const DemoProducts = () => {
                 </div>
               </div>
             </Link>
-          ))}
+            )
+          })}
         </div>
 
         {/* Bottom CTA */}

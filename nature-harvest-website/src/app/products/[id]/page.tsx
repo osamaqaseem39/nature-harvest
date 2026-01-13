@@ -14,6 +14,7 @@ import {
   generateProductSchema,
   generateBreadcrumbSchema,
 } from '@/lib/seo'
+import { isObjectId, generateProductSlug } from '../../../lib/slug'
 
 const ProductDetailContent = () => {
   const params = useParams()
@@ -26,13 +27,33 @@ const ProductDetailContent = () => {
   const [isNavigating, setIsNavigating] = useState(false)
   const [showShareMenu, setShowShareMenu] = useState(false)
 
-  const productId = params.id as string
+  const productSlugOrId = params.id as string
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const response = await apiService.getProduct(productId)
+        let response
+        
+        // If it looks like an ObjectId, try direct fetch first
+        if (isObjectId(productSlugOrId)) {
+          try {
+            response = await apiService.getProduct(productSlugOrId)
+          } catch {
+            // If direct fetch fails, try slug lookup
+            response = await apiService.getProductBySlug(productSlugOrId)
+            if (!response) {
+              throw new Error('Product not found')
+            }
+          }
+        } else {
+          // It's a slug, search for it
+          response = await apiService.getProductBySlug(productSlugOrId)
+          if (!response) {
+            throw new Error('Product not found')
+          }
+        }
+
         setProduct(response.data)
         // Set the main product image as selected by default
         if (response.data.imageUrl) {
@@ -48,10 +69,10 @@ const ProductDetailContent = () => {
       }
     }
 
-    if (productId) {
+    if (productSlugOrId) {
       fetchProduct()
     }
-  }, [productId])
+  }, [productSlugOrId])
 
   // Reset navigation state when product changes
   useEffect(() => {
@@ -217,21 +238,26 @@ const ProductDetailContent = () => {
   }
 
   // Generate structured data
-  const structuredData = product ? [
-    generateProductSchema({
-      name: product.name,
-      description: product.description || `${product.name} from Nature Harvest`,
-      image: product.imageUrl || product.brandId?.logoUrl || `${config.site.url}/images/logo.png`,
-      brand: product.brandId?.name || 'Nature Harvest',
-      category: 'Beverages',
-      url: `${config.site.url}/products/${product._id}`,
-    }),
-    generateBreadcrumbSchema([
-      { name: 'Home', url: config.site.url },
-      { name: 'Products', url: `${config.site.url}/products` },
-      { name: product.name, url: `${config.site.url}/products/${product._id}` },
-    ]),
-  ] : []
+  const structuredData = product ? (() => {
+    const productSlug = generateProductSlug(product.name, product._id)
+    const productUrl = `${config.site.url}/products/${productSlug}`
+    
+    return [
+      generateProductSchema({
+        name: product.name,
+        description: product.description || `${product.name} from Nature Harvest`,
+        image: product.imageUrl || product.brandId?.logoUrl || `${config.site.url}/images/logo.png`,
+        brand: product.brandId?.name || 'Nature Harvest',
+        category: 'Beverages',
+        url: productUrl,
+      }),
+      generateBreadcrumbSchema([
+        { name: 'Home', url: config.site.url },
+        { name: 'Products', url: `${config.site.url}/products` },
+        { name: product.name, url: productUrl },
+      ]),
+    ]
+  })() : []
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-white pt-20">

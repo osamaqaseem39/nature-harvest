@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { config } from '@/lib/config'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = config.site.url || 'https://nature-harvest-sooty.vercel.app'
+  const baseUrl = config.site.url || 'https://www.natureharvest.com.pk'
 
   return {
     rules: [

@@ -14,28 +14,31 @@ import {
 
 const inter = Inter({ subsets: ['latin'] })
 
-const siteUrl = config.site.url || 'https://nature-harvest-sooty.vercel.app'
+const siteUrl = config.site.url || 'https://www.natureharvest.com.pk'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Nature Harvest - Natural Products',
+    default: 'Nature Harvest - Premium Juice, Flavored Milk & Tea Whiteners',
     template: '%s | Nature Harvest',
   },
-  description: 'Discover premium natural products from Nature Harvest. Fresh, healthy, and sustainable products for your lifestyle.',
-  keywords: ['natural', 'healthy', 'sustainable', 'nature harvest', 'fresh products', 'juice', 'flavored milk', 'tea whiteners', 'organic', 'premium'],
+  description: 'Experience the authentic taste of nature\'s finest juice, premium flavored milk, and quality tea whiteners. Every product is crafted with care, bringing you the purest flavors without compromise. Nature Harvest - Premium Beverage Manufacturing in Pakistan.',
+  keywords: ['nature harvest', 'premium juice', 'flavored milk', 'tea whiteners', 'natural beverages', 'fresh juice pakistan', 'premium beverages', 'healthy drinks', 'organic juice', 'quality tea whiteners', 'beverage manufacturing pakistan', 'nature harvest pakistan'],
   authors: [{ name: 'Nature Harvest' }],
   creator: 'Nature Harvest',
   publisher: 'Nature Harvest',
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
+      'noimageindex': false,
+      'notranslate': false,
     },
   },
   openGraph: {
@@ -43,21 +46,21 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: siteUrl,
     siteName: 'Nature Harvest',
-    title: 'Nature Harvest - Natural Products',
-    description: 'Discover premium natural products from Nature Harvest. Fresh, healthy, and sustainable products for your lifestyle.',
+    title: 'Nature Harvest - Premium Juice, Flavored Milk & Tea Whiteners',
+    description: 'Experience the authentic taste of nature\'s finest juice, premium flavored milk, and quality tea whiteners. Every product is crafted with care, bringing you the purest flavors without compromise.',
     images: [
       {
         url: `${siteUrl}/images/logo.png`,
         width: 1200,
         height: 630,
-        alt: 'Nature Harvest Logo',
+        alt: 'Nature Harvest - Premium Beverages',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Nature Harvest - Natural Products',
-    description: 'Discover premium natural products from Nature Harvest.',
+    title: 'Nature Harvest - Premium Juice, Flavored Milk & Tea Whiteners',
+    description: 'Experience the authentic taste of nature\'s finest juice, premium flavored milk, and quality tea whiteners.',
     images: [`${siteUrl}/images/logo.png`],
   },
   alternates: {

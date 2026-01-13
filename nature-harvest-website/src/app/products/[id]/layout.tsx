@@ -1,6 +1,7 @@
 import { generateMetadata as generateSEOMetadata } from '@/lib/seo'
 import { config } from '@/lib/config'
 import { apiService } from '@/lib/api'
+import { isObjectId, generateProductSlug } from '@/lib/slug'
 import type { Metadata } from 'next'
 
 export async function generateMetadata({
@@ -9,8 +10,19 @@ export async function generateMetadata({
   params: { id: string }
 }): Promise<Metadata> {
   try {
-    const response = await apiService.getProduct(params.id)
+    // Try to fetch product by slug or ID
+    let response
+    if (isObjectId(params.id)) {
+      response = await apiService.getProduct(params.id)
+    } else {
+      response = await apiService.getProductBySlug(params.id)
+      if (!response) {
+        throw new Error('Product not found')
+      }
+    }
+    
     const product = response.data
+    const productSlug = generateProductSlug(product.name, product._id)
 
     return generateSEOMetadata({
       title: `${product.name} - Product Details`,
@@ -27,7 +39,7 @@ export async function generateMetadata({
         'tea whiteners',
       ].filter(Boolean),
       image: product.imageUrl || product.brandId?.logoUrl || `${config.site.url}/images/logo.png`,
-      url: `${config.site.url}/products/${params.id}`,
+      url: `${config.site.url}/products/${productSlug}`,
       type: 'product',
     })
   } catch (error) {

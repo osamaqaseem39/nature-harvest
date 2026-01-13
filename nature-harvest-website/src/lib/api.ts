@@ -414,6 +414,79 @@ class ApiService {
     return this.request<ProductResponse>(`/products/${id}`);
   }
 
+  /**
+   * Get product by slug
+   * Since the API doesn't support slug lookup, we fetch all products and find the matching one
+   */
+  async getProductBySlug(slug: string): Promise<ProductResponse | null> {
+    try {
+      // Dynamic import to avoid circular dependencies
+      const { generateProductSlug, isObjectId } = await import('./slug')
+      
+      // If slug looks like an ObjectId, try direct fetch first
+      if (isObjectId(slug)) {
+        try {
+          return await this.getProduct(slug)
+        } catch {
+          // Fall through to slug matching
+        }
+      }
+
+      // Fetch all active products
+      const response = await this.getProducts({
+        status: 'Active',
+        limit: 1000,
+        page: 1,
+      })
+
+      if (!response.data || !Array.isArray(response.data)) {
+        return null
+      }
+
+      // Search for product with matching slug
+      const product = response.data.find((p) => {
+        const productSlug = generateProductSlug(p.name, p._id)
+        return productSlug === slug || p._id === slug
+      })
+
+      if (product) {
+        return {
+          success: true,
+          data: product,
+        }
+      }
+
+      // If not found in first page, check other pages
+      const totalPages = response.pagination?.pages || 1
+      for (let page = 2; page <= Math.min(totalPages, 10); page++) {
+        const pageResponse = await this.getProducts({
+          status: 'Active',
+          limit: 1000,
+          page,
+        })
+
+        if (pageResponse.data && Array.isArray(pageResponse.data)) {
+          const foundProduct = pageResponse.data.find((p) => {
+            const productSlug = generateProductSlug(p.name, p._id)
+            return productSlug === slug || p._id === slug
+          })
+
+          if (foundProduct) {
+            return {
+              success: true,
+              data: foundProduct,
+            }
+          }
+        }
+      }
+
+      return null
+    } catch (error) {
+      console.error('Error fetching product by slug:', error)
+      return null
+    }
+  }
+
   // Flavors API
   async getFlavors(params?: {
     page?: number;

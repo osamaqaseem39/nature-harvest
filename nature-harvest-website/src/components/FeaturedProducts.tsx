@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { Star, ShoppingCart, Heart, Eye, ChevronLeft, ChevronRight } from 'lucide-react'
 import { apiService } from '../lib/api'
 import { config } from '../lib/config'
+import { generateProductSlug } from '../lib/slug'
 
 interface Product {
   _id: string
@@ -396,7 +397,10 @@ const FeaturedProducts = () => {
                   className={`relative transition-all duration-1000 ease-out ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   } block cursor-pointer`}
-                  onClick={() => router.push(`/products/${product._id}`)}
+                  onClick={() => {
+                    const productSlug = generateProductSlug(product.name, product._id)
+                    router.push(`/products/${productSlug}`)
+                  }}
                 >
                   {/* Product Image Container - No Background Container */}
                   <div className="relative overflow-hidden">

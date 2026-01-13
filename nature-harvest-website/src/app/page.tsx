@@ -11,9 +11,9 @@ import { config } from '@/lib/config'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = generateSEOMetadata({
-  title: 'Nature Harvest - Premium Natural Products',
-  description: 'Discover premium natural products from Nature Harvest. Fresh, healthy, and sustainable premium juice, flavored milk, and tea whiteners for your lifestyle. Made with natural ingredients and commitment to quality.',
-  keywords: ['premium juice', 'flavored milk', 'tea whiteners', 'natural beverages', 'organic drinks', 'healthy beverages', 'fresh juice', 'dairy products'],
+  title: 'Nature Harvest - Premium Juice, Flavored Milk & Tea Whiteners',
+  description: 'Experience the authentic taste of nature\'s finest juice, premium flavored milk, and quality tea whiteners. Every product is crafted with care, bringing you the purest flavors without compromise. Nature Harvest - Premium Beverage Manufacturing in Pakistan.',
+  keywords: ['premium juice', 'flavored milk', 'tea whiteners', 'natural beverages', 'fresh juice Pakistan', 'premium beverages', 'healthy drinks', 'organic juice', 'beverage manufacturing Pakistan', 'Nature Harvest Pakistan'],
   url: config.site.url,
 })
 
