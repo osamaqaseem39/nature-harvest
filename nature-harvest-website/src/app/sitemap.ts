@@ -3,11 +3,15 @@ import { config } from '@/lib/config'
 import { apiService } from '@/lib/api'
 import { generateProductSlug } from '@/lib/slug'
 
+// Export revalidation time for sitemap (1 hour)
+export const revalidate = 3600
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = config.site.url || 'https://www.natureharvest.com.pk'
-  const currentDate = new Date()
+  // Use ISO string for better compatibility
+  const currentDate = new Date().toISOString()
 
-  // Static pages
+  // Static pages with proper priorities and change frequencies
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -71,7 +75,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           const productSlug = generateProductSlug(product.name, product._id)
           return {
             url: `${baseUrl}/products/${productSlug}`,
-            lastModified: product.updatedAt ? new Date(product.updatedAt) : currentDate,
+            lastModified: product.updatedAt 
+              ? new Date(product.updatedAt).toISOString() 
+              : currentDate,
             changeFrequency: 'weekly' as const,
             priority: 0.8,
           }
@@ -101,7 +107,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                   const productSlug = generateProductSlug(product.name, product._id)
                   return {
                     url: `${baseUrl}/products/${productSlug}`,
-                    lastModified: product.updatedAt ? new Date(product.updatedAt) : currentDate,
+                    lastModified: product.updatedAt 
+                      ? new Date(product.updatedAt).toISOString() 
+                      : currentDate,
                     changeFrequency: 'weekly' as const,
                     priority: 0.8,
                   }
@@ -144,7 +152,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           .filter((career: any) => career._id && career.status === 'Active')
           .map((career: any) => ({
             url: `${baseUrl}/careers/${career._id}`,
-            lastModified: career.updatedAt ? new Date(career.updatedAt) : currentDate,
+            lastModified: career.updatedAt 
+              ? new Date(career.updatedAt).toISOString() 
+              : currentDate,
             changeFrequency: 'monthly' as const,
             priority: 0.5,
           }))
@@ -155,6 +165,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Continue without career pages if fetch fails
   }
 
-  return [...staticPages, ...productPages, ...careerPages]
+  // Combine all pages and ensure URLs are properly formatted
+  const allPages = [...staticPages, ...productPages, ...careerPages]
+  
+  // Validate and clean URLs - ensure proper formatting
+  const validatedPages = allPages.map((page) => {
+    let cleanUrl = page.url
+    // Remove duplicate slashes (except after protocol)
+    cleanUrl = cleanUrl.replace(/([^:]\/)\/+/g, '$1')
+    // Ensure proper protocol format
+    cleanUrl = cleanUrl.replace(/https:\//g, 'https://').replace(/http:\//g, 'http://')
+    // Remove trailing slash except for base URL
+    if (cleanUrl !== baseUrl && cleanUrl.endsWith('/')) {
+      cleanUrl = cleanUrl.slice(0, -1)
+    }
+    return {
+      ...page,
+      url: cleanUrl,
+    }
+  })
+
+  return validatedPages
 }
 
